@@ -1,0 +1,21 @@
+
+{
+  "rutina": {
+    "nombre": "push",
+    "descripcion":"rutina de pecho, triceps y hombros",
+    "items": [
+      {
+        "ejercicioId": 1,
+        "descansoEnSeg": 90,
+        "nota": "series al fallo",
+        "series": [
+          {
+            "reps": 12,
+            "pesoEnKg": 100
+          }
+        ]
+      }
+    ]
+  }
+}
+

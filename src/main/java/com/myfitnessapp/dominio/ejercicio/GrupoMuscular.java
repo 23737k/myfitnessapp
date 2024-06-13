@@ -1,4 +1,4 @@
-package com.myfitnessapp.dominio;
+package com.myfitnessapp.dominio.ejercicio;
 
 import lombok.Data;
 
