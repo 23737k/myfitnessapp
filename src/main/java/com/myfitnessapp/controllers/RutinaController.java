@@ -3,10 +3,10 @@ package com.myfitnessapp.controllers;
 import com.myfitnessapp.dto.request.RutinaRequestDto;
 import com.myfitnessapp.dto.response.RutinaResponseDto;
 import com.myfitnessapp.services.RutinaService;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +25,7 @@ public class RutinaController {
   }
 
   @PostMapping
-  public RutinaResponseDto crearRutina(@RequestBody RutinaRequestDto rutina) {
+  public RutinaResponseDto crearRutina(@Valid @RequestBody RutinaRequestDto rutina) {
     return rutinaService.saveRutina(rutina);
   }
 
