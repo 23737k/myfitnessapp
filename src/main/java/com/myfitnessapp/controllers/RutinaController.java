@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +27,9 @@ public class RutinaController {
   }
 
   @PostMapping
-  public RutinaResponseDto crearRutina(@Valid @RequestBody RutinaRequestDto rutina) {
-    return rutinaService.saveRutina(rutina);
+  public ResponseEntity<?> crearRutina(@RequestBody RutinaRequestDto rutina) {
+    RutinaResponseDto rutinaResponseDto = rutinaService.saveRutina(rutina);
+    return new ResponseEntity<>(rutinaResponseDto, HttpStatus.CREATED);
   }
 
   @GetMapping

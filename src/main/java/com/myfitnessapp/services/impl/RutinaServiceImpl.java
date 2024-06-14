@@ -5,17 +5,18 @@ import com.myfitnessapp.dto.request.RutinaRequestDto;
 import com.myfitnessapp.dto.response.RutinaResponseDto;
 import com.myfitnessapp.repositories.RutinaRepo;
 import com.myfitnessapp.services.RutinaService;
+import com.myfitnessapp.validation.ObjectsValidator;
 import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RutinaServiceImpl implements RutinaService {
   private final RutinaRepo rutinaRepo;
+  private final ObjectsValidator<RutinaRequestDto> rutinaValidator;
 
-  public RutinaServiceImpl(RutinaRepo rutinaRepo) {
-    this.rutinaRepo = rutinaRepo;
-  }
+
 
   // Mapping methods
   @Override
@@ -30,6 +31,8 @@ public class RutinaServiceImpl implements RutinaService {
 
   @Override
   public RutinaResponseDto saveRutina(RutinaRequestDto rutinaRequestDto) {
+    rutinaValidator.validate(rutinaRequestDto);
+
     Rutina rutina = rutinaRepo.save(toRutina(rutinaRequestDto));
     return new RutinaResponseDto(rutina.getId(), rutina.getNombre(), rutina.getDescripcion());
   }
