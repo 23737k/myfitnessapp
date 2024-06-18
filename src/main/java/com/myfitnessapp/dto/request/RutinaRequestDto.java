@@ -19,6 +19,8 @@ public class RutinaRequestDto {
   @NotEmpty(message = "La descripción no debe estar vacía")
   @NotNull(message = "La descripción no debe estar vacía")
   private String descripcion;
+  @NotEmpty(message = "Items no debe estar vacío")
+  @NotNull(message = "Items no debe estar vacío")
   private List<ItemRutinaRequestDto> items;
 
 }
