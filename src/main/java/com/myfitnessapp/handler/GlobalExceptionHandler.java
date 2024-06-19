@@ -1,6 +1,8 @@
 package com.myfitnessapp.handler;
 
+import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.exceptions.ObjectNotValidException;
+import com.myfitnessapp.exceptions.SerieNoValidaException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,9 +20,18 @@ public class GlobalExceptionHandler {
     return ResponseEntity.notFound().build();
   }
 
+  @ExceptionHandler(InvalidReferenceException.class)
+  public ResponseEntity<?> handleException(InvalidReferenceException e) {
+    return ResponseEntity.badRequest().body(e.getErrorMessage());
+  }
+
   @ExceptionHandler(ObjectNotValidException.class)
   public ResponseEntity<?> handleException(ObjectNotValidException e) {
     return ResponseEntity.badRequest().body(e.getErrorMessages());
+  }
+  @ExceptionHandler(SerieNoValidaException.class)
+  public ResponseEntity<?> handleException(SerieNoValidaException e) {
+    return ResponseEntity.badRequest().body(e.getErrorMessage());
   }
 
 }

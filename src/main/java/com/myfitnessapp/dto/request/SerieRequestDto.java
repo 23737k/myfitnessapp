@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SerieRequestDto {
-  private int reps;
-  private double pesoEnKg;
-  private int tiempoEnSeg;
-  private double distancia;
+  private Integer reps;
+  private Double pesoEnKg;
+  private Integer tiempoEnSeg;
+  private Double distancia;
 }

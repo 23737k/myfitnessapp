@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 public class RutinaService{
   private final RutinaRepo rutinaRepo;
   private final ObjectsValidator<RutinaRequestDto> rutinaValidator;
-  @Lazy
   private final ItemRutinaService itemRutinaService;
-
-
 
   // Mapping methods
   public Rutina toRutina(RutinaRequestDto rDto) {

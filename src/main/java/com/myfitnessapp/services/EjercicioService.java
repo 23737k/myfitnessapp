@@ -4,6 +4,7 @@ import com.myfitnessapp.dominio.ejercicio.Ejercicio;
 import com.myfitnessapp.dominio.ejercicio.GrupoMuscular;
 import com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio;
 import com.myfitnessapp.dto.request.EjercicioRequestDto;
+import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.EjercicioRepo;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,19 +19,20 @@ public class EjercicioService {
 
   public Ejercicio saveEjercicio(EjercicioRequestDto ejDto) {
 
-    GrupoMuscular gmPrimario = grupoMuscularRepo.findById(ejDto.getGrupoMuscularPrimario()).orElseThrow(() -> new IllegalArgumentException("Grupo muscular secundario no encontrado"));
+    GrupoMuscular gmPrimario = grupoMuscularRepo.
+        findById(ejDto.getGrupoMuscularPrimario()).orElseThrow(() -> new InvalidReferenceException("Grupo muscular secundario no encontrado"));
     GrupoMuscular gmSecundario = null;
     TipoDeEjercicio tipoDeEjercicio;
 
     if (ejDto.getGrupoMuscularSecundario() != null) {
-      gmSecundario = grupoMuscularRepo.findById(ejDto.getGrupoMuscularSecundario()).orElseThrow(() -> new IllegalArgumentException("Grupo muscular secundario no encontrado"));
+      gmSecundario = grupoMuscularRepo.findById(ejDto.getGrupoMuscularSecundario()).orElseThrow(() -> new InvalidReferenceException("Grupo muscular secundario no encontrado"));
     }
 
     try{
       tipoDeEjercicio = TipoDeEjercicio.valueOf(ejDto.getTipoDeEjercicio().toUpperCase());
     }
     catch(IllegalArgumentException e){
-      throw new RuntimeException("Tipo de ejercicio invalido " + ejDto.getTipoDeEjercicio());
+      throw new InvalidReferenceException("Tipo de ejercicio invalido " + ejDto.getTipoDeEjercicio());
     }
 
     return ejercicioRepo.save(new Ejercicio(ejDto.getNombre(),gmPrimario, gmSecundario,tipoDeEjercicio));
@@ -38,7 +40,7 @@ public class EjercicioService {
 
 
   public Ejercicio findEjercicioById(Integer id){
-    return ejercicioRepo.findById(id).orElseThrow(()->new EntityNotFoundException("El ejercicio no existe" + id));
+    return ejercicioRepo.findById(id).orElseThrow(()->new InvalidReferenceException("El ejercicio no existe " + id));
   }
 
 

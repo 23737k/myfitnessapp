@@ -10,22 +10,25 @@ import com.myfitnessapp.dominio.series.SerieTiempo;
 import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
 import com.myfitnessapp.dto.request.SerieRequestDto;
 import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
+import com.myfitnessapp.exceptions.SerieNoValidaException;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
+import com.myfitnessapp.validation.ObjectsValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ItemRutinaService {
-  @Lazy
   private final ItemRutinaRepo itemRutinaRepo;
   private final EjercicioService ejercicioService;
+  private final ObjectsValidator<ItemRutinaRequestDto> validator;
 
   public ItemRutina toItemRutina(ItemRutinaRequestDto itemRutinaRequestDto) {
+    validator.validate(itemRutinaRequestDto);
     Ejercicio ejercicio = ejercicioService.findEjercicioById(itemRutinaRequestDto.getEjercicioId());
     List<Serie> series = new ArrayList<>();
 
@@ -42,20 +45,27 @@ public class ItemRutinaService {
   }
 
   public Serie crearSerieFromTipoDeEjercicio(TipoDeEjercicio tipoDeEjercicio, SerieRequestDto serieRequestDto) {
-    return switch (tipoDeEjercicio) {
-      case PESO_Y_REPETICIONES -> new SeriePesoYReps(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
-      case TIEMPO -> new SerieTiempo(serieRequestDto.getTiempoEnSeg());
-      case PESO_CORPORAL -> new SeriePesoCorpYReps(serieRequestDto.getReps());
-      default -> null;
-    };
+    switch (tipoDeEjercicio) {
+      case PESO_Y_REPETICIONES:
+        SeriePesoYReps seriePesoYReps = new SeriePesoYReps(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+        new ObjectsValidator<SeriePesoYReps>().validate(seriePesoYReps);
+        return seriePesoYReps;
+      case TIEMPO:
+        SerieTiempo serieTiempo = new SerieTiempo(serieRequestDto.getTiempoEnSeg());
+        new ObjectsValidator<SerieTiempo>().validate(serieTiempo);
+        return serieTiempo;
+      case PESO_CORPORAL :
+        SeriePesoCorpYReps seriePesoCorpYReps = new SeriePesoCorpYReps(serieRequestDto.getReps());
+        new ObjectsValidator<SeriePesoCorpYReps>().validate(seriePesoCorpYReps);
+        return seriePesoCorpYReps;
+      default :
+        throw new SerieNoValidaException("Formato de serie invalido");
+    }
   }
 
   public List<ItemRutinaResponseDto> getItems(Integer rutinaId){
     List<ItemRutina> items = itemRutinaRepo.findAllByRutina(rutinaId);
-    List<ItemRutinaResponseDto> itemsDto = new ArrayList<>();
-    items.forEach(i-> itemsDto.add(new ItemRutinaResponseDto(i.getId(),i.getEjercicio().getNombre(),
-            i.getDescansoEnSeg(),i.getNota())));
-    return itemsDto;
+    return items.stream().map(this::toResponseDto).collect(Collectors.toList());
   }
 
   public ItemRutinaResponseDto toResponseDto(ItemRutina itemRutina){
