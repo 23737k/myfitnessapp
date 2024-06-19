@@ -1,13 +1,7 @@
 package com.myfitnessapp.dominio.rutina;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +18,7 @@ public class Rutina {
   private Integer id;
   private String nombre;
   private String descripcion;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "rutina_id")
   private List<ItemRutina> items;
 

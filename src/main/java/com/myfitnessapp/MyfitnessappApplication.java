@@ -18,7 +18,7 @@ public class MyfitnessappApplication {
 	public CommandLineRunner commandLineRunner (Bootstrap bootstrap){
 		return args -> {
 			//Carga inicial de la bd
-			bootstrap.init();
+			//bootstrap.init();
 		};
 	}
 

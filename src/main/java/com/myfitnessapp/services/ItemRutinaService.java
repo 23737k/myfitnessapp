@@ -9,9 +9,12 @@ import com.myfitnessapp.dominio.series.SeriePesoYReps;
 import com.myfitnessapp.dominio.series.SerieTiempo;
 import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
 import com.myfitnessapp.dto.request.SerieRequestDto;
+import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,4 +49,13 @@ public class ItemRutinaService {
       default -> null;
     };
   }
+
+  public List<ItemRutinaResponseDto> getItems(Integer rutinaId){
+    List<ItemRutina> items = itemRutinaRepo.findAllByRutina(rutinaId);
+    List<ItemRutinaResponseDto> itemsDto = new ArrayList<>();
+    items.forEach(i-> itemsDto.add(new ItemRutinaResponseDto(i.getId(),i.getEjercicio().getNombre(),
+            i.getDescansoEnSeg(),i.getNota())));
+    return itemsDto;
+  }
+
 }
