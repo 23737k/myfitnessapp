@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.List;
@@ -22,7 +24,8 @@ public class Rutina {
   private Integer id;
   private String nombre;
   private String descripcion;
-  @Transient
+  @OneToMany
+  @JoinColumn(name = "rutina_id")
   private List<ItemRutina> items;
 
   public Rutina(String nombre, String descripcion, List<ItemRutina> items) {

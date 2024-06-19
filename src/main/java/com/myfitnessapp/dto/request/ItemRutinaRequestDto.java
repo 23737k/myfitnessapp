@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ItemRutinaRequestDto {
   private Integer ejercicioId;
-  private double descansoEnSeg;
+  private Integer descansoEnSeg;
   private String nota;
   private List<SerieRequestDto> series;
 }

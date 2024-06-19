@@ -1,15 +1,10 @@
 package com.myfitnessapp;
 
-import com.myfitnessapp.dominio.ejercicio.GrupoMuscular;
-import com.myfitnessapp.repositories.GrupoMuscularRepo;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.myfitnessapp.utils.Bootstrap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.List;
 
 @SpringBootApplication
 public class MyfitnessappApplication {
@@ -20,17 +15,11 @@ public class MyfitnessappApplication {
 
 	//Bootstrap
 	@Bean
-	@Transactional
-	public CommandLineRunner commandLineRunner (GrupoMuscularRepo grupoMuscularRepo){
+	public CommandLineRunner commandLineRunner (Bootstrap bootstrap){
 		return args -> {
-			cargarGruposMusculares(grupoMuscularRepo);
+			//Carga inicial de la bd
+			bootstrap.init();
 		};
-	}
-
-	public void cargarGruposMusculares(GrupoMuscularRepo grupoMuscularRepo){
-		List<String> gruposMusculares = List.of("Pectoral", "Triceps", "Dorsales", "Biceps",
-				"Trapecios","Deltoides","Antebrazos", "Abdominales", "Cuadriceps", "Gemelos","Isquiotibiales", "Aductores");
-		gruposMusculares.forEach(gm -> grupoMuscularRepo.save(new GrupoMuscular(gm)));
 	}
 
 }

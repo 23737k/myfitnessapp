@@ -8,6 +8,6 @@ import lombok.Setter;
 public class SerieRequestDto {
   private int reps;
   private double pesoEnKg;
-  private double duracionEnSeg;
+  private int tiempoEnSeg;
   private double distancia;
 }
