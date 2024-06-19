@@ -6,6 +6,7 @@ import com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio;
 import com.myfitnessapp.dto.request.EjercicioRequestDto;
 import com.myfitnessapp.repositories.EjercicioRepo;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class EjercicioService {
 
 
   public Ejercicio findEjercicioById(Integer id){
-    return ejercicioRepo.findById(id).orElseThrow();
+    return ejercicioRepo.findById(id).orElseThrow(()->new EntityNotFoundException("El ejercicio no existe" + id));
   }
 
 

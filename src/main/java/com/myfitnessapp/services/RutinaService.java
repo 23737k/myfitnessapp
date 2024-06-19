@@ -7,10 +7,13 @@ import com.myfitnessapp.dto.request.RutinaRequestDto;
 import com.myfitnessapp.dto.response.RutinaResponseDto;
 import com.myfitnessapp.repositories.RutinaRepo;
 import com.myfitnessapp.validation.ObjectsValidator;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,13 +21,14 @@ import org.springframework.stereotype.Service;
 public class RutinaService{
   private final RutinaRepo rutinaRepo;
   private final ObjectsValidator<RutinaRequestDto> rutinaValidator;
+  @Lazy
   private final ItemRutinaService itemRutinaService;
 
 
 
   // Mapping methods
   public Rutina toRutina(RutinaRequestDto rDto) {
-    List<ItemRutina> itemRutinaList = rDto.getItems().stream().map(itemRutinaService::saveItemRutina).collect(Collectors.toList());
+    List<ItemRutina> itemRutinaList = rDto.getItems().stream().map(itemRutinaService::toItemRutina).collect(Collectors.toList());
     return new Rutina(rDto.getNombre(),rDto.getDescripcion(),itemRutinaList);
   }
 
@@ -52,6 +56,12 @@ public class RutinaService{
 
   public List<RutinaResponseDto> getRutinas() {
     return rutinaRepo.findAll().stream().map(this::toRutinaResponseDto).toList();
+  }
+
+  public void agregarItem(Integer rutinaId,ItemRutina item){
+    Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
+    rutina.getItems().add(item);
+    rutinaRepo.save(rutina);
   }
 
 }

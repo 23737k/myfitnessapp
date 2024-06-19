@@ -14,17 +14,18 @@ import com.myfitnessapp.repositories.ItemRutinaRepo;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ItemRutinaService {
+  @Lazy
   private final ItemRutinaRepo itemRutinaRepo;
   private final EjercicioService ejercicioService;
 
-  public ItemRutina saveItemRutina(ItemRutinaRequestDto itemRutinaRequestDto) {
+  public ItemRutina toItemRutina(ItemRutinaRequestDto itemRutinaRequestDto) {
     Ejercicio ejercicio = ejercicioService.findEjercicioById(itemRutinaRequestDto.getEjercicioId());
     List<Serie> series = new ArrayList<>();
 
@@ -32,13 +33,12 @@ public class ItemRutinaService {
       series.add(crearSerieFromTipoDeEjercicio(ejercicio.getTipoDeEjercicio(),serieDto));
     }
 
-    ItemRutina itemRutina = ItemRutina.builder()
+      return ItemRutina.builder()
         .ejercicio(ejercicio)
         .descansoEnSeg(itemRutinaRequestDto.getDescansoEnSeg())
         .nota(itemRutinaRequestDto.getNota())
         .series(series)
         .build();
-    return itemRutinaRepo.save(itemRutina);
   }
 
   public Serie crearSerieFromTipoDeEjercicio(TipoDeEjercicio tipoDeEjercicio, SerieRequestDto serieRequestDto) {
@@ -56,6 +56,11 @@ public class ItemRutinaService {
     items.forEach(i-> itemsDto.add(new ItemRutinaResponseDto(i.getId(),i.getEjercicio().getNombre(),
             i.getDescansoEnSeg(),i.getNota())));
     return itemsDto;
+  }
+
+  public ItemRutinaResponseDto toResponseDto(ItemRutina itemRutina){
+    return new ItemRutinaResponseDto(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
+            itemRutina.getNota());
   }
 
 }
