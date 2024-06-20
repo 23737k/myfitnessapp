@@ -13,6 +13,7 @@ import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
 import com.myfitnessapp.exceptions.SerieNoValidaException;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
 import com.myfitnessapp.validation.ObjectsValidator;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

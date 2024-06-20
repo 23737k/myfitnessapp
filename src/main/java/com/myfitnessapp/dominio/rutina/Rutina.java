@@ -20,6 +20,7 @@ public class Rutina {
   private String descripcion;
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "rutina_id")
+  @OrderColumn(name="item_order")
   private List<ItemRutina> items;
 
   public Rutina(String nombre, String descripcion, List<ItemRutina> items) {

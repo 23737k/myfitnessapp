@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface ItemRutinaRepo extends JpaRepository<ItemRutina, Integer> {
     @Transactional
-    @Query(value = "SELECT * FROM item_rutina i WHERE i.rutina_id = :rutinaId", nativeQuery = true)
+    @Query(value = "SELECT * FROM item_rutina i WHERE i.rutina_id = :rutinaId ORDER BY i.item_order", nativeQuery = true)
     List<ItemRutina> findAllByRutina(@Param("rutinaId")Integer rutinaId);
 }

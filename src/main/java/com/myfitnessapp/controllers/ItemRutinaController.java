@@ -1,5 +1,6 @@
 package com.myfitnessapp.controllers;
 
+import com.myfitnessapp.dto.request.CambiarOrdenItemRequest;
 import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
 import com.myfitnessapp.services.ItemRutinaService;
 import com.myfitnessapp.services.RutinaService;
@@ -24,4 +25,10 @@ public class ItemRutinaController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping("/cambiarOrden")
+    public ResponseEntity<?> cambiarOrdenItem(@PathVariable("rutinaId") Integer id, @RequestBody
+    CambiarOrdenItemRequest cambiarOrdenItemRequest){
+        rutinaService.cambiarOrdenItem(id, cambiarOrdenItemRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

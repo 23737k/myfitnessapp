@@ -7,7 +7,6 @@ import com.myfitnessapp.dto.request.EjercicioRequestDto;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.EjercicioRepo;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
