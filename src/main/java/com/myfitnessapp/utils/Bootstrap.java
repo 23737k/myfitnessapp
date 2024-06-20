@@ -32,6 +32,7 @@ public class Bootstrap {
   @Transactional
   public void cargarEjercicios(){
     String pesoYReps = TipoDeEjercicio.PESO_Y_REPETICIONES.toString();
+
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Press banca",1,2,pesoYReps ));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Sentadilla", 9, 13, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Dominadas", 3, null,pesoYReps ));

@@ -3,17 +3,15 @@ package com.myfitnessapp.services;
 import com.myfitnessapp.dominio.ejercicio.Ejercicio;
 import com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio;
 import com.myfitnessapp.dominio.rutina.ItemRutina;
-import com.myfitnessapp.dominio.series.Serie;
-import com.myfitnessapp.dominio.series.SeriePesoCorpYReps;
-import com.myfitnessapp.dominio.series.SeriePesoYReps;
-import com.myfitnessapp.dominio.series.SerieTiempo;
+import com.myfitnessapp.dominio.series.*;
 import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
 import com.myfitnessapp.dto.request.SerieRequestDto;
 import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
+import com.myfitnessapp.dto.response.SerieResponseDto;
 import com.myfitnessapp.exceptions.SerieNoValidaException;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
 import com.myfitnessapp.validation.ObjectsValidator;
-import jakarta.persistence.EntityNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,17 +46,33 @@ public class ItemRutinaService {
   public Serie crearSerieFromTipoDeEjercicio(TipoDeEjercicio tipoDeEjercicio, SerieRequestDto serieRequestDto) {
     switch (tipoDeEjercicio) {
       case PESO_Y_REPETICIONES:
-        SeriePesoYReps seriePesoYReps = new SeriePesoYReps(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
-        new ObjectsValidator<SeriePesoYReps>().validate(seriePesoYReps);
-        return seriePesoYReps;
-      case TIEMPO:
-        SerieTiempo serieTiempo = new SerieTiempo(serieRequestDto.getTiempoEnSeg());
-        new ObjectsValidator<SerieTiempo>().validate(serieTiempo);
-        return serieTiempo;
+        PesoYReps pesoYReps = new PesoYReps(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+        new ObjectsValidator<PesoYReps>().validate(pesoYReps);
+        return pesoYReps;
+      case DURACION:
+        Duracion duracion = new Duracion(serieRequestDto.getTiempoEnSeg());
+        new ObjectsValidator<Duracion>().validate(duracion);
+        return duracion;
       case PESO_CORPORAL :
-        SeriePesoCorpYReps seriePesoCorpYReps = new SeriePesoCorpYReps(serieRequestDto.getReps());
-        new ObjectsValidator<SeriePesoCorpYReps>().validate(seriePesoCorpYReps);
-        return seriePesoCorpYReps;
+        PesoCorpYReps pesoCorpYReps = new PesoCorpYReps(serieRequestDto.getReps());
+        new ObjectsValidator<PesoCorpYReps>().validate(pesoCorpYReps);
+        return pesoCorpYReps;
+      case PESO_CORPORAL_CON_PESO_EXTRA:
+        PesoCorpPesoExtra pesoCorpPesoExtra = new PesoCorpPesoExtra(serieRequestDto.getReps(),serieRequestDto.getPesoEnKg());
+        new ObjectsValidator<PesoCorpPesoExtra>().validate(pesoCorpPesoExtra);
+        return pesoCorpPesoExtra;
+      case PESO_CORPORAL_ASISTIDO:
+        PesoCorpAsistido pesoCorpAsistido = new PesoCorpAsistido(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+        new ObjectsValidator<>().validate(pesoCorpAsistido);
+        return pesoCorpAsistido;
+      case DISTANCIA_Y_PESO:
+        DistanciaYPeso distanciaYPeso = new DistanciaYPeso(serieRequestDto.getDistancia(), serieRequestDto.getPesoEnKg());
+        new ObjectsValidator<DistanciaYPeso>().validate(distanciaYPeso);
+        return distanciaYPeso;
+      case DISTANCIA_Y_DURACION:
+        DistanciaYDuracion distanciaYDuracion = new DistanciaYDuracion(serieRequestDto.getDistancia(),serieRequestDto.getTiempoEnSeg());
+        new ObjectsValidator<DistanciaYDuracion>().validate(distanciaYDuracion);
+        return distanciaYDuracion;
       default :
         throw new SerieNoValidaException("Formato de serie invalido");
     }
@@ -66,12 +80,51 @@ public class ItemRutinaService {
 
   public List<ItemRutinaResponseDto> getItems(Integer rutinaId){
     List<ItemRutina> items = itemRutinaRepo.findAllByRutina(rutinaId);
-    return items.stream().map(this::toResponseDto).collect(Collectors.toList());
+    return items.stream().map(this::toItemResponseDto).collect(Collectors.toList());
   }
 
-  public ItemRutinaResponseDto toResponseDto(ItemRutina itemRutina){
-    return new ItemRutinaResponseDto(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
-            itemRutina.getNota());
+  public List<SerieResponseDto> obtenerSeriesResponseDto(ItemRutina itemRutina){
+    TipoDeEjercicio tipoDeEjercicio = itemRutina.getEjercicio().getTipoDeEjercicio();
+    List<SerieResponseDto> seriesDto = new ArrayList<>();
+    for (Serie s : itemRutina.getSeries()) {
+      switch (tipoDeEjercicio){
+        case PESO_Y_REPETICIONES :
+          seriesDto.add(SerieResponseDto.builder()
+                  .reps(((PesoYReps) s).getReps())
+                  .pesoEnKg(((PesoYReps) s).getPesoEnKg())
+                  .build());
+          break;
+        case PESO_CORPORAL:
+          seriesDto.add(SerieResponseDto.builder()
+                  .reps(((PesoCorpYReps) s).getReps())
+                  .build());
+          break;
+        case PESO_CORPORAL_CON_PESO_EXTRA:
+          seriesDto.add(SerieResponseDto.builder()
+                  .reps(((PesoCorpPesoExtra) s).getReps())
+                  .pesoEnKg(((PesoCorpPesoExtra) s).getPesoEnKg())
+                  .build());
+          break;
+        case PESO_CORPORAL_ASISTIDO:
+          break;
+        case DISTANCIA_Y_DURACION:
+          break;
+        case DISTANCIA_Y_PESO:
+          break;
+        case DURACION:
+          break;
+      }
+    }
+    return seriesDto;
   }
+
+
+  public ItemRutinaResponseDto toItemResponseDto(ItemRutina itemRutina){
+    List<SerieResponseDto> series =  obtenerSeriesResponseDto(itemRutina);
+        return new ItemRutinaResponseDto(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
+            itemRutina.getNota(), series);
+  }
+
+
 
 }

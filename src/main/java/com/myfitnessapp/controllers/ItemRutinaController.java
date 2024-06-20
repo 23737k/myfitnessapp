@@ -31,4 +31,10 @@ public class ItemRutinaController {
         rutinaService.cambiarOrdenItem(id, cambiarOrdenItemRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<?> eliminarItem(@PathVariable("itemId") Integer itemId, @PathVariable("rutinaId") Integer rutinaId){
+        rutinaService.eliminarItem(rutinaId, itemId);
+        return ResponseEntity.ok().build();
+    }
 }

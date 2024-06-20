@@ -15,6 +15,6 @@ public class CambiarOrdenItemRequest {
   private Integer indice;
   @NotNull(message = "El campo idItem no debe estar vacío")
   @PositiveOrZero(message = "El idItem debe ser mayor o igual a cero")
-  private Integer idItem;
+  private Integer itemId;
 
 }

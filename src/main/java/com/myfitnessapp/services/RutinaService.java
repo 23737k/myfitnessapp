@@ -61,10 +61,18 @@ public class RutinaService{
     rutinaRepo.save(rutina);
   }
 
+  public void eliminarItem(Integer rutinaId, Integer itemId){
+    Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("La rutina no existe"));
+    boolean itemEliminado = rutina.getItems().removeIf(i -> i.getId().equals(itemId));
+    if(!itemEliminado)
+      throw new EntityNotFoundException("El item no existe");
+    rutinaRepo.save(rutina);
+  }
+
   public void cambiarOrdenItem(Integer rutinaId ,CambiarOrdenItemRequest cambiarOrdenItemRequest) {
     new ObjectsValidator<CambiarOrdenItemRequest>().validate(cambiarOrdenItemRequest);
     Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
-    Integer itemId = cambiarOrdenItemRequest.getIdItem();
+    Integer itemId = cambiarOrdenItemRequest.getItemId();
     ItemRutina itemRutina = rutina.getItems().stream()
         .filter(i->i.getId().equals(itemId)).findFirst().orElseThrow(()-> new InvalidReferenceException("Item de rutina no encontrada"));
 

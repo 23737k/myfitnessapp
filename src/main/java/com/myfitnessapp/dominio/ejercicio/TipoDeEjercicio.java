@@ -2,9 +2,10 @@ package com.myfitnessapp.dominio.ejercicio;
 
 public enum TipoDeEjercicio {
     PESO_Y_REPETICIONES,
-    REPETICIONES,
     PESO_CORPORAL,
-    DISTANCIA,
+    PESO_CORPORAL_CON_PESO_EXTRA,
+    PESO_CORPORAL_ASISTIDO,
+    DISTANCIA_Y_DURACION,
     DISTANCIA_Y_PESO,
-    TIEMPO
+    DURACION
 }
