@@ -32,10 +32,13 @@ public class Bootstrap {
   @Transactional
   public void cargarEjercicios(){
     String pesoYReps = TipoDeEjercicio.PESO_Y_REPETICIONES.toString();
+    String pesoCorp = TipoDeEjercicio.PESO_CORPORAL.toString();
+    String pesoCorpYPesoExtra = TipoDeEjercicio.PESO_CORPORAL_CON_PESO_EXTRA.toString();
+
 
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Press banca",1,2,pesoYReps ));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Sentadilla", 9, 13, pesoYReps));
-    ejercicioService.saveEjercicio(new EjercicioRequestDto("Dominadas", 3, null,pesoYReps ));
+    ejercicioService.saveEjercicio(new EjercicioRequestDto("Dominadas", 3, null,pesoCorp ));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Curl de bíceps", 4, null, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Press militar", 6, null, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Remo con barra", 3, 5, pesoYReps));
@@ -43,7 +46,7 @@ public class Bootstrap {
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Extensiones de tríceps", 2, null, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Elevaciones laterales", 6, null, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Encogimientos de hombros", 5, null, pesoYReps));
-    ejercicioService.saveEjercicio(new EjercicioRequestDto("Abdominales en banco declinado", 8, null, pesoYReps));
+    ejercicioService.saveEjercicio(new EjercicioRequestDto("Abdominales en banco declinado", 8, null, pesoCorp));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Press inclinado con mancuernas", 1, 2, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Curl de muñeca", 7, null, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Prensa de piernas", 9, 12, pesoYReps));
@@ -55,7 +58,7 @@ public class Bootstrap {
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Remo con mancuerna", 3, 4, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Face pull", 5, 6, pesoYReps));
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Levantamiento frontal", 6, null, pesoYReps));
-    ejercicioService.saveEjercicio(new EjercicioRequestDto("Fondos en paralelas", 1, 2, pesoYReps));
+    ejercicioService.saveEjercicio(new EjercicioRequestDto("Fondos en paralelas", 1, 2, pesoCorpYPesoExtra));
   }
 
 

@@ -3,6 +3,7 @@ package com.myfitnessapp.controllers;
 import com.myfitnessapp.dto.request.RutinaRequestDto;
 import com.myfitnessapp.dto.response.RutinaResponseDto;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

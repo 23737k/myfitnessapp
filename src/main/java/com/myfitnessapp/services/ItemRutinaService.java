@@ -106,12 +106,27 @@ public class ItemRutinaService {
                   .build());
           break;
         case PESO_CORPORAL_ASISTIDO:
+          seriesDto.add(SerieResponseDto.builder()
+              .reps(((PesoCorpAsistido)s).getReps())
+              .pesoEnKg(((PesoCorpAsistido) s).getPesoEnKg())
+              .build());
           break;
         case DISTANCIA_Y_DURACION:
+          seriesDto.add(SerieResponseDto.builder()
+              .distancia(((DistanciaYDuracion) s).getDistancia())
+              .tiempoEnSeg(((DistanciaYDuracion) s).getTiempoEnSeg())
+              .build());
           break;
         case DISTANCIA_Y_PESO:
+          seriesDto.add(SerieResponseDto.builder()
+              .distancia(((DistanciaYPeso) s).getDistancia())
+              .pesoEnKg(((DistanciaYPeso) s).getPesoEnKg())
+              .build());
           break;
         case DURACION:
+          seriesDto.add(SerieResponseDto.builder()
+              .tiempoEnSeg(((Duracion) s).getTiempoEnSeg())
+              .build());
           break;
       }
     }
