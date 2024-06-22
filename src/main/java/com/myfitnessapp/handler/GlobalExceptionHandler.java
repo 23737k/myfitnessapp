@@ -4,9 +4,14 @@ import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.exceptions.ObjectNotValidException;
 import com.myfitnessapp.exceptions.SerieNoValidaException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,6 +29,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<?> handleException(InvalidReferenceException e) {
     return ResponseEntity.badRequest().body(e.getErrorMessage());
   }
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<?> handleException(MethodArgumentNotValidException e){
+    Set<String> errorMessages = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
+    return ResponseEntity.badRequest().body(errorMessages);
+  }
+
 
   @ExceptionHandler(ObjectNotValidException.class)
   public ResponseEntity<?> handleException(ObjectNotValidException e) {

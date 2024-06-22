@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RutinaService{
   private final RutinaRepo rutinaRepo;
-  private final ObjectsValidator<RutinaRequestDto> rutinaValidator;
+  //private final ObjectsValidator<RutinaRequestDto> rutinaValidator;
   private final ItemRutinaService itemRutinaService;
 
   // Mapping methods
@@ -34,7 +34,7 @@ public class RutinaService{
   }
   //
   public RutinaResponseDto saveRutina(RutinaRequestDto rutinaRequestDto) {
-    rutinaValidator.validate(rutinaRequestDto);
+    //rutinaValidator.validate(rutinaRequestDto);
 
     Rutina rutina = rutinaRepo.save(toRutina(rutinaRequestDto));
     return new RutinaResponseDto(rutina.getId(), rutina.getNombre(), rutina.getDescripcion());
