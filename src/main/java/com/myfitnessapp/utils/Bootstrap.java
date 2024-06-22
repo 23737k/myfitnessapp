@@ -5,6 +5,8 @@ import com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio;
 import com.myfitnessapp.dto.request.EjercicioRequestDto;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
 import com.myfitnessapp.services.EjercicioService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +17,15 @@ import org.springframework.stereotype.Component;
 public class Bootstrap {
   private final GrupoMuscularRepo grupoMuscularRepo;
   private final EjercicioService ejercicioService;
+  private final EntityManager em;
 
   @Transactional
   public void init(){
-    cargarGruposMusculares();
-    cargarEjercicios();
+    if(bdVacia()) {
+      cargarGruposMusculares();
+      cargarEjercicios();
+    }
+
   }
 
   @Transactional
@@ -61,5 +67,15 @@ public class Bootstrap {
     ejercicioService.saveEjercicio(new EjercicioRequestDto("Fondos en paralelas", 1, 2, pesoCorpYPesoExtra));
   }
 
+  private boolean bdVacia(){
+    List<String> tablas = List.of("Ejercicio", "GrupoMuscular");
+      for(String t : tablas){
+        Query query = em.createQuery("SELECT COUNT(*) FROM " + t);
+        Long count = (Long) query.getSingleResult();
+        if(count>0)
+          return false;
+      }
+      return true;
+  }
 
 }
