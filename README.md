@@ -46,7 +46,7 @@ To get started with this project, you will need to have the following installed 
       Open a web browser and go to http://localhost/doc/swagger-ui.html
 
 
-   -> The application will be available at http://localhost 
+   -> The application will be available at http://localhost:8080
 
 
 Class Diagram
