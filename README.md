@@ -43,10 +43,10 @@ To get started with this project, you will need to have the following installed 
       ```
    5. Access the API documentation using Swagger UI:
       
-      Open a web browser and go to http://localhost/doc/swagger-ui.html
+      Open a web browser and go to http://localhost:8080/doc/swagger-ui.html
 
 
-   -> The application will be available at http://localhost 
+   -> The application will be available at http://localhost:8080
 
 
 Class Diagram
