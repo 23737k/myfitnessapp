@@ -7,6 +7,7 @@ import com.myfitnessapp.services.RutinaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -20,13 +21,14 @@ public class ItemRutinaController {
         return ResponseEntity.ok().body(itemRutinaService.getItems(id));
     }
     @PostMapping
-    public ResponseEntity<?> crearItem(@PathVariable("rutinaId") Integer id, @RequestBody ItemRutinaRequestDto itemDto){
+    public ResponseEntity<?> crearItem(@PathVariable("rutinaId") Integer id, @RequestBody @Validated
+    ItemRutinaRequestDto itemDto){
         rutinaService.agregarItem(id, itemRutinaService.toItemRutina(itemDto));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/cambiarOrden")
-    public ResponseEntity<?> cambiarOrdenItem(@PathVariable("rutinaId") Integer id, @RequestBody
+    public ResponseEntity<?> cambiarOrdenItem(@PathVariable("rutinaId") Integer id, @RequestBody @Validated
     CambiarOrdenItemRequest cambiarOrdenItemRequest){
         rutinaService.cambiarOrdenItem(id, cambiarOrdenItemRequest);
         return new ResponseEntity<>(HttpStatus.OK);

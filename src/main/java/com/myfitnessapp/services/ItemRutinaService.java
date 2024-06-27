@@ -10,11 +10,9 @@ import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
 import com.myfitnessapp.dto.response.SerieResponseDto;
 import com.myfitnessapp.exceptions.SerieNoValidaException;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
-import com.myfitnessapp.validation.ObjectsValidator;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,10 +22,8 @@ import org.springframework.stereotype.Service;
 public class ItemRutinaService {
   private final ItemRutinaRepo itemRutinaRepo;
   private final EjercicioService ejercicioService;
-  private final ObjectsValidator<ItemRutinaRequestDto> validator;
 
   public ItemRutina toItemRutina(ItemRutinaRequestDto itemRutinaRequestDto) {
-    validator.validate(itemRutinaRequestDto);
     Ejercicio ejercicio = ejercicioService.findEjercicioById(itemRutinaRequestDto.getEjercicioId());
     List<Serie> series = new ArrayList<>();
 
@@ -44,38 +40,20 @@ public class ItemRutinaService {
   }
 
   public Serie crearSerieFromTipoDeEjercicio(TipoDeEjercicio tipoDeEjercicio, SerieRequestDto serieRequestDto) {
-    switch (tipoDeEjercicio) {
-      case PESO_Y_REPETICIONES:
-        PesoYReps pesoYReps = new PesoYReps(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
-        new ObjectsValidator<PesoYReps>().validate(pesoYReps);
-        return pesoYReps;
-      case DURACION:
-        Duracion duracion = new Duracion(serieRequestDto.getTiempoEnSeg());
-        new ObjectsValidator<Duracion>().validate(duracion);
-        return duracion;
-      case PESO_CORPORAL :
-        PesoCorpYReps pesoCorpYReps = new PesoCorpYReps(serieRequestDto.getReps());
-        new ObjectsValidator<PesoCorpYReps>().validate(pesoCorpYReps);
-        return pesoCorpYReps;
-      case PESO_CORPORAL_CON_PESO_EXTRA:
-        PesoCorpPesoExtra pesoCorpPesoExtra = new PesoCorpPesoExtra(serieRequestDto.getReps(),serieRequestDto.getPesoEnKg());
-        new ObjectsValidator<PesoCorpPesoExtra>().validate(pesoCorpPesoExtra);
-        return pesoCorpPesoExtra;
-      case PESO_CORPORAL_ASISTIDO:
-        PesoCorpAsistido pesoCorpAsistido = new PesoCorpAsistido(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
-        new ObjectsValidator<>().validate(pesoCorpAsistido);
-        return pesoCorpAsistido;
-      case DISTANCIA_Y_PESO:
-        DistanciaYPeso distanciaYPeso = new DistanciaYPeso(serieRequestDto.getDistancia(), serieRequestDto.getPesoEnKg());
-        new ObjectsValidator<DistanciaYPeso>().validate(distanciaYPeso);
-        return distanciaYPeso;
-      case DISTANCIA_Y_DURACION:
-        DistanciaYDuracion distanciaYDuracion = new DistanciaYDuracion(serieRequestDto.getDistancia(),serieRequestDto.getTiempoEnSeg());
-        new ObjectsValidator<DistanciaYDuracion>().validate(distanciaYDuracion);
-        return distanciaYDuracion;
-      default :
-        throw new SerieNoValidaException("Formato de serie invalido");
-    }
+    return switch (tipoDeEjercicio) {
+      case PESO_Y_REPETICIONES ->
+          new PesoYReps(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+      case DURACION -> new Duracion(serieRequestDto.getTiempoEnSeg());
+      case PESO_CORPORAL -> new PesoCorpYReps(serieRequestDto.getReps());
+      case PESO_CORPORAL_CON_PESO_EXTRA ->
+          new PesoCorpPesoExtra(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+      case PESO_CORPORAL_ASISTIDO ->
+          new PesoCorpAsistido(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+      case DISTANCIA_Y_PESO ->
+          new DistanciaYPeso(serieRequestDto.getDistancia(), serieRequestDto.getPesoEnKg());
+      case DISTANCIA_Y_DURACION ->
+          new DistanciaYDuracion(serieRequestDto.getDistancia(), serieRequestDto.getTiempoEnSeg());
+    };
   }
 
   public List<ItemRutinaResponseDto> getItems(Integer rutinaId){

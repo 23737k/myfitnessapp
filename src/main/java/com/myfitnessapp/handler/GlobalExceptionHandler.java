@@ -35,14 +35,11 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(errorMessages);
   }
 
-
-  @ExceptionHandler(ObjectNotValidException.class)
-  public ResponseEntity<?> handleException(ObjectNotValidException e) {
-    return ResponseEntity.badRequest().body(e.getErrorMessages());
-  }
   @ExceptionHandler(SerieNoValidaException.class)
   public ResponseEntity<?> handleException(SerieNoValidaException e) {
     return ResponseEntity.badRequest().body(e.getErrorMessage());
   }
+
+
 
 }

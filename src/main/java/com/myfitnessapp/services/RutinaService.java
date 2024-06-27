@@ -7,7 +7,6 @@ import com.myfitnessapp.dto.request.RutinaRequestDto;
 import com.myfitnessapp.dto.response.RutinaResponseDto;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.RutinaRepo;
-import com.myfitnessapp.validation.ObjectsValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RutinaService{
   private final RutinaRepo rutinaRepo;
-  //private final ObjectsValidator<RutinaRequestDto> rutinaValidator;
   private final ItemRutinaService itemRutinaService;
 
   // Mapping methods
@@ -70,7 +68,6 @@ public class RutinaService{
   }
 
   public void cambiarOrdenItem(Integer rutinaId ,CambiarOrdenItemRequest cambiarOrdenItemRequest) {
-    new ObjectsValidator<CambiarOrdenItemRequest>().validate(cambiarOrdenItemRequest);
     Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
     Integer itemId = cambiarOrdenItemRequest.getItemId();
     ItemRutina itemRutina = rutina.getItems().stream()
