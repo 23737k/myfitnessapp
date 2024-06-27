@@ -3,14 +3,17 @@ package com.myfitnessapp.services;
 import com.myfitnessapp.dominio.ejercicio.Ejercicio;
 import com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio;
 import com.myfitnessapp.dominio.rutina.ItemRutina;
+import com.myfitnessapp.dominio.rutina.Rutina;
 import com.myfitnessapp.dominio.series.*;
 import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
 import com.myfitnessapp.dto.request.SerieRequestDto;
 import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
 import com.myfitnessapp.dto.response.SerieResponseDto;
+import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.exceptions.SerieNoValidaException;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -117,7 +120,5 @@ public class ItemRutinaService {
         return new ItemRutinaResponseDto(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
             itemRutina.getNota(), series);
   }
-
-
 
 }

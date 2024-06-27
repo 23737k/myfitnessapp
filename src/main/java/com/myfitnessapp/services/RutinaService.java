@@ -3,6 +3,7 @@ package com.myfitnessapp.services;
 import com.myfitnessapp.dominio.rutina.ItemRutina;
 import com.myfitnessapp.dominio.rutina.Rutina;
 import com.myfitnessapp.dto.request.CambiarOrdenItemRequest;
+import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
 import com.myfitnessapp.dto.request.RutinaRequestDto;
 import com.myfitnessapp.dto.response.RutinaResponseDto;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class RutinaService{
   private final RutinaRepo rutinaRepo;
   private final ItemRutinaService itemRutinaService;
+  private final EjercicioService ejercicioService;
 
   // Mapping methods
   public Rutina toRutina(RutinaRequestDto rDto) {
@@ -32,8 +34,6 @@ public class RutinaService{
   }
   //
   public RutinaResponseDto saveRutina(RutinaRequestDto rutinaRequestDto) {
-    //rutinaValidator.validate(rutinaRequestDto);
-
     Rutina rutina = rutinaRepo.save(toRutina(rutinaRequestDto));
     return new RutinaResponseDto(rutina.getId(), rutina.getNombre(), rutina.getDescripcion());
   }
@@ -80,6 +80,23 @@ public class RutinaService{
     }
     rutina.getItems().remove(itemRutina);
     rutina.getItems().add(nuevoIndice, itemRutina);
+    rutinaRepo.save(rutina);
+  }
+
+  public void modificarItem(ItemRutinaRequestDto itemModif, Integer rutinaId, Integer itemId){
+    Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
+    ItemRutina item = rutina.getItems().stream().filter(i-> i.getId().equals(itemId)).findFirst()
+        .orElseThrow(()-> new InvalidReferenceException("Item de rutina no existe"));
+
+    if(itemModif.getEjercicioId()!=null) {
+      item.setEjercicio(ejercicioService.findEjercicioById(itemModif.getEjercicioId()));
+    }
+    if(itemModif.getNota()!=null){
+      item.setNota(itemModif.getNota());
+    }
+    if(itemModif.getDescansoEnSeg()!=null)
+      item.setDescansoEnSeg(itemModif.getDescansoEnSeg());
+
     rutinaRepo.save(rutina);
   }
 }
