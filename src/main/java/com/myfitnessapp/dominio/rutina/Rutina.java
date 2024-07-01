@@ -18,7 +18,7 @@ public class Rutina {
   private Integer id;
   private String nombre;
   private String descripcion;
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "rutina_id")
   @OrderColumn(name="item_order")
   private List<ItemRutina> items;
@@ -27,5 +27,16 @@ public class Rutina {
     this.nombre = nombre;
     this.descripcion = descripcion;
     this.items = items;
+  }
+
+  public void setItems(List<ItemRutina> itemRutinaList){
+    if (this.items != null) {
+      this.items.clear();
+      if (itemRutinaList != null) {
+        this.items.addAll(itemRutinaList);
+      }
+    } else {
+      this.items = itemRutinaList;
+    }
   }
 }

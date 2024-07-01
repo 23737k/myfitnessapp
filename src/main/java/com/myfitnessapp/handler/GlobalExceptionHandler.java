@@ -4,6 +4,8 @@ import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.exceptions.ObjectNotValidException;
 import com.myfitnessapp.exceptions.SerieNoValidaException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,6 +34,11 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<?> handleException(MethodArgumentNotValidException e){
     Set<String> errorMessages = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
+    return ResponseEntity.badRequest().body(errorMessages);
+  }
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<?> handleException(ConstraintViolationException e){
+    Set<String> errorMessages = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.toSet());
     return ResponseEntity.badRequest().body(errorMessages);
   }
 

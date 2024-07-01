@@ -2,13 +2,16 @@ package com.myfitnessapp.services;
 
 import com.myfitnessapp.dominio.rutina.ItemRutina;
 import com.myfitnessapp.dominio.rutina.Rutina;
+import com.myfitnessapp.dominio.series.Serie;
 import com.myfitnessapp.dto.request.CambiarOrdenItemRequest;
 import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
 import com.myfitnessapp.dto.request.RutinaRequestDto;
+import com.myfitnessapp.dto.request.SerieRequestDto;
 import com.myfitnessapp.dto.response.RutinaResponseDto;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.RutinaRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,6 +93,7 @@ public class RutinaService{
 
     if(itemModif.getEjercicioId()!=null) {
       item.setEjercicio(ejercicioService.findEjercicioById(itemModif.getEjercicioId()));
+      item.setSeries(new ArrayList<>());
     }
     if(itemModif.getNota()!=null){
       item.setNota(itemModif.getNota());
@@ -97,6 +101,13 @@ public class RutinaService{
     if(itemModif.getDescansoEnSeg()!=null)
       item.setDescansoEnSeg(itemModif.getDescansoEnSeg());
 
+    if(itemModif.getSeries()!=null) {
+      List<Serie> series = new ArrayList<>();
+      for (SerieRequestDto serie : itemModif.getSeries()){
+        series.add(itemRutinaService.crearSerieFromTipoDeEjercicio(item.getEjercicio().getTipoDeEjercicio(),serie));
+      }
+      item.setSeries(series);
+    }
     rutinaRepo.save(rutina);
   }
 }

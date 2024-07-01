@@ -23,7 +23,7 @@ public class ItemRutina {
   private Ejercicio ejercicio;
   private int descansoEnSeg;
   private String nota;
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "item_rutina_id")
   private List<Serie> series;
 
@@ -32,6 +32,16 @@ public class ItemRutina {
     this.descansoEnSeg = descansoEnSeg;
     this.nota = nota;
     this.series = series;
+  }
+  public void setSeries(List<Serie> seriesList){
+    if (this.series != null) {
+      this.series.clear();
+      if (seriesList != null) {
+        this.series.addAll(seriesList);
+      }
+    } else {
+      this.series = seriesList;
+    }
   }
 
 }
