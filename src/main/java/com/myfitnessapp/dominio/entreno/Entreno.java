@@ -4,13 +4,8 @@ import static com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio.PESO_Y_REPETICI
 import com.myfitnessapp.dominio.rutina.ItemRutina;
 import com.myfitnessapp.dominio.rutina.Rutina;
 import com.myfitnessapp.dominio.series.PesoYReps;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +20,23 @@ public class Entreno {
   private Integer duracionEnMinutos;
   private Integer volumen;
   private LocalDateTime inicio;
-  private LocalDateTime fin;
   private Integer nroDeSeries;
   @ManyToOne(cascade = CascadeType.ALL)
   private Rutina rutina;
-  @ManyToOne
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "entreno_id")
+  @OrderColumn(name="item_order")
   private List<ItemRutina> items;
 
   protected Entreno(){}
 
-  public Entreno (Rutina rutina, List<ItemRutina> items, Integer duracionEnMinutos, LocalDateTime inicio, LocalDateTime fin){
+  public Entreno (Rutina rutina, List<ItemRutina> items, Integer duracionEnMinutos, LocalDateTime inicio){
     this.rutina = rutina;
     this.duracionEnMinutos = duracionEnMinutos;
     this.inicio = inicio;
-    this.fin = fin;
+    this.items = items == null? rutina.getItems(): items;
     this.nroDeSeries = calcularNroSeries();
     this.volumen = calcularVolumen();
-    this.items = items == null? new ArrayList<>(): items;
   }
 
   public int calcularVolumen(){
