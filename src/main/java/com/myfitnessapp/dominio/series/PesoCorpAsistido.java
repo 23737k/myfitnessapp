@@ -22,4 +22,9 @@ public class PesoCorpAsistido extends Serie{
     @Positive(message = "El campo pesoEnKg debe ser un numero positivo")
     @NotNull(message = "El campo pesoEnKg no debe estar vacío")
     private Double pesoEnKg;
+
+    @Override
+    public Serie clonar() {
+        return new PesoCorpAsistido(this.reps,this.pesoEnKg);
+    }
 }

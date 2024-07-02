@@ -44,4 +44,9 @@ public class ItemRutina {
     }
   }
 
+  public ItemRutina clonar(){
+    List<Serie> series = this.series.stream().map(Serie::clonar).toList();
+    return new ItemRutina(this.getEjercicio(),this.getDescansoEnSeg(),this.getNota(),series);
+  }
+
 }

@@ -23,4 +23,8 @@ public class PesoYReps extends Serie {
   @NotNull(message = "El campo pesoEnKg no debe estar vacío")
   private Double pesoEnKg;
 
+  @Override
+  public Serie clonar() {
+    return new PesoYReps(this.reps,this.pesoEnKg);
+  }
 }

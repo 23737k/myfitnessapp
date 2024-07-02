@@ -19,4 +19,5 @@ public abstract class Serie {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  public abstract Serie clonar();
 }

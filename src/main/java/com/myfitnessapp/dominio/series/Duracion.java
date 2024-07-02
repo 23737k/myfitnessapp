@@ -19,4 +19,9 @@ public class Duracion extends Serie{
     @Positive(message = "El campo tiempoEnSeg debe ser un numero positivo")
     @NotNull(message = "El campo tiempoEnSeg no debe estar vacío")
     private Integer tiempoEnSeg;
+
+    @Override
+    public Serie clonar() {
+        return new Duracion(this.tiempoEnSeg);
+    }
 }

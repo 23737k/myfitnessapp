@@ -22,4 +22,9 @@ public class DistanciaYDuracion extends Serie{
     @Positive(message = "El campo reps debe ser un numero positivo")
     @NotNull(message = "El campo reps no debe estar vacío")
     private Integer tiempoEnSeg;
+
+    @Override
+    public Serie clonar() {
+        return new DistanciaYDuracion(this.distancia,this.tiempoEnSeg);
+    }
 }

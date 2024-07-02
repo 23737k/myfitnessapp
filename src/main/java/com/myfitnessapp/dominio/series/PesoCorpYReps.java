@@ -21,4 +21,8 @@ public class PesoCorpYReps extends Serie{
   private Integer reps;
 
 
+  @Override
+  public Serie clonar() {
+    return new PesoCorpYReps(this.getReps());
+  }
 }

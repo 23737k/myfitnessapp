@@ -1,15 +1,15 @@
 package com.myfitnessapp.dominio.entreno;
 
-import static com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio.PESO_Y_REPETICIONES;
 import com.myfitnessapp.dominio.rutina.ItemRutina;
 import com.myfitnessapp.dominio.rutina.Rutina;
 import com.myfitnessapp.dominio.series.PesoYReps;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
+
+import static com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio.PESO_Y_REPETICIONES;
 
 @Data
 @Entity
@@ -34,7 +34,7 @@ public class Entreno {
     this.rutina = rutina;
     this.duracionEnMinutos = duracionEnMinutos;
     this.inicio = inicio;
-    this.items = items == null? rutina.getItems(): items;
+    this.items = items == null? rutina.getItems().stream().map(ItemRutina::clonar).toList():items;
     this.nroDeSeries = calcularNroSeries();
     this.volumen = calcularVolumen();
   }

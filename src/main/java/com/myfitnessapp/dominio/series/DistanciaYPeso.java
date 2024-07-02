@@ -22,4 +22,9 @@ public class DistanciaYPeso extends Serie{
     @Positive(message = "El campo distancia debe ser un numero positivo")
     @NotNull(message = "El campo distancia no debe estar vacío")
     private Double pesoEnKg;
+
+    @Override
+    public Serie clonar() {
+        return new DistanciaYPeso(this.distancia, this.pesoEnKg);
+    }
 }
