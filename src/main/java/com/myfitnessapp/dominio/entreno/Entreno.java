@@ -42,7 +42,7 @@ public class Entreno {
   public int calcularVolumen(){
     List<ItemRutina> items = this.items.stream().filter(i->i.getEjercicio().getTipoDeEjercicio().equals(PESO_Y_REPETICIONES)).toList();
     List<PesoYReps> series = items.stream().flatMap(i -> i.getSeries().stream()).map(s -> (PesoYReps) s).toList();
-    return series.stream().mapToInt(s-> s.getPesoEnKg().intValue()).sum();
+    return (int) series.stream().mapToDouble(s -> s.getPesoEnKg() * s.getReps()).sum();
   }
 
   public int calcularNroSeries(){
