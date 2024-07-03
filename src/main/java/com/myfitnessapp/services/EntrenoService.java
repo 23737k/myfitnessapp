@@ -48,4 +48,13 @@ public class EntrenoService {
                 .build();
     }
 
+    public void deleteEntreno(Integer id){
+        entrenoRepo.findById(id).orElseThrow(()->new InvalidReferenceException("No existe el entreno"));
+        entrenoRepo.deleteById(id);
+    }
+
+    public Entreno findById(Integer id){
+        return entrenoRepo.findById(id).orElseThrow(()-> new InvalidReferenceException("No existe el entreno"));
+    }
+
 }

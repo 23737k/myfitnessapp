@@ -21,7 +21,7 @@ public class Entreno {
   private Integer volumen;
   private LocalDateTime inicio;
   private Integer nroDeSeries;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   private Rutina rutina;
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "entreno_id")

@@ -7,7 +7,10 @@ import com.myfitnessapp.dto.request.EjercicioRequestDto;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.EjercicioRepo;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,6 +43,15 @@ public class EjercicioService {
 
   public Ejercicio findEjercicioById(Integer id){
     return ejercicioRepo.findById(id).orElseThrow(()->new InvalidReferenceException("El ejercicio no existe " + id));
+  }
+
+  public Page<Ejercicio> listarEjercicios(Pageable pageable){
+    return ejercicioRepo.findAll(pageable);
+  }
+
+  public void eliminarEjercicio(Integer id){
+    ejercicioRepo.findById(id).orElseThrow(()->new InvalidReferenceException("El ejercicio no existe " + id));
+    ejercicioRepo.deleteById(id);
   }
 
 
