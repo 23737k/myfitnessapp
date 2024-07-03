@@ -6,6 +6,8 @@ Features
 - CRUD operations for routines
 - CRUD operations for exercises and sets
 - CRUD operations for custom exercises
+- CRUD operations for workouts
+- Statistics per workout and exercise
 
 Getting started
 -
