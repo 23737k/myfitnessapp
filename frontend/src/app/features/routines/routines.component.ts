@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {EjercicioControllerService} from "../../core/services/api-client";
 
 @Component({
   selector: 'app-routines',
@@ -11,6 +12,12 @@ export class RoutinesComponent implements OnInit{
   routines?:any[];
 
   ngOnInit(): void {
+
+    this._exerciseService.listarEjercicios({}).subscribe({
+      next: ejercicios => console.log(ejercicios.content?.at(1))
+    })
+
+
     this.routines = [
       {
         title: 'Legs',
@@ -25,6 +32,9 @@ export class RoutinesComponent implements OnInit{
         description: 'Back, Biceps and Forearms'
       }
     ]
+  }
+
+  constructor(private _exerciseService: EjercicioControllerService) {
   }
 
 
