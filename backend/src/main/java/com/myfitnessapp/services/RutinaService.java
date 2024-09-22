@@ -1,13 +1,14 @@
 package com.myfitnessapp.services;
 
-import com.myfitnessapp.dominio.rutina.ItemRutina;
-import com.myfitnessapp.dominio.rutina.Rutina;
-import com.myfitnessapp.dominio.series.Serie;
+import com.myfitnessapp.dto.response.ItemRutinaRes;
+import com.myfitnessapp.model.rutina.ItemRutina;
+import com.myfitnessapp.model.rutina.Rutina;
+import com.myfitnessapp.model.series.Serie;
 import com.myfitnessapp.dto.request.CambiarOrdenItemRequest;
-import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
-import com.myfitnessapp.dto.request.RutinaRequestDto;
-import com.myfitnessapp.dto.request.SerieRequestDto;
-import com.myfitnessapp.dto.response.RutinaResponseDto;
+import com.myfitnessapp.dto.request.ItemRutinaReq;
+import com.myfitnessapp.dto.request.RutinaReq;
+import com.myfitnessapp.dto.request.SerieReq;
+import com.myfitnessapp.dto.response.RutinaRes;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.RutinaRepo;
 
@@ -27,39 +28,40 @@ public class RutinaService{
   private final EjercicioService ejercicioService;
 
   // Mapping methods
-  public Rutina toRutina(RutinaRequestDto rDto) {
+  public Rutina toRutina(RutinaReq rDto) {
     List<ItemRutina> itemRutinaList = rDto.getItems().stream().map(itemRutinaService::toItemRutina).collect(Collectors.toList());
     return new Rutina(rDto.getNombre(),rDto.getDescripcion(),itemRutinaList);
   }
 
-  public RutinaResponseDto toRutinaResponseDto(Rutina rutina) {
-    return new RutinaResponseDto(rutina.getId(), rutina.getNombre(), rutina.getDescripcion());
+  public RutinaRes toRutinaRes(Rutina rutina) {
+    return new RutinaRes(rutina.getId(), rutina.getNombre(), rutina.getDescripcion());
   }
   //
-  public RutinaResponseDto saveRutina(RutinaRequestDto rutinaRequestDto) {
-    Rutina rutina = rutinaRepo.save(toRutina(rutinaRequestDto));
-    return new RutinaResponseDto(rutina.getId(), rutina.getNombre(), rutina.getDescripcion());
+
+  public RutinaRes saveRutina(RutinaReq rutinaReq) {
+    Rutina rutina = rutinaRepo.save(toRutina(rutinaReq));
+    return new RutinaRes(rutina.getId(), rutina.getNombre(), rutina.getDescripcion());
   }
 
-  public RutinaResponseDto findRutinaById(Integer id) {
+  public RutinaRes findRutinaById(Integer id) {
     Rutina rutina = rutinaRepo.findById(id).orElse(null);
-    return rutina != null ? toRutinaResponseDto(rutina) : null ;
+    return rutina != null ? toRutinaRes(rutina) : null ;
   }
 
-  public RutinaResponseDto deleteRutinaById(Integer id) {
+  public RutinaRes deleteRutinaById(Integer id) {
     Rutina rutina = rutinaRepo.findById(id).orElse(null);
     rutinaRepo.deleteById(id);
-    return rutina != null ? toRutinaResponseDto(rutina) : null;
+    return rutina != null ? toRutinaRes(rutina) : null;
   }
 
-  public List<RutinaResponseDto> getRutinas() {
-    return rutinaRepo.findAll().stream().map(this::toRutinaResponseDto).toList();
+  public List<RutinaRes> getRutinas() {
+    return rutinaRepo.findAll().stream().map(this::toRutinaRes).toList();
   }
 
-  public void agregarItem(Integer rutinaId,ItemRutina item){
+  public ItemRutinaRes agregarItem(Integer rutinaId, ItemRutina item){
     Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
     rutina.getItems().add(item);
-    rutinaRepo.save(rutina);
+    return toItemR(rutinaRepo.save(rutina));
   }
 
   public void eliminarItem(Integer rutinaId, Integer itemId){
@@ -86,7 +88,7 @@ public class RutinaService{
     rutinaRepo.save(rutina);
   }
 
-  public void modificarItem(ItemRutinaRequestDto itemModif, Integer rutinaId, Integer itemId){
+  public void modificarItem(ItemRutinaReq itemModif, Integer rutinaId, Integer itemId){
     Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
     ItemRutina item = rutina.getItems().stream().filter(i-> i.getId().equals(itemId)).findFirst()
         .orElseThrow(()-> new InvalidReferenceException("Item de rutina no existe"));
@@ -103,7 +105,7 @@ public class RutinaService{
 
     if(itemModif.getSeries()!=null) {
       List<Serie> series = new ArrayList<>();
-      for (SerieRequestDto serie : itemModif.getSeries()){
+      for (SerieReq serie : itemModif.getSeries()){
         series.add(itemRutinaService.crearSerieFromTipoDeEjercicio(item.getEjercicio().getTipoDeEjercicio(),serie));
       }
       item.setSeries(series);

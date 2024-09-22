@@ -1,13 +1,12 @@
 package com.myfitnessapp.services;
 
-import com.myfitnessapp.dominio.ejercicio.Ejercicio;
-import com.myfitnessapp.dominio.ejercicio.GrupoMuscular;
-import com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio;
-import com.myfitnessapp.dto.request.EjercicioRequestDto;
+import com.myfitnessapp.model.ejercicio.Ejercicio;
+import com.myfitnessapp.model.ejercicio.GrupoMuscular;
+import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
+import com.myfitnessapp.dto.request.EjercicioReq;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.EjercicioRepo;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,7 @@ public class EjercicioService {
   private final EjercicioRepo ejercicioRepo;
   private final GrupoMuscularRepo grupoMuscularRepo;
 
-  public Ejercicio saveEjercicio(EjercicioRequestDto ejDto) {
+  public Ejercicio saveEjercicio(EjercicioReq ejDto) {
 
     GrupoMuscular gmPrimario = grupoMuscularRepo.
         findById(ejDto.getGrupoMuscularPrimario()).orElseThrow(() -> new InvalidReferenceException("Grupo muscular secundario no encontrado"));

@@ -1,7 +1,7 @@
 package com.myfitnessapp.controllers;
 
-import com.myfitnessapp.dominio.ejercicio.Ejercicio;
-import com.myfitnessapp.dto.request.EjercicioRequestDto;
+import com.myfitnessapp.model.ejercicio.Ejercicio;
+import com.myfitnessapp.dto.request.EjercicioReq;
 import com.myfitnessapp.services.EjercicioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class EjercicioController {
   }
 
   @PostMapping
-  public ResponseEntity<?> guardarEjercicio(@RequestBody @Validated EjercicioRequestDto ejercicio) {
+  public ResponseEntity<?> guardarEjercicio(@RequestBody @Validated EjercicioReq ejercicio) {
     return new ResponseEntity<>(ejercicioService.saveEjercicio(ejercicio),HttpStatus.CREATED);
   }
 

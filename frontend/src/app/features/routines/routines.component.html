@@ -9,11 +9,11 @@
   <div id="routinesList" class="row">
     @for(routine of routines; track routine){
       <div class="col-md-4 mb-4">
-        <div class="card">
+        <div class="card " (click)="seeDetails(routine?.id)">
           <div class="card-body">
-            <h5 class="card-title">{{routine.title}}</h5>
-            <p class="card-text">{{ routine.description }}</p>
-            <button class="btn btn-success w-100">Start Routine</button>
+            <h5 class="card-title">{{routine.nombre}}</h5>
+            <p class="card-text">{{ routine.descripcion }}</p>
+            <button class="btn btn-success w-100" (click)="startRoutine($event)">Start Routine</button>
           </div>
         </div>
       </div>

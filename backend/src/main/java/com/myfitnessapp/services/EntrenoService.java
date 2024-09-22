@@ -1,11 +1,10 @@
 package com.myfitnessapp.services;
 
-import com.myfitnessapp.dominio.entreno.Entreno;
-import com.myfitnessapp.dominio.rutina.ItemRutina;
-import com.myfitnessapp.dominio.rutina.Rutina;
-import com.myfitnessapp.dto.request.EntrenoRequestDto;
-import com.myfitnessapp.dto.response.EntrenoResponseDto;
-import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
+import com.myfitnessapp.model.entreno.Entreno;
+import com.myfitnessapp.model.rutina.ItemRutina;
+import com.myfitnessapp.model.rutina.Rutina;
+import com.myfitnessapp.dto.request.EntrenoReq;
+import com.myfitnessapp.dto.response.EntrenoRes;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.EntrenoRepo;
 import com.myfitnessapp.repositories.RutinaRepo;
@@ -25,18 +24,18 @@ public class EntrenoService {
         return entrenoRepo.findAll();
     }
 
-    public void saveEntreno(EntrenoRequestDto entrenoRequestDto){
-        entrenoRepo.save(toEntreno(entrenoRequestDto));
+    public void saveEntreno(EntrenoReq entrenoReq){
+        entrenoRepo.save(toEntreno(entrenoReq));
     }
 
-    public Entreno toEntreno(EntrenoRequestDto dto){
+    public Entreno toEntreno(EntrenoReq dto){
         Rutina rutina = rutinaRepo.findById(dto.getRutinaId()).orElseThrow(()->new InvalidReferenceException("No existe la rutina"));
         List<ItemRutina> items = dto.getItems() != null? dto.getItems().stream().map(itemRutinaService::toItemRutina).toList():null;
         return new Entreno(rutina,items,dto.getDuracionEnMinutos(),dto.getInicio());
     }
 
-    public EntrenoResponseDto toEntrenoResponseDto(Entreno entreno){
-        return EntrenoResponseDto.builder()
+    public EntrenoRes toEntrenoResponseDto(Entreno entreno){
+        return EntrenoRes.builder()
                 .id(entreno.getId())
                 .rutinaId(entreno.getRutina().getId())
                 .rutinaNombre(entreno.getRutina().getNombre())

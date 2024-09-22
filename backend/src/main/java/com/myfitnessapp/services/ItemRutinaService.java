@@ -1,20 +1,20 @@
 package com.myfitnessapp.services;
 
-import com.myfitnessapp.dominio.ejercicio.Ejercicio;
-import com.myfitnessapp.dominio.ejercicio.TipoDeEjercicio;
-import com.myfitnessapp.dominio.rutina.ItemRutina;
-import com.myfitnessapp.dominio.series.DistanciaYDuracion;
-import com.myfitnessapp.dominio.series.DistanciaYPeso;
-import com.myfitnessapp.dominio.series.Duracion;
-import com.myfitnessapp.dominio.series.PesoCorpAsistido;
-import com.myfitnessapp.dominio.series.PesoCorpPesoExtra;
-import com.myfitnessapp.dominio.series.PesoCorpYReps;
-import com.myfitnessapp.dominio.series.PesoYReps;
-import com.myfitnessapp.dominio.series.Serie;
-import com.myfitnessapp.dto.request.ItemRutinaRequestDto;
-import com.myfitnessapp.dto.request.SerieRequestDto;
-import com.myfitnessapp.dto.response.ItemRutinaResponseDto;
-import com.myfitnessapp.dto.response.SerieResponseDto;
+import com.myfitnessapp.model.ejercicio.Ejercicio;
+import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
+import com.myfitnessapp.model.rutina.ItemRutina;
+import com.myfitnessapp.model.series.DistanciaYDuracion;
+import com.myfitnessapp.model.series.DistanciaYPeso;
+import com.myfitnessapp.model.series.Duracion;
+import com.myfitnessapp.model.series.PesoCorpAsistido;
+import com.myfitnessapp.model.series.PesoCorpPesoExtra;
+import com.myfitnessapp.model.series.PesoCorpYReps;
+import com.myfitnessapp.model.series.PesoYReps;
+import com.myfitnessapp.model.series.Serie;
+import com.myfitnessapp.dto.request.ItemRutinaReq;
+import com.myfitnessapp.dto.request.SerieReq;
+import com.myfitnessapp.dto.response.ItemRutinaRes;
+import com.myfitnessapp.dto.response.SerieRes;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,86 +28,86 @@ public class ItemRutinaService {
   private final ItemRutinaRepo itemRutinaRepo;
   private final EjercicioService ejercicioService;
 
-  public ItemRutina toItemRutina(ItemRutinaRequestDto itemRutinaRequestDto) {
-    Ejercicio ejercicio = ejercicioService.findEjercicioById(itemRutinaRequestDto.getEjercicioId());
+  public ItemRutina toItemRutina(ItemRutinaReq itemRutinaReq) {
+    Ejercicio ejercicio = ejercicioService.findEjercicioById(itemRutinaReq.getEjercicioId());
     List<Serie> series = new ArrayList<>();
 
-    for(SerieRequestDto serieDto : itemRutinaRequestDto.getSeries()) {
+    for(SerieReq serieDto : itemRutinaReq.getSeries()) {
       series.add(crearSerieFromTipoDeEjercicio(ejercicio.getTipoDeEjercicio(),serieDto));
     }
 
       return ItemRutina.builder()
         .ejercicio(ejercicio)
-        .descansoEnSeg(itemRutinaRequestDto.getDescansoEnSeg())
-        .nota(itemRutinaRequestDto.getNota())
+        .descansoEnSeg(itemRutinaReq.getDescansoEnSeg())
+        .nota(itemRutinaReq.getNota())
         .series(series)
         .build();
   }
 
-  public Serie crearSerieFromTipoDeEjercicio(TipoDeEjercicio tipoDeEjercicio, SerieRequestDto serieRequestDto) {
+  public Serie crearSerieFromTipoDeEjercicio(TipoDeEjercicio tipoDeEjercicio, SerieReq serieReq) {
     return switch (tipoDeEjercicio) {
       case PESO_Y_REPETICIONES ->
-          new PesoYReps(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
-      case DURACION -> new Duracion(serieRequestDto.getTiempoEnSeg());
-      case PESO_CORPORAL -> new PesoCorpYReps(serieRequestDto.getReps());
+          new PesoYReps(serieReq.getReps(), serieReq.getPesoEnKg());
+      case DURACION -> new Duracion(serieReq.getTiempoEnSeg());
+      case PESO_CORPORAL -> new PesoCorpYReps(serieReq.getReps());
       case PESO_CORPORAL_CON_PESO_EXTRA ->
-          new PesoCorpPesoExtra(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+          new PesoCorpPesoExtra(serieReq.getReps(), serieReq.getPesoEnKg());
       case PESO_CORPORAL_ASISTIDO ->
-          new PesoCorpAsistido(serieRequestDto.getReps(), serieRequestDto.getPesoEnKg());
+          new PesoCorpAsistido(serieReq.getReps(), serieReq.getPesoEnKg());
       case DISTANCIA_Y_PESO ->
-          new DistanciaYPeso(serieRequestDto.getDistancia(), serieRequestDto.getPesoEnKg());
+          new DistanciaYPeso(serieReq.getDistancia(), serieReq.getPesoEnKg());
       case DISTANCIA_Y_DURACION ->
-          new DistanciaYDuracion(serieRequestDto.getDistancia(), serieRequestDto.getTiempoEnSeg());
+          new DistanciaYDuracion(serieReq.getDistancia(), serieReq.getTiempoEnSeg());
     };
   }
 
-  public List<ItemRutinaResponseDto> getItems(Integer rutinaId){
+  public List<ItemRutinaRes> getItems(Integer rutinaId){
     List<ItemRutina> items = itemRutinaRepo.findAllByRutina(rutinaId);
     return items.stream().map(this::toItemResponseDto).collect(Collectors.toList());
   }
 
-  public List<SerieResponseDto> obtenerSeriesResponseDto(ItemRutina itemRutina){
+  public List<SerieRes> obtenerSeriesResponseDto(ItemRutina itemRutina){
     TipoDeEjercicio tipoDeEjercicio = itemRutina.getEjercicio().getTipoDeEjercicio();
-    List<SerieResponseDto> seriesDto = new ArrayList<>();
+    List<SerieRes> seriesDto = new ArrayList<>();
     for (Serie s : itemRutina.getSeries()) {
       switch (tipoDeEjercicio){
         case PESO_Y_REPETICIONES :
-          seriesDto.add(SerieResponseDto.builder()
+          seriesDto.add(SerieRes.builder()
                   .reps(((PesoYReps) s).getReps())
                   .pesoEnKg(((PesoYReps) s).getPesoEnKg())
                   .build());
           break;
         case PESO_CORPORAL:
-          seriesDto.add(SerieResponseDto.builder()
+          seriesDto.add(SerieRes.builder()
                   .reps(((PesoCorpYReps) s).getReps())
                   .build());
           break;
         case PESO_CORPORAL_CON_PESO_EXTRA:
-          seriesDto.add(SerieResponseDto.builder()
+          seriesDto.add(SerieRes.builder()
                   .reps(((PesoCorpPesoExtra) s).getReps())
                   .pesoEnKg(((PesoCorpPesoExtra) s).getPesoEnKg())
                   .build());
           break;
         case PESO_CORPORAL_ASISTIDO:
-          seriesDto.add(SerieResponseDto.builder()
+          seriesDto.add(SerieRes.builder()
               .reps(((PesoCorpAsistido)s).getReps())
               .pesoEnKg(((PesoCorpAsistido) s).getPesoEnKg())
               .build());
           break;
         case DISTANCIA_Y_DURACION:
-          seriesDto.add(SerieResponseDto.builder()
+          seriesDto.add(SerieRes.builder()
               .distancia(((DistanciaYDuracion) s).getDistancia())
               .tiempoEnSeg(((DistanciaYDuracion) s).getTiempoEnSeg())
               .build());
           break;
         case DISTANCIA_Y_PESO:
-          seriesDto.add(SerieResponseDto.builder()
+          seriesDto.add(SerieRes.builder()
               .distancia(((DistanciaYPeso) s).getDistancia())
               .pesoEnKg(((DistanciaYPeso) s).getPesoEnKg())
               .build());
           break;
         case DURACION:
-          seriesDto.add(SerieResponseDto.builder()
+          seriesDto.add(SerieRes.builder()
               .tiempoEnSeg(((Duracion) s).getTiempoEnSeg())
               .build());
           break;
@@ -117,9 +117,9 @@ public class ItemRutinaService {
   }
 
 
-  public ItemRutinaResponseDto toItemResponseDto(ItemRutina itemRutina){
-    List<SerieResponseDto> series =  obtenerSeriesResponseDto(itemRutina);
-        return new ItemRutinaResponseDto(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
+  public ItemRutinaRes toItemResponseDto(ItemRutina itemRutina){
+    List<SerieRes> series =  obtenerSeriesResponseDto(itemRutina);
+        return new ItemRutinaRes(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
             itemRutina.getNota(), series);
   }
 

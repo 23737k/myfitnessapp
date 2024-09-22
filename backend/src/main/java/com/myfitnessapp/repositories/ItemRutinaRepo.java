@@ -1,6 +1,6 @@
 package com.myfitnessapp.repositories;
 
-import com.myfitnessapp.dominio.rutina.ItemRutina;
+import com.myfitnessapp.model.rutina.ItemRutina;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

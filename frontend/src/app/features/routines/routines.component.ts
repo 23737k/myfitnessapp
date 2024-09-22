@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {EjercicioControllerService} from "../../core/services/api-client";
+import {RutinaControllerService, RutinaResponseDto} from "../../core/services/api-client";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-routines',
@@ -9,33 +10,23 @@ import {EjercicioControllerService} from "../../core/services/api-client";
   styleUrl: './routines.component.css'
 })
 export class RoutinesComponent implements OnInit{
-  routines?:any[];
+  routines!:RutinaResponseDto[];
 
   ngOnInit(): void {
-
-    this._exerciseService.listarEjercicios({}).subscribe({
-      next: ejercicios => console.log(ejercicios.content?.at(1))
+    this._routineService.listarRutinas().subscribe({
+      next: rutinas => this.routines = rutinas
     })
-
-
-    this.routines = [
-      {
-        title: 'Legs',
-        description: 'quads, calves, glutes and hamstrings'
-      },
-      {
-        title: 'Push',
-        description: 'Chest, Triceps and Shoulders'
-      },
-      {
-        title: 'Pull',
-        description: 'Back, Biceps and Forearms'
-      }
-    ]
   }
 
-  constructor(private _exerciseService: EjercicioControllerService) {
+  constructor(private _routineService: RutinaControllerService, private _router: Router) {
   }
 
+  seeDetails(id: number | undefined): void {
+    this._router.navigateByUrl(`routines/${id}`);
+  }
+
+  startRoutine(event:Event){
+    event.stopPropagation();
+  }
 
 }

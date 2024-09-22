@@ -1,11 +1,9 @@
 package com.myfitnessapp.controllers;
 
-import com.myfitnessapp.dto.request.RutinaRequestDto;
-import com.myfitnessapp.dto.response.RutinaResponseDto;
+import com.myfitnessapp.dto.request.RutinaReq;
+import com.myfitnessapp.dto.response.RutinaRes;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.myfitnessapp.services.RutinaService;
 import lombok.RequiredArgsConstructor;
@@ -21,25 +19,26 @@ public class RutinaController {
   private final RutinaService rutinaService;
 
   @PostMapping
-  public ResponseEntity<?> crearRutina(@RequestBody @Validated RutinaRequestDto rutina) {
-    RutinaResponseDto rutinaResponseDto = rutinaService.saveRutina(rutina);
-    return new ResponseEntity<>(rutinaResponseDto, HttpStatus.CREATED);
+  @ResponseStatus(HttpStatus.CREATED)
+  public RutinaRes crearRutina(@RequestBody @Validated RutinaReq rutina) {
+    return rutinaService.saveRutina(rutina);
   }
 
   @GetMapping
-  public Map<String, List<RutinaResponseDto>> listarRutinas() {
-    Map<String, List<RutinaResponseDto>> rutinas = new HashMap<>();
-    rutinas.put("rutinas", rutinaService.getRutinas());
-    return rutinas ;
+  @ResponseStatus(HttpStatus.OK)
+  public List<RutinaRes> listarRutinas() {
+    return rutinaService.getRutinas();
   }
 
   @GetMapping("/{id}")
-  public RutinaResponseDto getRutinaById(@PathVariable int id) {
+  @ResponseStatus(HttpStatus.OK)
+  public RutinaRes getRutinaById(@PathVariable int id) {
     return rutinaService.findRutinaById(id);
   }
 
   @DeleteMapping("{id}")
-  public RutinaResponseDto eliminarRutina(@PathVariable int id) {
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public RutinaRes eliminarRutina(@PathVariable int id) {
     return rutinaService.deleteRutinaById(id);
   }
 
