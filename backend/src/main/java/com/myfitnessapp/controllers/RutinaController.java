@@ -2,15 +2,13 @@ package com.myfitnessapp.controllers;
 
 import com.myfitnessapp.dto.request.RutinaReq;
 import com.myfitnessapp.dto.response.RutinaRes;
-
-import java.util.List;
-
 import com.myfitnessapp.services.RutinaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/rutinas")
@@ -38,8 +36,8 @@ public class RutinaController {
 
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public RutinaRes eliminarRutina(@PathVariable int id) {
-    return rutinaService.deleteRutinaById(id);
+  public void eliminarRutina(@PathVariable int id) {
+    rutinaService.deleteRutinaById(id);
   }
 
 

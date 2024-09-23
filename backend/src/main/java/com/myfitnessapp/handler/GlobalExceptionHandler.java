@@ -1,7 +1,6 @@
 package com.myfitnessapp.handler;
 
 import com.myfitnessapp.exceptions.InvalidReferenceException;
-import com.myfitnessapp.exceptions.ObjectNotValidException;
 import com.myfitnessapp.exceptions.SerieNoValidaException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;

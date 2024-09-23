@@ -1,32 +1,29 @@
 package com.myfitnessapp.services;
 
-import com.myfitnessapp.model.ejercicio.Ejercicio;
-import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
-import com.myfitnessapp.model.rutina.ItemRutina;
-import com.myfitnessapp.model.series.DistanciaYDuracion;
-import com.myfitnessapp.model.series.DistanciaYPeso;
-import com.myfitnessapp.model.series.Duracion;
-import com.myfitnessapp.model.series.PesoCorpAsistido;
-import com.myfitnessapp.model.series.PesoCorpPesoExtra;
-import com.myfitnessapp.model.series.PesoCorpYReps;
-import com.myfitnessapp.model.series.PesoYReps;
-import com.myfitnessapp.model.series.Serie;
 import com.myfitnessapp.dto.request.ItemRutinaReq;
 import com.myfitnessapp.dto.request.SerieReq;
 import com.myfitnessapp.dto.response.ItemRutinaRes;
 import com.myfitnessapp.dto.response.SerieRes;
+import com.myfitnessapp.model.ejercicio.Ejercicio;
+import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
+import com.myfitnessapp.model.rutina.ItemRutina;
+import com.myfitnessapp.model.rutina.Rutina;
+import com.myfitnessapp.model.series.*;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ItemRutinaService {
   private final ItemRutinaRepo itemRutinaRepo;
   private final EjercicioService ejercicioService;
+  private final RutinaService rutinaService;
 
   public ItemRutina toItemRutina(ItemRutinaReq itemRutinaReq) {
     Ejercicio ejercicio = ejercicioService.findEjercicioById(itemRutinaReq.getEjercicioId());
@@ -63,10 +60,10 @@ public class ItemRutinaService {
 
   public List<ItemRutinaRes> getItems(Integer rutinaId){
     List<ItemRutina> items = itemRutinaRepo.findAllByRutina(rutinaId);
-    return items.stream().map(this::toItemResponseDto).collect(Collectors.toList());
+    return items.stream().map(this::toItemRutinaRes).collect(Collectors.toList());
   }
 
-  public List<SerieRes> obtenerSeriesResponseDto(ItemRutina itemRutina){
+  public List<SerieRes> obtenerSeriesRes(ItemRutina itemRutina){
     TipoDeEjercicio tipoDeEjercicio = itemRutina.getEjercicio().getTipoDeEjercicio();
     List<SerieRes> seriesDto = new ArrayList<>();
     for (Serie s : itemRutina.getSeries()) {
@@ -116,11 +113,66 @@ public class ItemRutinaService {
     return seriesDto;
   }
 
-
-  public ItemRutinaRes toItemResponseDto(ItemRutina itemRutina){
-    List<SerieRes> series =  obtenerSeriesResponseDto(itemRutina);
+  public ItemRutinaRes toItemRutinaRes(ItemRutina itemRutina){
+    List<SerieRes> series =  obtenerSeriesRes(itemRutina);
         return new ItemRutinaRes(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
             itemRutina.getNota(), series);
   }
 
+  public ItemRutinaRes agregarItem(Integer rutinaId, ItemRutinaReq itemRutinaReq){
+    ItemRutina itemRutina = itemRutinaRepo.save(toItemRutina(itemRutinaReq));
+    rutinaService.agregarItem(rutinaId, itemRutina);
+    return  toItemRutinaRes(itemRutina);
+  }
+
+  public void eliminarItem(Integer rutinaId, Integer itemId){
+    rutinaService.findById(rutinaId);
+    findById(itemId);
+    itemRutinaRepo.deleteById(itemId);
+  }
+
+//  public void cambiarOrdenItem(Integer rutinaId ,CambiarOrdenItemRequest cambiarOrdenItemRequest) {
+//    Rutina rutina = rutinaRepo.findById(rutinaId).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
+//    Integer itemId = cambiarOrdenItemRequest.getItemId();
+//    ItemRutina itemRutina = rutina.getItems().stream()
+//        .filter(i->i.getId().equals(itemId)).findFirst().orElseThrow(()-> new InvalidReferenceException("Item de rutina no encontrada"));
+//
+//    Integer itemsSize = rutina.getItems().size();
+//    Integer nuevoIndice = cambiarOrdenItemRequest.getIndice();
+//    if(nuevoIndice > itemsSize ){
+//      throw new InvalidReferenceException("Indice no valido.");
+//    }
+//    rutina.getItems().remove(itemRutina);
+//    rutina.getItems().add(nuevoIndice, itemRutina);
+//    rutinaRepo.save(rutina);
+//  }
+
+  public ItemRutinaRes modificarItem(ItemRutinaReq itemModif, Integer rutinaId, Integer itemId){
+    Rutina rutina = rutinaService.findById(rutinaId);
+    ItemRutina item = rutina.getItems().stream().filter(i-> i.getId().equals(itemId))
+            .findFirst().orElseThrow(()-> new EntityNotFoundException("item no encontrado"));
+
+    if(itemModif.getEjercicioId()!=null) {
+      item.setEjercicio(ejercicioService.findEjercicioById(itemModif.getEjercicioId()));
+      item.setSeries(new ArrayList<>());
+    }
+    if(itemModif.getNota()!=null){
+      item.setNota(itemModif.getNota());
+    }
+    if(itemModif.getDescansoEnSeg()!=null)
+      item.setDescansoEnSeg(itemModif.getDescansoEnSeg());
+
+    if(itemModif.getSeries()!=null) {
+      List<Serie> series = new ArrayList<>();
+      for (SerieReq serie : itemModif.getSeries()){
+        series.add(crearSerieFromTipoDeEjercicio(item.getEjercicio().getTipoDeEjercicio(),serie));
+      }
+      item.setSeries(series);
+    }
+    return toItemRutinaRes(itemRutinaRepo.save(item));
+  }
+
+  public ItemRutina findById(Integer itemRutinaId){
+    return itemRutinaRepo.findById(itemRutinaId).orElseThrow(()->(new EntityNotFoundException("item no encontrado")));
+  }
 }

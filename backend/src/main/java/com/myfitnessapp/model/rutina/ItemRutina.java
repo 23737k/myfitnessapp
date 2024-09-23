@@ -3,12 +3,12 @@ package com.myfitnessapp.model.rutina;
 import com.myfitnessapp.model.ejercicio.Ejercicio;
 import com.myfitnessapp.model.series.Serie;
 import jakarta.persistence.*;
-
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor

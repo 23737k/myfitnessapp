@@ -26,7 +26,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RutinaResponseDto"
+                    "$ref": "#/components/schemas/RutinaRes"
                   }
                 }
               }
@@ -43,19 +43,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RutinaRequestDto"
+                "$ref": "#/components/schemas/RutinaReq"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/RutinaRes"
                 }
               }
             }
@@ -86,7 +86,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemRutinaRes"
+                  }
                 }
               }
             }
@@ -113,60 +116,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ItemRutinaRequestDto"
+                "$ref": "#/components/schemas/ItemRutinaReq"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/rutinas/{rutinaId}/items/cambiarOrden": {
-      "post": {
-        "tags": [
-          "item-rutina-controller"
-        ],
-        "operationId": "cambiarOrdenItem",
-        "parameters": [
-          {
-            "name": "rutinaId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CambiarOrdenItemRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ItemRutinaRes"
                 }
               }
             }
@@ -202,7 +164,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EntrenoRequestDto"
+                "$ref": "#/components/schemas/EntrenoReq"
               }
             }
           },
@@ -260,7 +222,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EjercicioRequestDto"
+                "$ref": "#/components/schemas/EjercicioReq"
               }
             }
           },
@@ -310,19 +272,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ItemRutinaRequestDto"
+                "$ref": "#/components/schemas/ItemRutinaReq"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
+          "202": {
+            "description": "Accepted",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ItemRutinaRes"
                 }
               }
             }
@@ -353,7 +315,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RutinaResponseDto"
+                  "$ref": "#/components/schemas/RutinaRes"
                 }
               }
             }
@@ -377,15 +339,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RutinaResponseDto"
-                }
-              }
-            }
+          "204": {
+            "description": "No Content"
           }
         }
       }
@@ -477,15 +432,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
+          "204": {
+            "description": "No Content"
           }
         }
       }
@@ -524,7 +472,37 @@
   },
   "components": {
     "schemas": {
-      "ItemRutinaRequestDto": {
+      "RutinaReq": {
+        "required": [
+          "descripcion",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          }
+        }
+      },
+      "RutinaRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          }
+        }
+      },
+      "ItemRutinaReq": {
         "required": [
           "descansoEnSeg",
           "ejercicioId",
@@ -549,33 +527,12 @@
             "minItems": 1,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SerieRequestDto"
+              "$ref": "#/components/schemas/SerieReq"
             }
           }
         }
       },
-      "RutinaRequestDto": {
-        "required": [
-          "descripcion",
-          "nombre"
-        ],
-        "type": "object",
-        "properties": {
-          "nombre": {
-            "type": "string"
-          },
-          "descripcion": {
-            "type": "string"
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemRutinaRequestDto"
-            }
-          }
-        }
-      },
-      "SerieRequestDto": {
+      "SerieReq": {
         "type": "object",
         "properties": {
           "reps": {
@@ -596,24 +553,57 @@
           }
         }
       },
-      "CambiarOrdenItemRequest": {
-        "required": [
-          "indice",
-          "itemId"
-        ],
+      "ItemRutinaRes": {
         "type": "object",
         "properties": {
-          "indice": {
+          "id": {
             "type": "integer",
             "format": "int32"
           },
-          "itemId": {
+          "ejercicio": {
+            "type": "string"
+          },
+          "descansoEnSeg": {
             "type": "integer",
             "format": "int32"
+          },
+          "nota": {
+            "type": "string"
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SerieRes"
+            }
           }
         }
       },
-      "EntrenoRequestDto": {
+      "SerieRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pesoEnKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "tiempoEnSeg": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "distancia": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "EntrenoReq": {
         "required": [
           "duracionEnMinutos",
           "inicio",
@@ -639,12 +629,12 @@
             "minItems": 1,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ItemRutinaRequestDto"
+              "$ref": "#/components/schemas/ItemRutinaReq"
             }
           }
         }
       },
-      "EjercicioRequestDto": {
+      "EjercicioReq": {
         "required": [
           "grupoMuscularPrimario",
           "nombre",
@@ -664,21 +654,6 @@
             "format": "int32"
           },
           "tipoDeEjercicio": {
-            "type": "string"
-          }
-        }
-      },
-      "RutinaResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nombre": {
-            "type": "string"
-          },
-          "descripcion": {
             "type": "string"
           }
         }
@@ -757,12 +732,6 @@
             "type": "integer",
             "format": "int32"
           },
-          "first": {
-            "type": "boolean"
-          },
-          "last": {
-            "type": "boolean"
-          },
           "size": {
             "type": "integer",
             "format": "int32"
@@ -782,6 +751,12 @@
             "items": {
               "$ref": "#/components/schemas/SortObject"
             }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
           },
           "numberOfElements": {
             "type": "integer",
@@ -808,9 +783,6 @@
               "$ref": "#/components/schemas/SortObject"
             }
           },
-          "unpaged": {
-            "type": "boolean"
-          },
           "paged": {
             "type": "boolean"
           },
@@ -821,6 +793,9 @@
           "pageSize": {
             "type": "integer",
             "format": "int32"
+          },
+          "unpaged": {
+            "type": "boolean"
           }
         }
       },

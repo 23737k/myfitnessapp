@@ -1,5 +1,109 @@
-<div class="container bg-secondary-subtle">
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card mb-4 routine-card">
+        <div class="card-body">
+          <h1 class="card-title text-center mb-4">{{ rutina.nombre }}</h1>
+          <div class="routine-summary text-center mb-4">
+            <span class="badge bg-info me-2">
+              <i class="fas fa-dumbbell me-1"></i> {{ itemsRutina.length }} Exercises
+            </span>
+            <span class="badge bg-success">
+              <i class="fas fa-clock me-1"></i> 60 min
+            </span>
+          </div>
 
-  <div>{{rutina.}}</div>
+          <div class="accordion" id="routineAccordion">
+            @for (item of itemsRutina; track item; let i = $index) {
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{i}}">
+                  <button class="accordion-button" type="button"
+                          data-bs-toggle="collapse"
+                          [attr.data-bs-target]="'#collapse' + i"
+                          aria-expanded="true"
+                          [attr.aria-controls]="'collapse' + i">
+                    {{ item.ejercicio }} <!-- Muestra el nombre del ejercicio -->
+                  </button>
+                </h2>
+                <div [attr.id]="'collapse' + i" class="accordion-collapse collapse show" data-bs-parent="#routineAccordion">
+                  <div class="accordion-body">
+                    <p class="card-text"><i class="fas fa-hourglass-half me-2"></i>Rest: {{ item.descansoEnSeg }} seconds</p>
 
+                    <div class="sets-container">
+                      <h6><i class="fas fa-layer-group me-2"></i>Sets:</h6>
+                      <ul class="list-group">
+                        @for (serie of item.series; track serie) {
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span *ngIf="serie.pesoEnKg"><i class="fas fa-weight-hanging me-1"></i>{{ serie.pesoEnKg }} kg</span>
+                            <span *ngIf="serie.reps"><i class="fas fa-redo me-1"></i>{{ serie.reps }} reps</span>
+                            <span *ngIf="serie.distancia"><i class="fas fa-route me-1"></i>{{ serie.distancia }}</span>
+                            <span *ngIf="serie.tiempoEnSeg"><i class="fas fa-stopwatch me-1"></i>{{ serie.tiempoEnSeg }} sec</span>
+                          </li>
+                        }
+                      </ul>
+                      <button class="btn btn-primary mt-3" data-bs-toggle="modal" [attr.data-bs-target]="'#editItemModal' + i" ng-click="setEditingItem(item)">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <button class="btn btn-success w-100" ng-click="startWorkout()">
+            <i class="fas fa-play me-2"></i>Start Workout
+          </button>
+        </div>
+      </div>
+
+      <div class="modal fade" [attr.id]="'editItemModal'" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="exerciseSelect" class="form-label">Exercise</label>
+                  <select class="form-select" id="exerciseSelect" ng-model="editingItem.exercise" ng-change="updateExerciseType()">
+                    <option value="">Select an exercise</option>
+                    <option value="Squat">Squat</option>
+                    <option value="Bench Press">Bench Press</option>
+                    <option value="Deadlift">Deadlift</option>
+                    <option value="Running">Running</option>
+                    <option value="Swimming">Swimming</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="restInput" class="form-label">Rest (seconds)</label>
+                  <input type="number" class="form-control" id="restInput" ng-model="editingItem.restInSecs">
+                </div>
+                <div class="mb-3" ng-if="showWeight">
+                  <label for="weightInput" class="form-label">Weight (kg)</label>
+                  <input type="number" class="form-control" id="weightInput" ng-model="editingItem.weightInKg">
+                </div>
+                <div class="mb-3" ng-if="showReps">
+                  <label for="repsInput" class="form-label">Reps</label>
+                  <input type="number" class="form-control" id="repsInput" ng-model="editingItem.reps">
+                </div>
+                <div class="mb-3" ng-if="showDistance">
+                  <label for="distanceInput" class="form-label">Distance</label>
+                  <input type="text" class="form-control" id="distanceInput" ng-model="editingItem.distance">
+                </div>
+                <div class="mb-3" ng-if="showTime">
+                  <label for="timeInput" class="form-label">Time (seconds)</label>
+                  <input type="number" class="form-control" id="timeInput" ng-model="editingItem.timeInSecs">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" ng-click="saveItem()">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

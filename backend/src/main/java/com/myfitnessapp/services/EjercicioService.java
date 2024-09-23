@@ -1,10 +1,10 @@
 package com.myfitnessapp.services;
 
+import com.myfitnessapp.dto.request.EjercicioReq;
+import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.model.ejercicio.Ejercicio;
 import com.myfitnessapp.model.ejercicio.GrupoMuscular;
 import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
-import com.myfitnessapp.dto.request.EjercicioReq;
-import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.repositories.EjercicioRepo;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
 import lombok.RequiredArgsConstructor;

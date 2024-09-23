@@ -1,11 +1,11 @@
 package com.myfitnessapp.services;
 
-import com.myfitnessapp.model.entreno.Entreno;
-import com.myfitnessapp.model.rutina.ItemRutina;
-import com.myfitnessapp.model.rutina.Rutina;
 import com.myfitnessapp.dto.request.EntrenoReq;
 import com.myfitnessapp.dto.response.EntrenoRes;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
+import com.myfitnessapp.model.entreno.Entreno;
+import com.myfitnessapp.model.rutina.ItemRutina;
+import com.myfitnessapp.model.rutina.Rutina;
 import com.myfitnessapp.repositories.EntrenoRepo;
 import com.myfitnessapp.repositories.RutinaRepo;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class EntrenoService {
                 .duracionEnMinutos(entreno.getDuracionEnMinutos())
                 .volumenEnKg(entreno.getVolumen())
                 .nroDeSeries(entreno.getNroDeSeries())
-                .items(entreno.getItems().stream().map(itemRutinaService::toItemResponseDto).toList())
+                .items(entreno.getItems().stream().map(itemRutinaService::toItemRutinaRes).toList())
                 .build();
     }
 

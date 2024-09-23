@@ -1,18 +1,26 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {ItemRutinaControllerService, RutinaControllerService, RutinaResponseDto} from "../../core/services/api-client";
+import {
+  ItemRutinaControllerService,
+  ItemRutinaRes,
+  RutinaControllerService,
+  RutinaRes
+} from "../../core/services/api-client";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-routine-details',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf
+  ],
   templateUrl: './routine-details.component.html',
   styleUrl: './routine-details.component.css'
 })
 export class RoutineDetailsComponent implements OnInit {
 
-  rutina!: RutinaResponseDto;
-  itemsRutina!: RutinaResponseDto[];
+  rutina!: RutinaRes;
+  itemsRutina!: ItemRutinaRes[];
   routineId!: number;
 
   constructor(
@@ -28,7 +36,7 @@ export class RoutineDetailsComponent implements OnInit {
     this._rutinaService.getRutinaById(this.routineId).subscribe({
       next : rutina => this.rutina = rutina})
     this._itemRutinaService.getItems(this.routineId).subscribe({
-      next: items => this.itemsRutina = items.
+      next: items => this.itemsRutina = items
     })
   }
 

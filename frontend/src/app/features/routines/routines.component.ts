@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {RutinaControllerService, RutinaResponseDto} from "../../core/services/api-client";
+import {RutinaControllerService, RutinaRes} from "../../core/services/api-client";
 import {Router} from "@angular/router";
 
 @Component({
@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
   styleUrl: './routines.component.css'
 })
 export class RoutinesComponent implements OnInit{
-  routines!:RutinaResponseDto[];
+  routines!:RutinaRes[];
 
   ngOnInit(): void {
     this._routineService.listarRutinas().subscribe({

@@ -1,16 +1,17 @@
 package com.myfitnessapp.utils;
 
+import com.myfitnessapp.dto.request.EjercicioReq;
 import com.myfitnessapp.model.ejercicio.GrupoMuscular;
 import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
-import com.myfitnessapp.dto.request.EjercicioReq;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
 import com.myfitnessapp.services.EjercicioService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
