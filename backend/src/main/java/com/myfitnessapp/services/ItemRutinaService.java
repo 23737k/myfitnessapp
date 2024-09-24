@@ -77,29 +77,34 @@ public class ItemRutinaService {
       switch (tipoDeEjercicio){
         case PESO_Y_REPETICIONES :
           seriesDto.add(SerieRes.builder()
+                          .id(s.getId())
                   .reps(((PesoYReps) s).getReps())
                   .pesoEnKg(((PesoYReps) s).getPesoEnKg())
                   .build());
           break;
         case PESO_CORPORAL:
           seriesDto.add(SerieRes.builder()
+                  .id(s.getId())
                   .reps(((PesoCorpYReps) s).getReps())
                   .build());
           break;
         case PESO_CORPORAL_CON_PESO_EXTRA:
           seriesDto.add(SerieRes.builder()
+                  .id(s.getId())
                   .reps(((PesoCorpPesoExtra) s).getReps())
                   .pesoEnKg(((PesoCorpPesoExtra) s).getPesoEnKg())
                   .build());
           break;
         case PESO_CORPORAL_ASISTIDO:
           seriesDto.add(SerieRes.builder()
+                  .id(s.getId())
               .reps(((PesoCorpAsistido)s).getReps())
               .pesoEnKg(((PesoCorpAsistido) s).getPesoEnKg())
               .build());
           break;
         case DISTANCIA_Y_DURACION:
           seriesDto.add(SerieRes.builder()
+                  .id(s.getId())
               .distancia(((DistanciaYDuracion) s).getDistancia())
               .tiempoEnSeg(((DistanciaYDuracion) s).getTiempoEnSeg())
               .build());
@@ -112,6 +117,7 @@ public class ItemRutinaService {
           break;
         case DURACION:
           seriesDto.add(SerieRes.builder()
+                  .id(s.getId())
               .tiempoEnSeg(((Duracion) s).getTiempoEnSeg())
               .build());
           break;

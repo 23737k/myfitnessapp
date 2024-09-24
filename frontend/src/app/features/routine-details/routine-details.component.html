@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div *ngIf="itemsRutina && rutina" class="container mt-5">
   <div class="row">
     <div class="col-md-8 offset-md-2">
       <div class="card mb-4 routine-card">
@@ -32,17 +32,17 @@
                     <div class="sets-container">
                       <h6><i class="fas fa-layer-group me-2"></i>Sets:</h6>
                       <ul class="list-group">
-                        @for (serie of item.series; track serie) {
-                          <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'weigh')"><i class="fas fa-weight-hanging me-1"></i>{{ serie.pesoEnKg }} kg</span>
-                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'reps')"><i class="fas fa-redo me-1"></i>{{ serie.reps }} reps</span>
-                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'distance')"><i class="fas fa-route me-1"></i>{{ serie.distancia }}</span>
-                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'time')"><i class="fas fa-stopwatch me-1"></i>{{ serie.tiempoEnSeg }} sec</span>
+                        @for (serie of item.series; track serie.id ; let i = $index) {
+                          <li class="list-group-item d-flex justify-content-between align-items-center" id="set{{i}}">
+                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'weigh')" id="weightInput{{i}}">{{ serie.pesoEnKg }} kg</span>
+                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'reps')" id="repsInput{{i}}">{{ serie.reps }} reps</span>
+                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'distance')" id="distanceInput{{i}}">{{ serie.distancia }}</span>
+                            <span *ngIf="appopiateExerciseType(item.ejercicio!,'time')" id="timeInput{{i}}">{{ serie.tiempoEnSeg }} sec</span>
                           </li>
                         }
                       </ul>
-                      <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target='#editItemModal' (click)="setItemToUpdate(item.id!)">Edit</button>
                     </div>
+                    <button class="btn btn-primary mt-3" (click)="setItemToUpdate(item!.id!)">Edit</button>
                   </div>
                 </div>
               </div>
@@ -55,67 +55,64 @@
         </div>
       </div>
 
-
-      <div class="modal fade" [attr.id]="'editItemModal'" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="mb-3">
-                  <label for="exerciseSelect" class="form-label">Exercise</label>
-                  <select class="form-select" id="exerciseSelect" [(ngModel)]="editingItem.ejercicio" name="ejercicio" >
-                    @for (exercise of exercises; track exercise){
-                      <option [ngValue]="exercise" >{{exercise.nombre}}</option>
-                    }
-<!--                    [selected]="exercise.id === this.editingItem.ejercicio?.id"-->
-
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="restInput" class="form-label">Rest (seconds)</label>
-                  <input type="number" class="form-control" id="restInput" [(ngModel)]="editingItem.descansoEnSeg" name="desansoEnSeg">
-                </div>
-                <div class="mb-3">
-                  <label for="restInput" class="form-label">Nota</label>
-                  <input type="text" class="form-control" id="noteInput" [(ngModel)]="editingItem.nota" name="nota">
-                </div>
-
-                @for (serie of editingItem.series; track serie; let i = $index){
-                  <div class="rounded-2 bg-secondary-subtle mb-2 p-2" >
-                    <div class="mb-1"><strong>Set {{i+1}}</strong></div>
-                    <div class="mb-1" *ngIf="appopiateExerciseType(editingItem.ejercicio!,'weigh')">
-                      <label for="weightInput" class="form-label">Weight (kg)</label>
-                      <input type="number" class="form-control" id="weightInput" [(ngModel)]="serie.pesoEnKg" name="pesoEnKg" >
-                    </div>
-                    <div class="mb-1" *ngIf="appopiateExerciseType(editingItem.ejercicio!,'reps')">
-                      <label for="repsInput" class="form-label">Reps</label>
-                      <input type="number" class="form-control" id="repsInput" [(ngModel)]="serie.reps" name="reps">
-                    </div>
-                    <div class="mb-1" *ngIf="appopiateExerciseType(editingItem.ejercicio!,'distance')">
-                      <label for="distanceInput" class="form-label">Distance</label>
-                      <input type="number" class="form-control" id="distanceInput" [(ngModel)]="serie.distancia" name="distancia">
-                    </div>
-                    <div class="mb-1" *ngIf="appopiateExerciseType(editingItem.ejercicio!,'time')">
-                      <label for="timeInput" class="form-label">Time (seconds)</label>
-                      <input type="number" class="form-control" id="timeInput" [(ngModel)]="serie.tiempoEnSeg" name="tiempoEnSeg">
-                    </div>
-                  </div>
-
+    @if(editingItem){
+      <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="exerciseSelect" class="form-label">Exercise</label>
+              <select class="form-select" id="exerciseSelect" [(ngModel)]="editingItem!.ejercicio!.id" name="ejercicio" >
+                @for (exercise of exercises; track exercise){
+                  <option [ngValue]="exercise.id">{{exercise.nombre}}</option>
                 }
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="restInput" class="form-label">Rest (seconds)</label>
+              <input type="number" class="form-control" id="restInput" [(ngModel)]="editingItem!.descansoEnSeg" name="desansoEnSeg">
+            </div>
+            <div class="mb-3">
+              <label for="restInput" class="form-label">Nota</label>
+              <input type="text" class="form-control" id="noteInput" [(ngModel)]="editingItem!.nota" name="nota">
+            </div>
+            @for (serie of editingItem!.series; track serie.id; let i = $index){
+              <div class="rounded-2 bg-secondary-subtle mb-2 p-2" >
+                <div class="mb-1"><strong>Set {{i+1}}</strong></div>
+                <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio,'weigh')">
+                  <label for="weightInput{{i}}" class="form-label">Weight (kg)</label>
+                  <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="serie.pesoEnKg" name="pesoEnKg" >
+                </div>
+                <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio!,'reps')">
+                  <label  class="form-label">Reps</label>
+                  <input type="number" class="form-control" [(ngModel)]="serie.reps" name="reps">
+                </div>
+                <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio!,'distance')">
+                  <label for="distanceInput{{i}}" class="form-label">Distance</label>
+                  <input type="number" class="form-control" id="distanceInput{{i}}" [(ngModel)]="serie.distancia" name="distancia">
+                </div>
+                <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio!,'time')">
+                  <label for="timeInput{{i}}" class="form-label">Time (seconds)</label>
+                  <input type="number" class="form-control" id="timeInput{{i}}" [(ngModel)]="serie.tiempoEnSeg" name="tiempoEnSeg">
+                </div>
+              </div>
 
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" ng-click="saveItem()">Save changes</button>
-            </div>
-          </div>
+            }
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" ng-click="saveItem()">Save changes</button>
         </div>
       </div>
+    </div>
+  </div>
+    }
     </div>
   </div>
 </div>

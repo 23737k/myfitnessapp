@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {
   EjercicioControllerService,
@@ -6,12 +6,12 @@ import {
   ItemRutinaControllerService,
   ItemRutinaRes,
   RutinaControllerService,
-  RutinaRes,
-  SerieRes
+  RutinaRes
 } from "../../core/services/api-client";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
+import 'bootstrap';
+import {forkJoin} from "rxjs";
 
 @Component({
   selector: 'app-routine-details',
@@ -26,49 +26,57 @@ import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 export class RoutineDetailsComponent implements OnInit {
 
   rutina!: RutinaRes;
-  itemsRutina: ItemRutinaRes[]=[];
+  itemsRutina!: ItemRutinaRes[];
   routineId!: number;
   editingItem!: ItemRutinaRes;
-  exercises!: EjercicioRes[];
+  exercises!: EjercicioRes[] ;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _router: Router,
     private _rutinaService: RutinaControllerService,
     private _itemRutinaService: ItemRutinaControllerService,
-    private _ejercicioService : EjercicioControllerService,
-    private cdr: ChangeDetectorRef
+    private _ejercicioService : EjercicioControllerService
   ) {}
 
   ngOnInit(): void {
     this.routineId = this._activatedRoute.snapshot.params['id'];
-    this._itemRutinaService.getItems(this.routineId).subscribe({
-      next: items => this.itemsRutina = items
+
+    // Usar forkJoin para esperar a que todas las llamadas se completen
+    forkJoin({
+      items: this._itemRutinaService.getItems(this.routineId!),
+      rutina: this._rutinaService.getRutinaById(this.routineId!),
+      ejercicios: this._ejercicioService.listarEjercicios()
+    }).subscribe({
+      next: ({ items, rutina, ejercicios }) => {
+        this.itemsRutina = items;
+        this.rutina = rutina;
+        this.exercises = ejercicios;
+      },
+      error: err => console.error('Error al cargar datos:', err)
     });
-    this._rutinaService.getRutinaById(this.routineId).subscribe({
-      next : rutina => this.rutina = rutina});
-
-    this._ejercicioService.listarEjercicios().subscribe({
-      next: ejercicios => this.exercises = ejercicios
-    })
-
-    this.editingItem = new ItemRutina();
-
   }
 
   totalSeries(){
-    return this.itemsRutina.reduce((total: number, item: ItemRutinaRes) => total + item!.series!.length, 0);
+    return this.itemsRutina!.reduce((total: number, item: ItemRutinaRes) => total + item!.series!.length, 0);
 
   }
 
   setItemToUpdate(id: number) {
-    this.editingItem = this.itemsRutina.find(item => item.id === id)!;
-    if (this.editingItem.ejercicio) {
-      this.editingItem.ejercicio = this.exercises.find(ej => ej.id === this.editingItem.ejercicio!.id!); // Asigna el objeto completo
+    const item = this.itemsRutina.find(item => item.id === id);
+    if (item) {
+      this.editingItem = {
+        ...item,
+        series: JSON.parse(JSON.stringify(item.series)) // Copia profunda de series
+      };
     }
+    const modalElement = document.getElementById('editItemModal');
+    // @ts-ignore
+    const modal = new bootstrap.Modal(modalElement!);
+    modal.show();
   }
 
-  appopiateExerciseType(exercise: EjercicioRes, type : string) {
+  appopiateExerciseType(exercise: EjercicioRes | undefined, type: string) {
+    // @ts-ignore
     const exerciseType = exercise.tipoDeEjercicio;
     switch (type) {
       case 'reps': return ['PESO_Y_REPETICIONES','PESO_CORPORAL','PESO_CORPORAL_CON_PESO_EXTRA','PESO_CORPORAL_ASISTIDO'].includes(exerciseType!);
@@ -79,11 +87,4 @@ export class RoutineDetailsComponent implements OnInit {
     }
   }
 
-}
-export class ItemRutina implements ItemRutinaRes{
-  id?: number;
-  ejercicio?: EjercicioRes;
-  descansoEnSeg?: number;
-  nota?: string;
-  series?: Array<SerieRes>;
 }
