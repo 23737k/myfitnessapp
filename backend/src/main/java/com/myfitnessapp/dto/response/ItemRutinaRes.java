@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ItemRutinaRes {
   private Integer id;
-  private String ejercicio;
+  private EjercicioRes ejercicio;
   private int descansoEnSeg;
   private String nota;
   private List<SerieRes> series;

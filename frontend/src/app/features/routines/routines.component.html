@@ -11,7 +11,7 @@
       <div class="col-md-4 mb-4">
         <div class="card " (click)="seeDetails(routine?.id)">
           <div class="card-body">
-            <h5 class="card-title">{{routine.nombre}}</h5>
+            <h5 class="card-title">{{routine.nombre?.toUpperCase()}}</h5>
             <p class="card-text">{{ routine.descripcion }}</p>
             <button class="btn btn-success w-100" (click)="startRoutine($event)">Start Routine</button>
           </div>

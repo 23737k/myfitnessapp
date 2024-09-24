@@ -1,12 +1,14 @@
 package com.myfitnessapp.services;
 
 import com.myfitnessapp.dto.request.EjercicioReq;
+import com.myfitnessapp.dto.response.EjercicioRes;
 import com.myfitnessapp.exceptions.InvalidReferenceException;
 import com.myfitnessapp.model.ejercicio.Ejercicio;
 import com.myfitnessapp.model.ejercicio.GrupoMuscular;
 import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
 import com.myfitnessapp.repositories.EjercicioRepo;
 import com.myfitnessapp.repositories.GrupoMuscularRepo;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,8 +46,8 @@ public class EjercicioService {
     return ejercicioRepo.findById(id).orElseThrow(()->new InvalidReferenceException("El ejercicio no existe " + id));
   }
 
-  public Page<Ejercicio> listarEjercicios(Pageable pageable){
-    return ejercicioRepo.findAll(pageable);
+  public List<EjercicioRes> listarEjercicios(){
+    return ejercicioRepo.findAll().stream().map(this::toEjercicioRes).toList();
   }
 
   public void eliminarEjercicio(Integer id){
@@ -53,6 +55,16 @@ public class EjercicioService {
     ejercicioRepo.deleteById(id);
   }
 
+
+  public EjercicioRes toEjercicioRes(Ejercicio ejercicio){
+    return EjercicioRes.builder()
+        .id(ejercicio.getId())
+        .nombre(ejercicio.getNombre())
+        .grupoMuscularPrimario(ejercicio.getGrupoMuscularPrimario().getId())
+        .grupoMuscularSecundario(ejercicio.getGrupoMuscularSecundario() == null? null: ejercicio.getGrupoMuscularSecundario().getId())
+        .tipoDeEjercicio(ejercicio.getTipoDeEjercicio())
+        .build();
+  }
 
 
 }

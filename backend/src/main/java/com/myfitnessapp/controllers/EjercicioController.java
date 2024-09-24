@@ -1,8 +1,10 @@
 package com.myfitnessapp.controllers;
 
 import com.myfitnessapp.dto.request.EjercicioReq;
+import com.myfitnessapp.dto.response.EjercicioRes;
 import com.myfitnessapp.model.ejercicio.Ejercicio;
 import com.myfitnessapp.services.EjercicioService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +20,8 @@ public class EjercicioController {
   private final EjercicioService ejercicioService;
 
   @GetMapping
-  public Page<Ejercicio> listarEjercicios(Pageable pageable) {
-    return ejercicioService.listarEjercicios(pageable);
+  public List<EjercicioRes> listarEjercicios() {
+    return ejercicioService.listarEjercicios();
   }
 
   @PostMapping

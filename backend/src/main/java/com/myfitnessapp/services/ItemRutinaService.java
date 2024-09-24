@@ -2,6 +2,7 @@ package com.myfitnessapp.services;
 
 import com.myfitnessapp.dto.request.ItemRutinaReq;
 import com.myfitnessapp.dto.request.SerieReq;
+import com.myfitnessapp.dto.response.EjercicioRes;
 import com.myfitnessapp.dto.response.ItemRutinaRes;
 import com.myfitnessapp.dto.response.SerieRes;
 import com.myfitnessapp.model.ejercicio.Ejercicio;
@@ -41,6 +42,12 @@ public class ItemRutinaService {
         .build();
   }
 
+  public ItemRutinaRes toItemRutinaRes(ItemRutina itemRutina){
+    List<SerieRes> series =  obtenerSeriesRes(itemRutina);
+    EjercicioRes ejercicioRes = ejercicioService.toEjercicioRes(ejercicioService.findEjercicioById(itemRutina.getEjercicio().getId()));
+    return new ItemRutinaRes(itemRutina.getId(),ejercicioRes,itemRutina.getDescansoEnSeg(),
+        itemRutina.getNota(), series);
+  }
   public Serie crearSerieFromTipoDeEjercicio(TipoDeEjercicio tipoDeEjercicio, SerieReq serieReq) {
     return switch (tipoDeEjercicio) {
       case PESO_Y_REPETICIONES ->
@@ -113,11 +120,6 @@ public class ItemRutinaService {
     return seriesDto;
   }
 
-  public ItemRutinaRes toItemRutinaRes(ItemRutina itemRutina){
-    List<SerieRes> series =  obtenerSeriesRes(itemRutina);
-        return new ItemRutinaRes(itemRutina.getId(),itemRutina.getEjercicio().getNombre(),itemRutina.getDescansoEnSeg(),
-            itemRutina.getNota(), series);
-  }
 
   public ItemRutinaRes agregarItem(Integer rutinaId, ItemRutinaReq itemRutinaReq){
     ItemRutina itemRutina = itemRutinaRepo.save(toItemRutina(itemRutinaReq));

@@ -8,17 +8,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GrupoMuscular } from './grupoMuscular';
 
 
-export interface Ejercicio { 
+export interface EjercicioRes { 
     id?: number;
     nombre?: string;
-    grupoMuscularPrimario?: GrupoMuscular;
-    grupoMuscularSecundario?: GrupoMuscular;
-    tipoDeEjercicio?: Ejercicio.TipoDeEjercicioEnum;
+    grupoMuscularPrimario?: number;
+    grupoMuscularSecundario?: number;
+    tipoDeEjercicio?: EjercicioRes.TipoDeEjercicioEnum;
 }
-export namespace Ejercicio {
+export namespace EjercicioRes {
     export type TipoDeEjercicioEnum = 'PESO_Y_REPETICIONES' | 'PESO_CORPORAL' | 'PESO_CORPORAL_CON_PESO_EXTRA' | 'PESO_CORPORAL_ASISTIDO' | 'DISTANCIA_Y_DURACION' | 'DISTANCIA_Y_PESO' | 'DURACION';
     export const TipoDeEjercicioEnum = {
         PesoYRepeticiones: 'PESO_Y_REPETICIONES' as TipoDeEjercicioEnum,

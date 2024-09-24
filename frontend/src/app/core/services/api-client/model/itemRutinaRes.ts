@@ -9,11 +9,12 @@
  * Do not edit the class manually.
  */
 import { SerieRes } from './serieRes';
+import { EjercicioRes } from './ejercicioRes';
 
 
 export interface ItemRutinaRes { 
     id?: number;
-    ejercicio?: string;
+    ejercicio?: EjercicioRes;
     descansoEnSeg?: number;
     nota?: string;
     series?: Array<SerieRes>;

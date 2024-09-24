@@ -20,9 +20,7 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { EjercicioReq } from '../model/ejercicioReq';
 // @ts-ignore
-import { PageEjercicio } from '../model/pageEjercicio';
-// @ts-ignore
-import { Pageable } from '../model/pageable';
+import { EjercicioRes } from '../model/ejercicioRes';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -232,23 +230,13 @@ export class EjercicioControllerService {
     }
 
     /**
-     * @param pageable 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listarEjercicios(pageable: Pageable, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageEjercicio>;
-    public listarEjercicios(pageable: Pageable, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageEjercicio>>;
-    public listarEjercicios(pageable: Pageable, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageEjercicio>>;
-    public listarEjercicios(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling listarEjercicios.');
-        }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (pageable !== undefined && pageable !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>pageable, 'pageable');
-        }
+    public listarEjercicios(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EjercicioRes>>;
+    public listarEjercicios(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EjercicioRes>>>;
+    public listarEjercicios(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EjercicioRes>>>;
+    public listarEjercicios(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -287,10 +275,9 @@ export class EjercicioControllerService {
         }
 
         let localVarPath = `/api/ejercicios`;
-        return this.httpClient.request<PageEjercicio>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EjercicioRes>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
