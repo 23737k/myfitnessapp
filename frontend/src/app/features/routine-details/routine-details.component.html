@@ -83,22 +83,22 @@
             </div>
             @for (serie of editingItem!.series; track serie.id; let i = $index){
               <div class="rounded-2 bg-secondary-subtle mb-2 p-2" >
-                <div class="mb-1"><strong>Set {{i+1}}</strong></div>
+                <div class="mb-1"><strong>Set {{serie.id}}</strong></div>
                 <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio,'weigh')">
                   <label for="weightInput{{i}}" class="form-label">Weight (kg)</label>
-                  <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="serie.pesoEnKg" name="pesoEnKg" >
+                  <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="serie.pesoEnKg" name="pesoEnKg{{i}}" >
                 </div>
                 <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio!,'reps')">
-                  <label  class="form-label">Reps</label>
-                  <input type="number" class="form-control" [(ngModel)]="serie.reps" name="reps">
+                  <label  for="repsInput{{i}}" class="form-label">Reps</label>
+                  <input type="number" class="form-control" id="repsInput{{i}}" [(ngModel)]="serie.reps" name="reps{{i}}">
                 </div>
                 <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio!,'distance')">
                   <label for="distanceInput{{i}}" class="form-label">Distance</label>
-                  <input type="number" class="form-control" id="distanceInput{{i}}" [(ngModel)]="serie.distancia" name="distancia">
+                  <input type="number" class="form-control" id="distanceInput{{i}}" [(ngModel)]="serie.distancia" name="distancia{{i}}">
                 </div>
                 <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio!,'time')">
                   <label for="timeInput{{i}}" class="form-label">Time (seconds)</label>
-                  <input type="number" class="form-control" id="timeInput{{i}}" [(ngModel)]="serie.tiempoEnSeg" name="tiempoEnSeg">
+                  <input type="number" class="form-control" id="timeInput{{i}}" [(ngModel)]="serie.tiempoEnSeg" name="tiempoEnSeg{{i}}">
                 </div>
               </div>
 

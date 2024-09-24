@@ -62,13 +62,8 @@ export class RoutineDetailsComponent implements OnInit {
   }
 
   setItemToUpdate(id: number) {
-    const item = this.itemsRutina.find(item => item.id === id);
-    if (item) {
-      this.editingItem = {
-        ...item,
-        series: JSON.parse(JSON.stringify(item.series)) // Copia profunda de series
-      };
-    }
+    const itemToUpdate = this.itemsRutina.find(item => item.id === id)!;
+    this.editingItem = JSON.parse(JSON.stringify(itemToUpdate));
     const modalElement = document.getElementById('editItemModal');
     // @ts-ignore
     const modal = new bootstrap.Modal(modalElement!);
