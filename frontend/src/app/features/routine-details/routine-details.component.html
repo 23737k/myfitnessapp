@@ -83,7 +83,7 @@
             </div>
             @for (serie of editingItem!.series; track serie.id; let i = $index){
               <div class="rounded-2 bg-secondary-subtle mb-2 p-2" >
-                <div class="mb-1"><strong>Set {{serie.id}}</strong></div>
+                <div class="mb-1"><strong>Set {{i}}</strong></div>
                 <div class="mb-1" *ngIf="appopiateExerciseType(editingItem!.ejercicio,'weigh')">
                   <label for="weightInput{{i}}" class="form-label">Weight (kg)</label>
                   <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="serie.pesoEnKg" name="pesoEnKg{{i}}" >
