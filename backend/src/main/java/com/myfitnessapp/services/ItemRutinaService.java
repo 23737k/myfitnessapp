@@ -160,24 +160,10 @@ public class ItemRutinaService {
     ItemRutina item = rutina.getItems().stream().filter(i-> i.getId().equals(itemId))
             .findFirst().orElseThrow(()-> new EntityNotFoundException("item no encontrado"));
 
-    if(itemModif.getEjercicioId()!=null) {
-      item.setEjercicio(ejercicioService.findEjercicioById(itemModif.getEjercicioId()));
-      item.setSeries(new ArrayList<>());
-    }
-    if(itemModif.getNota()!=null){
-      item.setNota(itemModif.getNota());
-    }
-    if(itemModif.getDescansoEnSeg()!=null)
-      item.setDescansoEnSeg(itemModif.getDescansoEnSeg());
+     ItemRutina itemRutinaModif = toItemRutina(itemModif);
+     itemRutinaModif.setId(item.getId());
 
-    if(itemModif.getSeries()!=null) {
-      List<Serie> series = new ArrayList<>();
-      for (SerieReq serie : itemModif.getSeries()){
-        series.add(crearSerieFromTipoDeEjercicio(item.getEjercicio().getTipoDeEjercicio(),serie));
-      }
-      item.setSeries(series);
-    }
-    return toItemRutinaRes(itemRutinaRepo.save(item));
+    return toItemRutinaRes(itemRutinaRepo.save(itemRutinaModif));
   }
 
   public ItemRutina findById(Integer itemRutinaId){

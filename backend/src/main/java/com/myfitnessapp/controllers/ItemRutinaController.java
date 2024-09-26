@@ -31,7 +31,7 @@ public class ItemRutinaController {
 
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ItemRutinaRes modificarItem(@PathVariable("rutinaId") Integer rutinaId, @PathVariable("id")Integer itemId,
                                            @RequestBody @Validated ItemRutinaReq itemDto){

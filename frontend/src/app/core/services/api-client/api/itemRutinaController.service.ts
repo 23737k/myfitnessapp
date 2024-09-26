@@ -366,7 +366,7 @@ export class ItemRutinaControllerService {
         }
 
         let localVarPath = `/api/rutinas/${this.configuration.encodeParam({name: "rutinaId", value: rutinaId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/items/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<ItemRutinaRes>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ItemRutinaRes>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: itemRutinaReq,

@@ -45,3 +45,6 @@ body {
 .modal-footer {
   border-top: none;
 }
+:invalid {
+  border: 1px solid red;
+}
