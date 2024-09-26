@@ -1,24 +1,32 @@
-import {Component, OnInit} from '@angular/core';
-import {RutinaControllerService, RutinaRes} from "../../core/services/api-client";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {RutinaControllerService, RutinaReq, RutinaRes} from "../../core/services/api-client";
 import {Router} from "@angular/router";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-routines',
   standalone: true,
-  imports: [],
+  imports: [
+    ReactiveFormsModule
+  ],
   templateUrl: './routines.component.html',
   styleUrl: './routines.component.css'
 })
 export class RoutinesComponent implements OnInit{
   routines!:RutinaRes[];
+  routineForm!: FormGroup;
 
   ngOnInit(): void {
     this._routineService.listarRutinas().subscribe({
       next: rutinas => this.routines = rutinas
-    })
+    });
+    this.routineForm = this._fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required]
+    });
   }
 
-  constructor(private _routineService: RutinaControllerService, private _router: Router) {
+  constructor(private _routineService: RutinaControllerService, private _router: Router, private _fb: FormBuilder) {
   }
 
   seeDetails(id: number | undefined): void {
@@ -28,5 +36,27 @@ export class RoutinesComponent implements OnInit{
   startRoutine(event:Event){
     event.stopPropagation();
   }
+
+  createRoutine(){
+    if(this.routineForm.valid){
+      const newRoutine : RutinaReq = {
+        nombre: this.routineForm.get('name')!.value,
+        descripcion: this.routineForm.get('description')!.value,
+      };
+
+      this._routineService.crearRutina(newRoutine).subscribe({
+        next: rutina => {
+          this.routines.push(newRoutine);
+          alert("Routine created successfully!");
+          this._router.navigate([`routines/${rutina.id}`]);
+        }
+      });
+    }
+    else {
+      alert("Some fields are missing");
+    }
+  }
+
+
 
 }

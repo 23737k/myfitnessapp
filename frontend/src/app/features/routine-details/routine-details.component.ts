@@ -124,7 +124,15 @@ export class RoutineDetailsComponent implements OnInit {
   }
 
   addNewSet(){
-    this.editingItem.series?.push({});
+    console.log(this.editingItem.series)
+    this.editingItem.series!.push({
+      pesoEnKg: 0,
+      reps: 0,
+      tiempoEnSeg: 0,
+      distancia: 0
+    });
+    console.log(this.editingItem.series)
+
   }
   removeSet(index:number){
     console.log(index)

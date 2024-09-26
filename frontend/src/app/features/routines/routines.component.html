@@ -22,7 +22,7 @@
 </main>
 
 <!-- Create Routine Modal -->
-<div class="modal fade" id="createRoutineModal" tabindex="-1" aria-labelledby="createRoutineModalLabel" aria-hidden="true">
+<div class="modal fade" id="createRoutineModal" da tabindex="-1" aria-labelledby="createRoutineModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -30,20 +30,20 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="createRoutineForm">
+        <form id="createRoutineForm" [formGroup]="routineForm" (ngSubmit)="createRoutine()">
           <div class="mb-3">
             <label for="routineName" class="form-label">Routine Name</label>
-            <input type="text" class="form-control" id="routineName" required>
+            <input type="text" class="form-control" id="routineName" required formControlName="name">
           </div>
           <div class="mb-3">
             <label for="routineDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="routineDescription" rows="3" required></textarea>
+            <textarea class="form-control" id="routineDescription" rows="3" required formControlName="description"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="saveRoutineBtn">Create Routine</button>
+        <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" form="createRoutineForm" id="saveRoutineBtn">Create Routine</button>
       </div>
     </div>
   </div>

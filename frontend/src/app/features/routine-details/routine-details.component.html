@@ -158,20 +158,20 @@
                     </div>
 
                     <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'weigh')">
-                      <label for="weightInput{{i}}" class="form-label">Weight (kg)</label>
-                      <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="editingItem.series![i].pesoEnKg" name="weigh" required>
+                      <label [for]="'weighInput'+i" class="form-label">Weight (kg)</label>
+                      <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="editingItem.series![i].pesoEnKg" name="weigh{{i}}" required>
                     </div>
                     <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'reps')">
-                      <label  for="repsInput{{i}}" class="form-label">Reps</label>
-                      <input type="number" class="form-control" id="repsInput{{i}}" [(ngModel)]="editingItem.series![i].reps" name="reps" required>
+                      <label  [for]="'repsInput'+i" class="form-label">Reps</label>
+                      <input type="number" class="form-control" id="repsInput{{i}}" [(ngModel)]="editingItem.series![i].reps" name="reps{{i}}" required>
                     </div>
                     <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'distance')">
-                      <label for="distanceInput{{i}}" class="form-label">Distance</label>
-                      <input type="number" class="form-control" id="distanceInput{{i}}" [(ngModel)]="editingItem.series![i].distancia" name="distance" required>
+                      <label [for]="'distanceInput'+i" class="form-label">Distance</label>
+                      <input type="number" class="form-control" [id]="'distanceInput'+i" [(ngModel)]="editingItem.series![i].distancia" name="distance{{i}}" required>
                     </div>
                     <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'time')">
-                      <label for="timeInput{{i}}" class="form-label">Time (seconds)</label>
-                      <input type="number" class="form-control" id="timeInput{{i}}" [(ngModel)]="editingItem.series![i].tiempoEnSeg" name="time" required>
+                      <label [for]="'timeInput'+i" class="form-label">Time (seconds)</label>
+                      <input type="number" class="form-control" [id]="'timeInput'+i" [(ngModel)]="editingItem.series![i].tiempoEnSeg" name="time{{i}}" required>
                     </div>
                   </div>
                 }
