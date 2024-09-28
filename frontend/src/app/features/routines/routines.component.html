@@ -13,7 +13,7 @@
           <div class="card-body">
             <h5 class="card-title">{{routine.nombre?.toUpperCase()}}</h5>
             <p class="card-text">{{ routine.descripcion }}</p>
-            <button class="btn btn-success w-100" (click)="startRoutine($event)">Start Routine</button>
+            <button class="btn btn-success w-100" (click)="startRoutine($event, routine.id!)">Start Routine</button>
           </div>
         </div>
       </div>

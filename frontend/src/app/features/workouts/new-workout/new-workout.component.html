@@ -1,0 +1,16 @@
+<div>
+  Duration: <span *ngIf="hours !==0">{{hours}}H</span> <span *ngIf="minutes!==0">{{minutes}}min </span> <span>{{seconds}}s</span>
+</div>
+
+<div class="container">
+  <h1 *ngIf="routine" class="text-center">{{routine.nombre!.toUpperCase()}}</h1>
+  @if(items){
+    @for (item of items; track $index){
+      <div class="row">
+        <div class="col">{{item.ejercicio?.nombre!}}</div>
+        <div class="col">{{item.descansoEnSeg}}</div>
+      </div>
+    }
+  }
+
+</div>

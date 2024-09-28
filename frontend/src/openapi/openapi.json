@@ -1,1 +1,722 @@
-{"openapi":"3.0.1","info":{"title":"MyFitnessApp","description":"A REST api for exercise and workout tracking","version":"v1.0"},"servers":[{"url":"http://localhost:8080","description":"Generated server url"}],"paths":{"/api/rutinas":{"get":{"tags":["rutina-controller"],"operationId":"listarRutinas","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/RutinaRes"}}}}}}},"post":{"tags":["rutina-controller"],"operationId":"crearRutina","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RutinaReq"}}},"required":true},"responses":{"201":{"description":"Created","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RutinaRes"}}}}}}},"/api/rutinas/{rutinaId}/items":{"get":{"tags":["item-rutina-controller"],"operationId":"getItems","parameters":[{"name":"rutinaId","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/ItemRutinaRes"}}}}}}},"post":{"tags":["item-rutina-controller"],"operationId":"crearItem","parameters":[{"name":"rutinaId","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ItemRutinaReq"}}},"required":true},"responses":{"201":{"description":"Created","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ItemRutinaRes"}}}}}}},"/api/rutinas/{rutinaId}/items/{id}":{"post":{"tags":["item-rutina-controller"],"operationId":"modificarItem","parameters":[{"name":"rutinaId","in":"path","required":true,"schema":{"type":"integer","format":"int32"}},{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ItemRutinaReq"}}},"required":true},"responses":{"202":{"description":"Accepted","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ItemRutinaRes"}}}}}}},"/api/entrenos":{"get":{"tags":["entreno-controller"],"operationId":"listarEntrenos","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object"}}}}}},"post":{"tags":["entreno-controller"],"operationId":"nuevoEntreno","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/EntrenoReq"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object"}}}}}}},"/api/ejercicios":{"get":{"tags":["ejercicio-controller"],"operationId":"listarEjercicios","responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/EjercicioRes"}}}}}}},"post":{"tags":["ejercicio-controller"],"operationId":"guardarEjercicio","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/EjercicioReq"}}},"required":true},"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object"}}}}}}},"/api/rutinas/{id}":{"get":{"tags":["rutina-controller"],"operationId":"getRutinaById","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RutinaRes"}}}}}},"delete":{"tags":["rutina-controller"],"operationId":"eliminarRutina","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"responses":{"204":{"description":"No Content"}}}},"/api/entrenos/{id}":{"get":{"tags":["entreno-controller"],"operationId":"obtenerEntrenoPorId","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object"}}}}}},"delete":{"tags":["entreno-controller"],"operationId":"eliminarEntreno","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object"}}}}}}},"/api/rutinas/{rutinaId}/items/{itemId}":{"delete":{"tags":["item-rutina-controller"],"operationId":"eliminarItem","parameters":[{"name":"itemId","in":"path","required":true,"schema":{"type":"integer","format":"int32"}},{"name":"rutinaId","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"responses":{"204":{"description":"No Content"}}}},"/api/ejercicios/{id}":{"delete":{"tags":["ejercicio-controller"],"operationId":"eliminarEjercicio","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int32"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"object"}}}}}}}},"components":{"schemas":{"RutinaReq":{"required":["descripcion","nombre"],"type":"object","properties":{"nombre":{"type":"string"},"descripcion":{"type":"string"}}},"RutinaRes":{"type":"object","properties":{"id":{"type":"integer","format":"int32"},"nombre":{"type":"string"},"descripcion":{"type":"string"}}},"ItemRutinaReq":{"required":["descansoEnSeg","ejercicioId","nota","series"],"type":"object","properties":{"ejercicioId":{"type":"integer","format":"int32"},"descansoEnSeg":{"type":"integer","format":"int32"},"nota":{"type":"string"},"series":{"maxItems":2147483647,"minItems":1,"type":"array","items":{"$ref":"#/components/schemas/SerieReq"}}}},"SerieReq":{"type":"object","properties":{"reps":{"type":"integer","format":"int32"},"pesoEnKg":{"type":"number","format":"double"},"tiempoEnSeg":{"type":"integer","format":"int32"},"distancia":{"type":"number","format":"double"}}},"EjercicioRes":{"type":"object","properties":{"id":{"type":"integer","format":"int32"},"nombre":{"type":"string"},"grupoMuscularPrimario":{"type":"integer","format":"int32"},"grupoMuscularSecundario":{"type":"integer","format":"int32"},"tipoDeEjercicio":{"type":"string","enum":["PESO_Y_REPETICIONES","PESO_CORPORAL","PESO_CORPORAL_CON_PESO_EXTRA","PESO_CORPORAL_ASISTIDO","DISTANCIA_Y_DURACION","DISTANCIA_Y_PESO","DURACION"]}}},"ItemRutinaRes":{"type":"object","properties":{"id":{"type":"integer","format":"int32"},"ejercicio":{"$ref":"#/components/schemas/EjercicioRes"},"descansoEnSeg":{"type":"integer","format":"int32"},"nota":{"type":"string"},"series":{"type":"array","items":{"$ref":"#/components/schemas/SerieRes"}}}},"SerieRes":{"type":"object","properties":{"id":{"type":"integer","format":"int32"},"reps":{"type":"integer","format":"int32"},"pesoEnKg":{"type":"number","format":"double"},"tiempoEnSeg":{"type":"integer","format":"int32"},"distancia":{"type":"number","format":"double"}}},"EntrenoReq":{"required":["duracionEnMinutos","inicio","items","rutinaId"],"type":"object","properties":{"rutinaId":{"type":"integer","format":"int32"},"inicio":{"type":"string","format":"date-time"},"duracionEnMinutos":{"type":"integer","format":"int32"},"items":{"maxItems":2147483647,"minItems":1,"type":"array","items":{"$ref":"#/components/schemas/ItemRutinaReq"}}}},"EjercicioReq":{"required":["grupoMuscularPrimario","nombre","tipoDeEjercicio"],"type":"object","properties":{"nombre":{"type":"string"},"grupoMuscularPrimario":{"type":"integer","format":"int32"},"grupoMuscularSecundario":{"type":"integer","format":"int32"},"tipoDeEjercicio":{"type":"string"}}}}}}
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MyFitnessApp",
+    "description": "A REST api for exercise and workout tracking",
+    "version": "v1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/rutinas": {
+      "get": {
+        "tags": [
+          "rutina-controller"
+        ],
+        "operationId": "listarRutinas",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RutinaRes"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "rutina-controller"
+        ],
+        "operationId": "crearRutina",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RutinaReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RutinaRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rutinas/{rutinaId}/items": {
+      "get": {
+        "tags": [
+          "item-rutina-controller"
+        ],
+        "operationId": "getItems",
+        "parameters": [
+          {
+            "name": "rutinaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemRutinaRes"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "item-rutina-controller"
+        ],
+        "operationId": "crearItem",
+        "parameters": [
+          {
+            "name": "rutinaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemRutinaReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemRutinaRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rutinas/{rutinaId}/items/{id}": {
+      "post": {
+        "tags": [
+          "item-rutina-controller"
+        ],
+        "operationId": "modificarItem",
+        "parameters": [
+          {
+            "name": "rutinaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemRutinaReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemRutinaRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/entrenos": {
+      "get": {
+        "tags": [
+          "entreno-controller"
+        ],
+        "operationId": "listarEntrenos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntrenoRes"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "entreno-controller"
+        ],
+        "operationId": "nuevoEntreno",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntrenoReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntrenoRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ejercicios": {
+      "get": {
+        "tags": [
+          "ejercicio-controller"
+        ],
+        "operationId": "listarEjercicios",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EjercicioRes"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ejercicio-controller"
+        ],
+        "operationId": "guardarEjercicio",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EjercicioReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rutinas/{id}": {
+      "get": {
+        "tags": [
+          "rutina-controller"
+        ],
+        "operationId": "getRutinaById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RutinaRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "rutina-controller"
+        ],
+        "operationId": "eliminarRutina",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/entrenos/{id}": {
+      "get": {
+        "tags": [
+          "entreno-controller"
+        ],
+        "operationId": "obtenerEntrenoPorId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntrenoRes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "entreno-controller"
+        ],
+        "operationId": "eliminarEntreno",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/rutinas/{rutinaId}/items/{itemId}": {
+      "delete": {
+        "tags": [
+          "item-rutina-controller"
+        ],
+        "operationId": "eliminarItem",
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "rutinaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/ejercicios/{id}": {
+      "delete": {
+        "tags": [
+          "ejercicio-controller"
+        ],
+        "operationId": "eliminarEjercicio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RutinaReq": {
+        "required": [
+          "descripcion",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          }
+        }
+      },
+      "RutinaRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string"
+          }
+        }
+      },
+      "ItemRutinaReq": {
+        "required": [
+          "descansoEnSeg",
+          "ejercicioId",
+          "nota",
+          "series"
+        ],
+        "type": "object",
+        "properties": {
+          "ejercicioId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "descansoEnSeg": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nota": {
+            "type": "string"
+          },
+          "series": {
+            "maxItems": 2147483647,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SerieReq"
+            }
+          }
+        }
+      },
+      "SerieReq": {
+        "type": "object",
+        "properties": {
+          "reps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pesoEnKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "tiempoEnSeg": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "distancia": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "EjercicioRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "grupoMuscularPrimario": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grupoMuscularSecundario": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoDeEjercicio": {
+            "type": "string",
+            "enum": [
+              "PESO_Y_REPETICIONES",
+              "PESO_CORPORAL",
+              "PESO_CORPORAL_CON_PESO_EXTRA",
+              "PESO_CORPORAL_ASISTIDO",
+              "DISTANCIA_Y_DURACION",
+              "DISTANCIA_Y_PESO",
+              "DURACION"
+            ]
+          }
+        }
+      },
+      "ItemRutinaRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ejercicio": {
+            "$ref": "#/components/schemas/EjercicioRes"
+          },
+          "descansoEnSeg": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nota": {
+            "type": "string"
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SerieRes"
+            }
+          }
+        }
+      },
+      "SerieRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reps": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pesoEnKg": {
+            "type": "number",
+            "format": "double"
+          },
+          "tiempoEnSeg": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "distancia": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "EntrenoReq": {
+        "required": [
+          "duracionEnMinutos",
+          "inicio",
+          "items",
+          "rutinaId"
+        ],
+        "type": "object",
+        "properties": {
+          "rutinaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duracionEnMinutos": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "maxItems": 2147483647,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemRutinaReq"
+            }
+          }
+        }
+      },
+      "EntrenoRes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rutinaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rutinaNombre": {
+            "type": "string"
+          },
+          "inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duracionEnMinutos": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "volumenEnKg": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nroDeSeries": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemRutinaRes"
+            }
+          }
+        }
+      },
+      "EjercicioReq": {
+        "required": [
+          "grupoMuscularPrimario",
+          "nombre",
+          "tipoDeEjercicio"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "grupoMuscularPrimario": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grupoMuscularSecundario": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoDeEjercicio": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

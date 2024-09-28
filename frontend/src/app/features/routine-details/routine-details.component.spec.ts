@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { RoutineDetailsComponent } from './routine-details.component';
+import {RoutineDetailsComponent} from './routine-details.component';
 
 describe('RoutineDetailsComponent', () => {
   let component: RoutineDetailsComponent;

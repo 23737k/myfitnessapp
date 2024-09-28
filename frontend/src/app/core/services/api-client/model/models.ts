@@ -1,6 +1,7 @@
 export * from './ejercicioReq';
 export * from './ejercicioRes';
 export * from './entrenoReq';
+export * from './entrenoRes';
 export * from './itemRutinaReq';
 export * from './itemRutinaRes';
 export * from './rutinaReq';

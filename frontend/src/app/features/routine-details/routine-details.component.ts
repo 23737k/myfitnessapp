@@ -1,17 +1,18 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 import {
   EjercicioControllerService,
   EjercicioRes,
-  ItemRutinaControllerService, ItemRutinaReq,
+  ItemRutinaControllerService,
+  ItemRutinaReq,
   ItemRutinaRes,
   RutinaControllerService,
-  RutinaRes, SerieReq, SerieRes
+  RutinaRes
 } from "../../core/services/api-client";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import 'bootstrap';
-import {concatMap, forkJoin, switchMap} from "rxjs";
+import {concatMap, forkJoin} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 
 @Component({

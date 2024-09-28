@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RutinaControllerService, RutinaReq, RutinaRes} from "../../core/services/api-client";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -33,8 +33,9 @@ export class RoutinesComponent implements OnInit{
     this._router.navigateByUrl(`routines/${id}`);
   }
 
-  startRoutine(event:Event){
+  startRoutine(event:Event, routineId: number){
     event.stopPropagation();
+    this._router.navigate(['new-workout'], {queryParams: {routineId : routineId}})
   }
 
   createRoutine(){
