@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
+  EjercicioRes,
   EntrenoControllerService,
   EntrenoRes, ItemRutinaControllerService, ItemRutinaRes,
   RutinaControllerService,
@@ -8,6 +9,7 @@ import {
 import {NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {concatMap} from "rxjs";
+import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 
 @Component({
   selector: 'app-new-workout',
@@ -64,6 +66,25 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     },1000);
   }
 
+  appropriateExerciseType(typeOfExercise: EjercicioRes, type: string) {
+    const exerciseType: TipoDeEjercicioEnum = typeOfExercise.tipoDeEjercicio!;
+    switch (type) {
+      case 'reps': return ['PESO_Y_REPETICIONES','PESO_CORPORAL','PESO_CORPORAL_CON_PESO_EXTRA','PESO_CORPORAL_ASISTIDO'].includes(exerciseType!);
+      case 'distance' : return ['DISTANCIA_Y_PESO'].includes(exerciseType!);
+      case 'time' : return ['DURACION','DISTANCIA_Y_DURACION'].includes(exerciseType!);
+      case 'weigh' : return ['PESO_Y_REPETICIONES', 'PESO_CORPORAL_CON_PESO_EXTRA'].includes(exerciseType!);
+      default: return false;
+    }
+  }
+
+  addSet(item: ItemRutinaRes){
+    item!.series!.push({
+      pesoEnKg: this.appropriateExerciseType(item.ejercicio!, 'weigh')? 0 : undefined,
+      reps: this.appropriateExerciseType(item.ejercicio!, 'reps') ? 0 : undefined,
+      distancia: this.appropriateExerciseType(item.ejercicio!, 'distance') ? 0 : undefined,
+      tiempoEnSeg: this.appropriateExerciseType(item.ejercicio!, 'time') ? 0 : undefined
+    });
+  }
 
 
 

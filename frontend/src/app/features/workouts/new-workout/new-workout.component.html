@@ -1,14 +1,47 @@
-<div>
-  Duration: <span *ngIf="hours !==0">{{hours}}H</span> <span *ngIf="minutes!==0">{{minutes}}min </span> <span>{{seconds}}s</span>
-</div>
-
-<div class="container">
+<div class="container col-lg-4 mt-2">
   <h1 *ngIf="routine" class="text-center">{{routine.nombre!.toUpperCase()}}</h1>
+  <div class="mb-2">
+    <strong>Duration: </strong> <span *ngIf="hours !==0">{{hours}}H</span> <span *ngIf="minutes!==0">{{minutes}}min </span> <span>{{seconds}}s</span>
+  </div>
   @if(items){
     @for (item of items; track $index){
-      <div class="row">
-        <div class="col">{{item.ejercicio?.nombre!}}</div>
-        <div class="col">{{item.descansoEnSeg}}</div>
+      <div class="row mb-3 item bg-secondary-subtle p-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="exercise-name mb-2 p-0">{{item.ejercicio?.nombre!}}</div>
+          <div class="dropdown">
+            <button class="btn" data-bs-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v"></i></button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+        </div>
+        <input type="text" placeholder="Add notes here..." class="form-control mb-2">
+        <div class="mb-2 p-0"><strong>Rest time: </strong>{{item.descansoEnSeg}} s</div>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Set</th>
+            <th>Previous</th>
+            <th *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')">Weigh</th>
+            <th *ngIf="appropriateExerciseType(item.ejercicio!,'reps')">Reps</th>
+            <th><i class="fa-solid fa-circle-check"></i></th>
+          </tr>
+          </thead>
+          <tbody>
+          @for(set of item.series; track set){
+            <tr>
+              <td>{{$index +1}}</td>
+              <td></td>
+              <td *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')">{{set.pesoEnKg}}</td>
+              <td *ngIf="appropriateExerciseType(item.ejercicio!,'reps')">{{set.reps}}</td>
+              <td><input class="form-check-input" type="checkbox"></td>
+            </tr>
+          }
+          </tbody>
+        </table>
+        <button class="btn btn-primary" type="button" (click)="addSet(item)">+ Add Set</button>
       </div>
     }
   }
