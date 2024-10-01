@@ -53,9 +53,9 @@
             }
           </div>
           <button class="btn btn-primary my-2" (click)="addNewItem()">Add item</button>
-          <button class="btn btn-success w-100" ng-click="startWorkout()">
-            <i class="fas fa-play me-2"></i>Start Workout
-          </button>
+          <a [routerLink]="['/new-workout']" [queryParams]="{routineId: routineId}"><button class="btn btn-success w-100"> <i class="fas fa-play me-2"></i>Start Workout
+          </button></a>
+
         </div>
       </div>
 

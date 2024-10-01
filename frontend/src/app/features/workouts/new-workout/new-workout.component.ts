@@ -7,7 +7,7 @@ import {
   RutinaRes
 } from "../../../core/services/api-client";
 import {NgIf} from "@angular/common";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {concatMap} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 
@@ -15,7 +15,8 @@ import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
   selector: 'app-new-workout',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './new-workout.component.html',
   styleUrl: './new-workout.component.css'
@@ -86,6 +87,9 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     });
   }
 
+  removeItem(id:number){
+    this.items = this.items.filter(i => i.id !== id);
+  }
 
 
 

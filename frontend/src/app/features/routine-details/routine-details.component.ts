@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {
   EjercicioControllerService,
   EjercicioRes,
@@ -11,7 +11,6 @@ import {
 } from "../../core/services/api-client";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import 'bootstrap';
 import {concatMap, forkJoin} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 
@@ -20,7 +19,8 @@ import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
   standalone: true,
   imports: [
     NgIf,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './routine-details.component.html',
   styleUrl: './routine-details.component.css'

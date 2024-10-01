@@ -1,5 +1,8 @@
 <div class="container col-lg-4 mt-2">
-  <h1 *ngIf="routine" class="text-center">{{routine.nombre!.toUpperCase()}}</h1>
+  <div class="row">
+    <h1 *ngIf="routine" class="col text-center">{{routine.nombre!.toUpperCase()}}</h1>
+  </div>
+
   <div class="mb-2">
     <strong>Duration: </strong> <span *ngIf="hours !==0">{{hours}}H</span> <span *ngIf="minutes!==0">{{minutes}}min </span> <span>{{seconds}}s</span>
   </div>
@@ -11,9 +14,9 @@
           <div class="dropdown">
             <button class="btn" data-bs-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v"></i></button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="#">Reorder Exercise</a></li>
+              <li><a class="dropdown-item" href="#">Replace Exercise</a></li>
+              <li><a class="dropdown-item text-danger" (click)="removeItem(item.id!)">Remove Exercise</a></li>
             </ul>
           </div>
         </div>
@@ -34,16 +37,22 @@
             <tr>
               <td>{{$index +1}}</td>
               <td></td>
-              <td *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')">{{set.pesoEnKg}}</td>
-              <td *ngIf="appropriateExerciseType(item.ejercicio!,'reps')">{{set.reps}}</td>
+              <td *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')"><input class="form-control no-border" value="{{set.pesoEnKg}}" type="text"></td>
+              <td *ngIf="appropriateExerciseType(item.ejercicio!,'reps')"><input class="form-control" value="{{set.reps}}" type="text"></td>
               <td><input class="form-check-input" type="checkbox"></td>
             </tr>
           }
           </tbody>
         </table>
-        <button class="btn btn-primary" type="button" (click)="addSet(item)">+ Add Set</button>
+        <button class="btn btn-secondary col-8 mx-auto" type="button" (click)="addSet(item)">+ Add Set</button>
       </div>
     }
   }
+  <div class="d-grid gap-3 mx-auto">
+    <button class="btn btn-primary d-block mx-auto col-8" type="button">+ Add Exercise</button>
+    <button class="btn btn-success  mt-4 fs-5" type="button">Finish</button>
+    <button class="btn btn-outline-danger d-block">Discard Workout</button>
+  </div>
+
 
 </div>

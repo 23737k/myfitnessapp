@@ -24,8 +24,8 @@ public class EntrenoService {
         return entrenoRepo.findAll();
     }
 
-    public void saveEntreno(EntrenoReq entrenoReq){
-        entrenoRepo.save(toEntreno(entrenoReq));
+    public Entreno saveEntreno(EntrenoReq entrenoReq){
+        return entrenoRepo.save(toEntreno(entrenoReq));
     }
 
     public Entreno toEntreno(EntrenoReq dto){

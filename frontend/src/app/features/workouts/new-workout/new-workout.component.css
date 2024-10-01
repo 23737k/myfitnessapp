@@ -12,10 +12,22 @@
 }
 .exercise-name{
   font-weight: bold;
-  color: #0022FF
+  font-size: 1.2em;
+  margin-left: -7px;
 }
 input[type='checkbox']:hover{
   cursor: pointer;
 }
+a:hover{
+  cursor: pointer;
+}
 
+table{
+  text-align: center;
+}
 
+table input[type="text"]{
+  margin: auto;
+  text-align: center;
+  max-width: 70px;
+}

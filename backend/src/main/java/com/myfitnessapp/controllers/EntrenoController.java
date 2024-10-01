@@ -6,7 +6,6 @@ import com.myfitnessapp.services.EntrenoService;
 import com.myfitnessapp.validation.Crear;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,26 +18,27 @@ public class EntrenoController {
     private final EntrenoService entrenoService;
 
     @GetMapping("")
-    public ResponseEntity<?> listarEntrenos(){
-        List<EntrenoRes> entrenos = entrenoService.getEntrenos().stream().map(entrenoService::toEntrenoResponseDto).toList();
-        return new ResponseEntity<>(entrenos, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<EntrenoRes> listarEntrenos(){
+        return entrenoService.getEntrenos().stream().map(entrenoService::toEntrenoResponseDto).toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerEntrenoPorId(@PathVariable Integer id){
-        return new ResponseEntity<>(entrenoService.toEntrenoResponseDto(entrenoService.findById(id)),HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public EntrenoRes obtenerEntrenoPorId(@PathVariable Integer id){
+        return entrenoService.toEntrenoResponseDto(entrenoService.findById(id));
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> nuevoEntreno(@RequestBody @Validated(Crear.class)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public EntrenoRes nuevoEntreno(@RequestBody @Validated(Crear.class)
                                           EntrenoReq entrenoReq){
-        entrenoService.saveEntreno(entrenoReq);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return entrenoService.toEntrenoResponseDto(entrenoService.saveEntreno(entrenoReq));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarEntreno(@PathVariable Integer id){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void eliminarEntreno(@PathVariable Integer id){
         entrenoService.deleteEntreno(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
