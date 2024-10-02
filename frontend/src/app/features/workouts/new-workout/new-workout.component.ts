@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   EjercicioRes,
-  EntrenoControllerService,
-  EntrenoRes, ItemRutinaControllerService, ItemRutinaRes,
+  EntrenoControllerService, EntrenoReq,
+  ItemRutinaControllerService, ItemRutinaRes,
   RutinaControllerService,
   RutinaRes
 } from "../../../core/services/api-client";
@@ -10,6 +10,7 @@ import {NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {concatMap} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-new-workout',
@@ -26,16 +27,44 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
   minutes: number = 0;
   seconds : number = 0;
 
-  workout!: EntrenoRes;
+  workout!: EntrenoReq;
   routine!:RutinaRes;
-  items: ItemRutinaRes[] = [];
+  items!: ItemRutinaRes[];
+  form!: FormGroup;
+
+
+  createItemControls(): FormArray{
+    return this._fb.array(this.items!.map(item => {
+      return this._fb.group({
+        id: [item.id],
+        ejercicio: [item.ejercicio, [Validators.min(1), Validators.required]],
+        descansoEnSeg: [item.descansoEnSeg, [Validators.min(1), Validators.required]],
+        nota: [item.nota],
+        series: this.createSetControls(item)
+      })
+    }));
+  }
+
+  createSetControls(item: ItemRutinaRes) : FormArray{
+    return this._fb.array(item.series!.map(set => {
+      return this._fb.group({
+        id: [set.id],
+        reps: [set.reps, Validators.min(1)],
+        pesoEnKg: [set.pesoEnKg, Validators.min(1)],
+        tiempoEnSeg: [set.tiempoEnSeg, Validators.min(1)],
+        distancia: [set.distancia, Validators.min(1)],
+        selected: [false],
+      })
+    }));
+  }
 
 
   constructor(
     private _entrenoService: EntrenoControllerService,
     private _rutinaService : RutinaControllerService,
     private _itemService : ItemRutinaControllerService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _fb: FormBuilder
   ) {}
 
 
@@ -48,23 +77,16 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
         })).subscribe({
         next: items => {
           this.items = items;
-          console.log(items);
+          this.form = this._fb.group({
+            //TODO modificar algunos params absurdos en EntrenoReq
+            items: this.createItemControls()
+          });
         }
       });
-
   }
 
 
-  startTimer(){
-    const startTime = Date.now();
-    let counter;
-    this.timerRef = setInterval(()=>{
-      counter = Math.floor((Date.now()-startTime)/1000);
-      this.hours = Math.floor((counter!/3600)%60);
-      this.minutes = Math.floor((counter!/60)%60);
-      this.seconds = Math.floor(counter!%60);
-    },1000);
-  }
+
 
   appropriateExerciseType(typeOfExercise: EjercicioRes, type: string) {
     const exerciseType: TipoDeEjercicioEnum = typeOfExercise.tipoDeEjercicio!;
@@ -77,6 +99,8 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     }
   }
 
+
+  //TODO cambiar por formGroup
   addSet(item: ItemRutinaRes){
     item!.series!.push({
       pesoEnKg: this.appropriateExerciseType(item.ejercicio!, 'weigh')? 0 : undefined,
@@ -90,6 +114,16 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
 
 
 
+  startTimer(){
+    const startTime = Date.now();
+    let counter;
+    this.timerRef = setInterval(()=>{
+      counter = Math.floor((Date.now()-startTime)/1000);
+      this.hours = Math.floor((counter!/3600)%60);
+      this.minutes = Math.floor((counter!/60)%60);
+      this.seconds = Math.floor(counter!%60);
+    },1000);
+  }
 
   ngOnDestroy(): void {
     clearInterval(this.timerRef);

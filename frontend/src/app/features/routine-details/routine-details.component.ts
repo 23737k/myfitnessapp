@@ -11,7 +11,6 @@ import {
 } from "../../core/services/api-client";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import 'bootstrap';
 import {concatMap, forkJoin} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 
