@@ -6,18 +6,20 @@ import {
   RutinaControllerService,
   RutinaRes
 } from "../../../core/services/api-client";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {concatMap} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-new-workout',
   standalone: true,
   imports: [
     NgIf,
-    RouterLink
+    RouterLink,
+    ReactiveFormsModule,
+    NgForOf
   ],
   templateUrl: './new-workout.component.html',
   styleUrl: './new-workout.component.css'
@@ -38,7 +40,10 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     return this._fb.array(this.items!.map(item => {
       return this._fb.group({
         id: [item.id],
-        ejercicio: [item.ejercicio, [Validators.min(1), Validators.required]],
+        ejercicio: this._fb.group({
+          id: item.ejercicio?.id,
+          nombre: item.ejercicio?.nombre
+        }),
         descansoEnSeg: [item.descansoEnSeg, [Validators.min(1), Validators.required]],
         nota: [item.nota],
         series: this.createSetControls(item)
@@ -86,8 +91,18 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
       });
   }
 
+  saveRoutine(){
+    console.log(this.form.get('items'));
+  }
 
-
+  get itemsFormArray() : FormArray{
+    // @ts-ignore
+    return this.form!.get('items') as FormArray;
+  }
+  setsFormArray(item: AbstractControl):FormArray{
+    // @ts-ignore
+    return item.get('series') as FormArray;
+  }
 
   appropriateExerciseType(typeOfExercise: EjercicioRes, type: string) {
     const exerciseType: TipoDeEjercicioEnum = typeOfExercise.tipoDeEjercicio!;
@@ -133,4 +148,5 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     clearInterval(this.timerRef);
   }
 
+  protected readonly FormArray = FormArray;
 }

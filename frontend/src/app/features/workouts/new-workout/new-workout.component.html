@@ -6,53 +6,62 @@
   <div class="mb-2">
     <strong>Duration: </strong> <span *ngIf="hours !==0">{{hours}}H</span> <span *ngIf="minutes!==0">{{minutes}}min </span> <span>{{seconds}}s</span>
   </div>
-  @if(items){
-    @for (item of items; track $index){
-      <div class="row mb-3 item bg-secondary-subtle p-3">
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="exercise-name mb-2 p-0">{{item.ejercicio?.nombre!}}</div>
-          <div class="dropdown">
-            <button class="btn" data-bs-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v"></i></button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Reorder Exercise</a></li>
-              <li><a class="dropdown-item" href="#">Replace Exercise</a></li>
-              <li><a class="dropdown-item text-danger" (click)="removeItem(item.id!)">Remove Exercise</a></li>
-            </ul>
+  @if(form){
+    <form [formGroup]="form" (ngSubmit)="saveRoutine()">
+      <div formArrayName="items"><div *ngFor="let item of itemsFormArray.controls; let i = index" [formGroupName]="i">
+        <div class="row mb-3 item bg-secondary-subtle p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="exercise-name mb-2 p-0">{{item.get('ejercicio')?.get('nombre')?.value}}</div>
+            <div class="dropdown">
+              <button class="btn" data-bs-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v"></i></button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Reorder Exercise</a></li>
+                <li><a class="dropdown-item" href="#">Replace Exercise</a></li>
+                <li><a class="dropdown-item text-danger" (click)="removeItem(item.value.id!)">Remove Exercise</a></li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <input type="text" placeholder="Add notes here..." class="form-control mb-2">
-        <div class="mb-2 p-0"><strong>Rest time: </strong>{{item.descansoEnSeg}} s</div>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Set</th>
-            <th>Previous</th>
-            <th *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')">Weigh</th>
-            <th *ngIf="appropriateExerciseType(item.ejercicio!,'reps')">Reps</th>
-            <th><i class="fa-solid fa-circle-check"></i></th>
-          </tr>
-          </thead>
-          <tbody>
-          @for(set of item.series; track set){
+          <input type="text" placeholder="Add notes here..." class="form-control mb-2">
+          <div class="mb-2 p-0 input-group">
+            <span class="input-group-text"><strong>Rest time: </strong></span>
+            <input type="number" class="form-control d-inline"
+                   value="{{item.get('descansoEnSeg')?.value}}" formControlName="">
+            <span class="input-group-text">seconds</span>
+          </div>
+          <table class="table table-striped">
+            <thead>
             <tr>
-              <td>{{$index +1}}</td>
-              <td></td>
-              <td *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')"><input class="form-control no-border" value="{{set.pesoEnKg}}" type="text"></td>
-              <td *ngIf="appropriateExerciseType(item.ejercicio!,'reps')"><input class="form-control" value="{{set.reps}}" type="text"></td>
+              <th>Set</th>
+              <th>Previous</th>
+              <th *ngIf="appropriateExerciseType(item.get('ejercicio')!.value,'weigh')">Weigh</th>
+              <th *ngIf="appropriateExerciseType(item.get('ejercicio')!.value,'reps')">Reps</th>
+              <th><i class="fa-solid fa-circle-check"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let set of setsFormArray(item).controls; let i = index">
+              <td>{{i +1}}</td>
+              <td>holis</td>
+              <td *ngIf="appropriateExerciseType(item.value.ejercicio!,'weigh')"><input class="form-control no-border" value="{{set.value.pesoEnKg}}" type="text"></td>
+              <td *ngIf="appropriateExerciseType(item.value.ejercicio!,'reps')"><input class="form-control" value="{{set.value.reps}}" type="text"></td>
               <td><input class="form-check-input" type="checkbox"></td>
             </tr>
-          }
-          </tbody>
-        </table>
-        <button class="btn btn-secondary col-8 mx-auto" type="button" (click)="addSet(item)">+ Add Set</button>
+            </tbody>
+          </table>
+          <button class="btn btn-secondary col-8 mx-auto" type="button" (click)="addSet(item.value)">+ Add Set</button>
+        </div>
+      </div></div>
+
+
+      <div class="d-grid gap-3 mx-auto">
+        <button class="btn btn-primary d-block mx-auto col-8" type="button">+ Add Exercise</button>
+        <button class="btn btn-success  mt-4 fs-5" type="submit">Finish</button>
+        <button class="btn btn-outline-danger d-block" type="button">Discard Workout</button>
       </div>
-    }
+    </form>
   }
-  <div class="d-grid gap-3 mx-auto">
-    <button class="btn btn-primary d-block mx-auto col-8" type="button">+ Add Exercise</button>
-    <button class="btn btn-success  mt-4 fs-5" type="button">Finish</button>
-    <button class="btn btn-outline-danger d-block">Discard Workout</button>
-  </div>
+
+
 
 
 </div>
