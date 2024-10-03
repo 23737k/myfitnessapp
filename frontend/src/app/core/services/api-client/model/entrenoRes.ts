@@ -15,8 +15,8 @@ export interface EntrenoRes {
     id?: number;
     rutinaId?: number;
     rutinaNombre?: string;
-    inicio?: string;
-    duracionEnMinutos?: number;
+    fecha?: string;
+    duracionEnSeg?: number;
     volumenEnKg?: number;
     nroDeSeries?: number;
     items?: Array<ItemRutinaRes>;

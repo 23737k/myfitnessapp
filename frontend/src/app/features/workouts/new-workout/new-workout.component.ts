@@ -1,16 +1,19 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   EjercicioRes,
-  EntrenoControllerService, EntrenoReq,
-  ItemRutinaControllerService, ItemRutinaRes,
+  EntrenoControllerService,
+  EntrenoReq,
+  ItemRutinaControllerService,
+  ItemRutinaRes,
   RutinaControllerService,
-  RutinaRes
+  RutinaRes,
+  SerieReq
 } from "../../../core/services/api-client";
-import {NgForOf, NgIf} from "@angular/common";
-import {ActivatedRoute, RouterLink} from "@angular/router";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {concatMap} from "rxjs";
-import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 
 @Component({
   selector: 'app-new-workout',
@@ -19,7 +22,8 @@ import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule,
     NgIf,
     RouterLink,
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    NgClass
   ],
   templateUrl: './new-workout.component.html',
   styleUrl: './new-workout.component.css'
@@ -35,6 +39,32 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
   items!: ItemRutinaRes[];
   form!: FormGroup;
 
+  constructor(
+    private _entrenoService: EntrenoControllerService,
+    private _rutinaService : RutinaControllerService,
+    private _itemService : ItemRutinaControllerService,
+    private _route: ActivatedRoute,
+    private _fb: FormBuilder,
+    private _router: Router
+  ) {}
+
+
+  ngOnInit(): void {
+    this.startTimer();
+    this._rutinaService.getRutinaById(this._route.snapshot.queryParams['routineId']).pipe(
+      concatMap(routine => {
+        this.routine = routine;
+        return this._itemService.getItems(routine.id!);
+        })).subscribe({
+        next: items => {
+          this.items = items;
+          this.form = this._fb.group({
+            //TODO modificar algunos params absurdos en EntrenoReq
+            items: this.createItemControls()
+          });
+        }
+      });
+  }
 
   createItemControls(): FormArray{
     return this._fb.array(this.items!.map(item => {
@@ -42,7 +72,8 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
         id: [item.id],
         ejercicio: this._fb.group({
           id: item.ejercicio?.id,
-          nombre: item.ejercicio?.nombre
+          nombre: item.ejercicio?.nombre,
+          tipoDeEjercicio: item.ejercicio?.tipoDeEjercicio
         }),
         descansoEnSeg: [item.descansoEnSeg, [Validators.min(1), Validators.required]],
         nota: [item.nota],
@@ -64,44 +95,90 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     }));
   }
 
-
-  constructor(
-    private _entrenoService: EntrenoControllerService,
-    private _rutinaService : RutinaControllerService,
-    private _itemService : ItemRutinaControllerService,
-    private _route: ActivatedRoute,
-    private _fb: FormBuilder
-  ) {}
-
-
-  ngOnInit(): void {
-    this.startTimer();
-    this._rutinaService.getRutinaById(this._route.snapshot.queryParams['routineId']).pipe(
-      concatMap(routine => {
-        this.routine = routine;
-        return this._itemService.getItems(routine.id!);
-        })).subscribe({
-        next: items => {
-          this.items = items;
-          this.form = this._fb.group({
-            //TODO modificar algunos params absurdos en EntrenoReq
-            items: this.createItemControls()
-          });
-        }
-      });
-  }
-
-  saveRoutine(){
-    console.log(this.form.get('items'));
-  }
-
   get itemsFormArray() : FormArray{
     // @ts-ignore
     return this.form!.get('items') as FormArray;
   }
+
   setsFormArray(item: AbstractControl):FormArray{
     // @ts-ignore
     return item.get('series') as FormArray;
+  }
+
+
+  addSet(index: number){
+    let item = (this.form.get('items') as FormArray).at(index);
+    let series = item.get('series') as FormArray;
+    let ejercicio = item.value.ejercicio;
+    let serieAnt = series.at(series.length - 1);
+    series.push(this._fb.group({
+      id: undefined,
+      pesoEnKg: this.appropriateExerciseType(ejercicio!, 'weigh')? (serieAnt? serieAnt.get('pesoEnKg')!.value : 0) : undefined,
+      reps: this.appropriateExerciseType(ejercicio!, 'reps') ? (serieAnt? serieAnt.get('reps')!.value : 0) : undefined,
+      distancia: this.appropriateExerciseType(ejercicio!, 'distance') ? (serieAnt? serieAnt.get('distancia')!.value : 0)  : undefined,
+      tiempoEnSeg: this.appropriateExerciseType(ejercicio!, 'time') ? (serieAnt? serieAnt.get('tiempoEnSeg')!.value : 0)  : undefined,
+      selected: false
+    }));
+
+  }
+
+
+
+  saveWorkout() {
+    console.log(this.form.get('items'));
+
+    let workout: EntrenoReq = {
+      rutinaId: this.routine.id!,
+      duracionEnSeg: this.hours * 3600 + this.minutes * 60 + this.seconds,
+      fecha: new Date().toISOString(),
+      items: []
+    };
+
+    let items = this.form.get('items') as FormArray;
+
+    // Filtras solo los items que tienen al menos una serie seleccionada
+    let validItems = items.controls.filter(item =>
+      item.value.series.some((serie: any) => serie.selected)
+    );
+
+    workout.items = validItems.map((item) => {
+      // Filtra las series seleccionadas en cada item
+      let filteredSeries = item.value.series.filter((serie: any) => serie.selected);
+
+      return {
+        ejercicioId: item.get('ejercicio')!.get('id')!.value,
+        descansoEnSeg: item.get('descansoEnSeg')!.value,
+        nota: item.get('nota')!.value,
+        // Asigna solo las series seleccionadas
+        series: filteredSeries.map((serie: any) => {
+          return {
+            reps: serie.reps,
+            pesoEnKg: serie.pesoEnKg,
+            tiempoEnSeg: serie.tiempoEnSeg,
+            distancia: serie.distancia
+          };
+        }) as SerieReq[]
+      };
+    });
+
+    console.log(workout);
+
+    this._entrenoService.nuevoEntreno(workout).subscribe({
+      next: (updatedItem) => {
+        console.log(updatedItem);
+        this._router.navigate(['workouts'])
+      }
+    });
+
+
+  }
+
+  discardWorkout(){
+    this._router.navigate(['routines']);
+  }
+
+  removeItem(index:number){
+    (this.form.get('items') as FormArray).removeAt(index);
   }
 
   appropriateExerciseType(typeOfExercise: EjercicioRes, type: string) {
@@ -114,24 +191,6 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
       default: return false;
     }
   }
-
-
-  //TODO cambiar por formGroup
-  addSet(item: ItemRutinaRes){
-    item!.series!.push({
-      pesoEnKg: this.appropriateExerciseType(item.ejercicio!, 'weigh')? 0 : undefined,
-      reps: this.appropriateExerciseType(item.ejercicio!, 'reps') ? 0 : undefined,
-      distancia: this.appropriateExerciseType(item.ejercicio!, 'distance') ? 0 : undefined,
-      tiempoEnSeg: this.appropriateExerciseType(item.ejercicio!, 'time') ? 0 : undefined
-    });
-  }
-
-  removeItem(id:number){
-    this.items = this.items.filter(i => i.id !== id);
-  }
-
-
-
 
   startTimer(){
     const startTime = Date.now();

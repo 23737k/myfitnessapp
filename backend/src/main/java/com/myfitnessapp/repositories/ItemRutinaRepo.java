@@ -2,11 +2,10 @@ package com.myfitnessapp.repositories;
 
 import com.myfitnessapp.model.rutina.ItemRutina;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface ItemRutinaRepo extends JpaRepository<ItemRutina, Integer> {
     @Transactional

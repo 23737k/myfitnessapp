@@ -626,8 +626,8 @@
       },
       "EntrenoReq": {
         "required": [
-          "duracionEnMinutos",
-          "inicio",
+          "duracionEnSeg",
+          "fecha",
           "items",
           "rutinaId"
         ],
@@ -637,13 +637,13 @@
             "type": "integer",
             "format": "int32"
           },
-          "inicio": {
+          "fecha": {
             "type": "string",
             "format": "date-time"
           },
-          "duracionEnMinutos": {
+          "duracionEnSeg": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
           "items": {
             "maxItems": 2147483647,
@@ -669,13 +669,13 @@
           "rutinaNombre": {
             "type": "string"
           },
-          "inicio": {
+          "fecha": {
             "type": "string",
             "format": "date-time"
           },
-          "duracionEnMinutos": {
+          "duracionEnSeg": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
           "volumenEnKg": {
             "type": "integer",

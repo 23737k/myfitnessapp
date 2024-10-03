@@ -13,8 +13,8 @@ import {ItemRutinaReq} from './itemRutinaReq';
 
 export interface EntrenoReq {
     rutinaId: number;
-    inicio: string;
-    duracionEnMinutos: number;
+    fecha: string;
+    duracionEnSeg: number;
     items: Array<ItemRutinaReq>;
 }
 

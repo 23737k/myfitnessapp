@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@DiscriminatorValue("duracion")
+@DiscriminatorValue("duracionEnSeg")
 public class Duracion extends Serie{
     @Positive(message = "El campo tiempoEnSeg debe ser un numero positivo")
     @NotNull(message = "El campo tiempoEnSeg no debe estar vacío")

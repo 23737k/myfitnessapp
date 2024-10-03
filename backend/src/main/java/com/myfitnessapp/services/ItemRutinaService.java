@@ -9,15 +9,21 @@ import com.myfitnessapp.model.ejercicio.Ejercicio;
 import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
 import com.myfitnessapp.model.rutina.ItemRutina;
 import com.myfitnessapp.model.rutina.Rutina;
-import com.myfitnessapp.model.series.*;
+import com.myfitnessapp.model.series.DistanciaYDuracion;
+import com.myfitnessapp.model.series.DistanciaYPeso;
+import com.myfitnessapp.model.series.Duracion;
+import com.myfitnessapp.model.series.PesoCorpAsistido;
+import com.myfitnessapp.model.series.PesoCorpPesoExtra;
+import com.myfitnessapp.model.series.PesoCorpYReps;
+import com.myfitnessapp.model.series.PesoYReps;
+import com.myfitnessapp.model.series.Serie;
 import com.myfitnessapp.repositories.ItemRutinaRepo;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

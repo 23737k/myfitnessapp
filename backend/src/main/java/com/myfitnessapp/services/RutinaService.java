@@ -6,11 +6,10 @@ import com.myfitnessapp.model.rutina.ItemRutina;
 import com.myfitnessapp.model.rutina.Rutina;
 import com.myfitnessapp.repositories.RutinaRepo;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

@@ -1,15 +1,22 @@
 package com.myfitnessapp.model.entreno;
 
+import static com.myfitnessapp.model.ejercicio.TipoDeEjercicio.PESO_Y_REPETICIONES;
+
 import com.myfitnessapp.model.rutina.ItemRutina;
 import com.myfitnessapp.model.rutina.Rutina;
 import com.myfitnessapp.model.series.PesoYReps;
-import jakarta.persistence.*;
-import lombok.Data;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.myfitnessapp.model.ejercicio.TipoDeEjercicio.PESO_Y_REPETICIONES;
+import lombok.Data;
 
 @Data
 @Entity
@@ -17,9 +24,9 @@ public class Entreno {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private Integer duracionEnMinutos;
+  private Long duracionEnSeg;
   private Integer volumen;
-  private LocalDateTime inicio;
+  private LocalDateTime fecha;
   private Integer nroDeSeries;
   @ManyToOne
   private Rutina rutina;
@@ -30,10 +37,10 @@ public class Entreno {
 
   protected Entreno(){}
 
-  public Entreno (Rutina rutina, List<ItemRutina> items, Integer duracionEnMinutos, LocalDateTime inicio){
+  public Entreno (Rutina rutina, List<ItemRutina> items, Long duracionEnSeg, LocalDateTime fecha){
     this.rutina = rutina;
-    this.duracionEnMinutos = duracionEnMinutos;
-    this.inicio = inicio;
+    this.duracionEnSeg = duracionEnSeg;
+    this.fecha = fecha;
     this.items = items == null? rutina.getItems().stream().map(ItemRutina::clonar).toList():items;
     this.nroDeSeries = calcularNroSeries();
     this.volumen = calcularVolumen();

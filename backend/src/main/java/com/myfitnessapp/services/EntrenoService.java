@@ -8,10 +8,9 @@ import com.myfitnessapp.model.rutina.ItemRutina;
 import com.myfitnessapp.model.rutina.Rutina;
 import com.myfitnessapp.repositories.EntrenoRepo;
 import com.myfitnessapp.repositories.RutinaRepo;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class EntrenoService {
     public Entreno toEntreno(EntrenoReq dto){
         Rutina rutina = rutinaRepo.findById(dto.getRutinaId()).orElseThrow(()->new InvalidReferenceException("No existe la rutina"));
         List<ItemRutina> items = dto.getItems() != null? dto.getItems().stream().map(itemRutinaService::toItemRutina).toList():null;
-        return new Entreno(rutina,items,dto.getDuracionEnMinutos(),dto.getInicio());
+        return new Entreno(rutina,items,dto.getDuracionEnSeg(),dto.getFecha());
     }
 
     public EntrenoRes toEntrenoResponseDto(Entreno entreno){
@@ -39,8 +38,8 @@ public class EntrenoService {
                 .id(entreno.getId())
                 .rutinaId(entreno.getRutina().getId())
                 .rutinaNombre(entreno.getRutina().getNombre())
-                .inicio(entreno.getInicio())
-                .duracionEnMinutos(entreno.getDuracionEnMinutos())
+                .fecha(entreno.getFecha())
+                .duracionEnSeg(entreno.getDuracionEnSeg())
                 .volumenEnKg(entreno.getVolumen())
                 .nroDeSeries(entreno.getNroDeSeries())
                 .items(entreno.getItems().stream().map(itemRutinaService::toItemRutinaRes).toList())
