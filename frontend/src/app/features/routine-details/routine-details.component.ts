@@ -60,7 +60,6 @@ export class RoutineDetailsComponent implements OnInit {
 
   totalSeries(){
     return this.itemsRutina!.reduce((total: number, item: ItemRutinaRes) => total + item!.series!.length, 0);
-
   }
 
   setItemToUpdate(id: number) {

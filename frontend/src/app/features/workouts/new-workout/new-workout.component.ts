@@ -59,7 +59,6 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
         next: items => {
           this.items = items;
           this.form = this._fb.group({
-            //TODO modificar algunos params absurdos en EntrenoReq
             items: this.createItemControls()
           });
         }

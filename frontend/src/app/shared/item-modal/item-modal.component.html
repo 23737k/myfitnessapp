@@ -1,0 +1,62 @@
+<div class="modal fade" id="itemModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div *ngIf="form" class="modal-body">
+        <form  (ngSubmit)="saveItem()"  [formGroup]="form">
+          <div class="mb-3">
+            <label for="exerciseSelect" class="form-label">Exercise</label>
+            <select class="form-select" id="exerciseSelect" formControlName="exerciseId">
+              @for (exercise of exercises; track exercise){
+                <option [ngValue]="exercise.id">{{exercise.nombre}}</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="restInput" class="form-label">Rest (seconds)</label>
+            <input type="number" class="form-control" id="restInput" formControlName="rest">
+          </div>
+          <div class="mb-3">
+            <label for="noteInput" class="form-label">Nota</label>
+            <input type="text" class="form-control" id="noteInput" formControlName="note">
+          </div>
+          <div *ngFor="let set of formSets.controls; let i = index" formArrayName="sets">
+            <div [formGroupName]="i" class="rounded-2 bg-secondary-subtle mb-2 p-2">
+              <div class="row">
+                <div class="mb-1 col-9"><strong>Set {{i+1}}</strong></div>
+                <div class="col-3 d-block">
+                  <button class="btn btn-danger w-100" type="button" (click)="removeSet(i)">Remove</button>
+                </div>
+              </div>
+
+              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'weigh')">
+                <label for="weightInput{{i}}" class="form-label">Weight (kg)</label>
+                <input type="number" class="form-control" id="weightInput{{i}}" formControlName="weighInKg">
+              </div>
+              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'reps')">
+                <label for="repsInput{{i}}" class="form-label">Reps</label>
+                <input type="number" class="form-control" id="repsInput{{i}}" formControlName="reps">
+              </div>
+              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'distance')">
+                <label for="distanceInput{{i}}" class="form-label">Distance</label>
+                <input type="number" class="form-control" id="distanceInput{{i}}" formControlName="distance">
+              </div>
+              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'time')">
+                <label for="timeInput{{i}}" class="form-label">Time (seconds)</label>
+                <input type="number" class="form-control" id="timeInput{{i}}" formControlName="timeInSecs">
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline-primary" type="button" (click)="addNewSet()">Add set</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
