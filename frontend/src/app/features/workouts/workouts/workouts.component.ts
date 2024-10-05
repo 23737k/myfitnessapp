@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {ItemModalComponent} from "../../../shared/item-modal/item-modal.component";
-import {ItemRutinaControllerService, ItemRutinaRes} from "../../../core/services/api-client";
+import {ItemRutinaControllerService, ItemRutinaReq, ItemRutinaRes} from "../../../core/services/api-client";
 
 @Component({
   selector: 'app-workouts',
@@ -25,6 +25,10 @@ export class WorkoutsComponent implements OnInit{
         this.item = item.pop();
       }
     })
+  }
+
+  savedItem(item:ItemRutinaReq) {
+    console.log(item);
   }
 
 }

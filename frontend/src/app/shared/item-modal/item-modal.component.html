@@ -6,6 +6,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div *ngIf="form" class="modal-body">
+        <div [ngClass]="{'alert alert-danger': !form.valid}">{{ getFormErrors() }}</div>
         <form  (ngSubmit)="saveItem()"  [formGroup]="form">
           <div class="mb-3">
             <label for="exerciseSelect" class="form-label">Exercise</label>
@@ -32,7 +33,7 @@
                 </div>
               </div>
 
-              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'weigh')">
+              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'weighInKg')">
                 <label for="weightInput{{i}}" class="form-label">Weight (kg)</label>
                 <input type="number" class="form-control" id="weightInput{{i}}" formControlName="weighInKg">
               </div>
@@ -44,7 +45,7 @@
                 <label for="distanceInput{{i}}" class="form-label">Distance</label>
                 <input type="number" class="form-control" id="distanceInput{{i}}" formControlName="distance">
               </div>
-              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'time')">
+              <div class="mb-1" *ngIf="appropriateExerciseType(form.get('exerciseId')?.value,'timeInSecs')">
                 <label for="timeInput{{i}}" class="form-label">Time (seconds)</label>
                 <input type="number" class="form-control" id="timeInput{{i}}" formControlName="timeInSecs">
               </div>
@@ -53,7 +54,7 @@
           <button class="btn btn-outline-primary" type="button" (click)="addNewSet()">Add set</button>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="!form.valid" >Save changes</button>
           </div>
         </form>
       </div>
