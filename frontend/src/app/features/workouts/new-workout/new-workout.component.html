@@ -18,8 +18,8 @@
             <div class="dropdown">
               <button class="btn" data-bs-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v"></i></button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Reorder Exercise</a></li>
-                <li><a class="dropdown-item" href="#">Replace Exercise</a></li>
+<!--&lt;!&ndash;                <li><a class="dropdown-item" href="#">Reorder Exercise</a></li>&ndash;&gt;-->
+<!--                <li><a class="dropdown-item" data-bs-target="#itemModal" data-bs-toggle="modal" (click)="replaceExercise(i)">Replace Exercise</a></li>-->
                 <li><a class="dropdown-item text-danger" (click)="removeItem(i)">Remove Exercise</a></li>
               </ul>
             </div>
@@ -67,13 +67,15 @@
 
 
       <div class="d-grid gap-3 mx-auto">
-        <button class="btn btn-primary d-block mx-auto col-8" type="button">+ Add Exercise</button>
+        <button class="btn btn-primary d-block mx-auto col-8" type="button" data-bs-target="#itemModal" data-bs-toggle="modal">+ Add Exercise</button>
         <button class="btn btn-success  mt-4 fs-5" type="submit">Finish</button>
         <button class="btn btn-outline-danger d-block" type="button" (click)="discardWorkout()">Discard Workout</button>
       </div>
     </form>
   }
 
+  <app-item-modal (savedItem)="addExercise($event)" >
+  </app-item-modal>
 
 
 

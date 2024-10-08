@@ -27,7 +27,6 @@ import {
 } from "@angular/forms";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
-import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-item-modal',

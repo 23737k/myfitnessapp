@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
+  EjercicioControllerService,
   EjercicioRes,
   EntrenoControllerService,
   EntrenoReq,
@@ -14,6 +15,7 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {concatMap} from "rxjs";
 import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
+import {ItemModalComponent, SavedItemEvent} from "../../../shared/item-modal/item-modal.component";
 
 @Component({
   selector: 'app-new-workout',
@@ -23,7 +25,8 @@ import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
     RouterLink,
     ReactiveFormsModule,
     NgForOf,
-    NgClass
+    NgClass,
+    ItemModalComponent
   ],
   templateUrl: './new-workout.component.html',
   styleUrl: './new-workout.component.css'
@@ -37,12 +40,14 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
   workout!: EntrenoReq;
   routine!:RutinaRes;
   items!: ItemRutinaRes[];
+  exercises!: EjercicioRes[];
   form!: FormGroup;
 
   constructor(
     private _entrenoService: EntrenoControllerService,
     private _rutinaService : RutinaControllerService,
     private _itemService : ItemRutinaControllerService,
+    private _ejercicioService: EjercicioControllerService,
     private _route: ActivatedRoute,
     private _fb: FormBuilder,
     private _router: Router
@@ -63,6 +68,9 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
           });
         }
       });
+    this._ejercicioService.listarEjercicios().subscribe({
+      next: exercises => this.exercises = exercises
+    })
   }
 
   createItemControls(): FormArray{
@@ -180,6 +188,26 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     (this.form.get('items') as FormArray).removeAt(index);
   }
 
+  addExercise(savedItemEvent: SavedItemEvent){
+    let item = savedItemEvent.item;
+    let exercise = this.exercises.find(e => e.id === savedItemEvent.item.ejercicioId)!;
+
+    let itemFormGroup = this._fb.group({
+      ejercicio: this._fb.group({
+        id: exercise.id,
+        nombre: exercise.nombre,
+        tipoDeEjercicio: exercise.tipoDeEjercicio
+      }),
+      descansoEnSeg: [item.descansoEnSeg, [Validators.min(1), Validators.required]],
+      nota: [item.nota],
+      series: this.createSetControls(item as ItemRutinaRes)
+    });
+
+    (this.form.get('items') as FormArray).push(itemFormGroup);
+
+  }
+
+
   appropriateExerciseType(typeOfExercise: EjercicioRes, type: string) {
     const exerciseType: TipoDeEjercicioEnum = typeOfExercise.tipoDeEjercicio!;
     switch (type) {
@@ -206,5 +234,4 @@ export class NewWorkoutComponent implements OnInit, OnDestroy{
     clearInterval(this.timerRef);
   }
 
-  protected readonly FormArray = FormArray;
 }
