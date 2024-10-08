@@ -43,7 +43,9 @@
                       </ul>
                     </div>
                     <div class="row d-block">
-                      <button class="btn btn-primary mt-3 col-3 me-2 d-inline-block " (click)="setItemToUpdate(item!.id!)">Edit</button>
+                      <button class="btn btn-primary mt-3 col-3 me-2 d-inline-block"
+                              data-bs-target="#itemModal" data-bs-toggle="modal"
+                              (click)="setItemToUpdate(item!.id!)">Edit</button>
                       <button class="btn btn-danger mt-3 col-3 d-inline-block" (click)="removeItem(item!.id!)">Remove</button>
                     </div>
 
@@ -52,140 +54,17 @@
               </div>
             }
           </div>
-          <button class="btn btn-primary my-2" (click)="addNewItem()">Add item</button>
+          <button class="btn btn-primary my-2" >Add item</button>
           <a [routerLink]="['/new-workout']" [queryParams]="{routineId: routineId}"><button class="btn btn-success w-100"> <i class="fas fa-play me-2"></i>Start Workout
           </button></a>
 
         </div>
       </div>
 
-      <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div *ngIf="editingItem" class="modal-body">
-              <form  (ngSubmit)="editItem()"  #editItemForm="ngForm">
-                <div class="mb-3">
-                  <label for="exerciseSelect" class="form-label">Exercise</label>
-                  <select class="form-select" id="exerciseSelect" [(ngModel)]="editingItem!.ejercicio!" name="ejercicio" (ngModelChange)="updateExercise($event)" required>
-                    @for (exercise of exercises; track exercise){
-                      <option [ngValue]="exercise">{{exercise.nombre}}</option>
-                    }
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="restInput" class="form-label">Rest (seconds)</label>
-                  <input type="number" class="form-control" id="restInput" [(ngModel)]="editingItem!.descansoEnSeg" name="desansoEnSeg" required>
-                </div>
-                <div class="mb-3">
-                  <label for="noteInput" class="form-label">Nota</label>
-                  <input type="text" class="form-control" id="noteInput" [(ngModel)]="editingItem!.nota" name="nota">
-                </div>
-                @for (serie of editingItem!.series; track serie; let i = $index){
-                  <div class="rounded-2 bg-secondary-subtle mb-2 p-2">
-                    <div class="row">
-                      <div class="mb-1 col-9"><strong>Set {{i+1}}</strong></div>
-                      <div class="col-3 d-block">
-                        <button class="btn btn-danger w-100" type="button" (click)="removeSet(i)">Remove</button>
-                      </div>
-                    </div>
+      <app-item-modal
+        [item]="editingItem"
+      ></app-item-modal>
 
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem!.ejercicio!,'weigh')">
-                      <label for="weightInput{{i}}" class="form-label">Weight (kg)</label>
-                      <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="serie.pesoEnKg" name="pesoEnKg{{i}}" required>
-                    </div>
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem!.ejercicio!,'reps')">
-                      <label for="repsInput{{i}}" class="form-label">Reps</label>
-                      <input type="number" class="form-control" id="repsInput{{i}}" [(ngModel)]="serie.reps" name="reps{{i}}" required>
-                    </div>
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem!.ejercicio!,'distance')">
-                      <label for="distanceInput{{i}}" class="form-label">Distance</label>
-                      <input type="number" class="form-control" id="distanceInput{{i}}" [(ngModel)]="serie.distancia" name="distancia{{i}}" required>
-                    </div>
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem!.ejercicio!,'time')">
-                      <label for="timeInput{{i}}" class="form-label">Time (seconds)</label>
-                      <input type="number" class="form-control" id="timeInput{{i}}" [(ngModel)]="serie.tiempoEnSeg" name="tiempoEnSeg{{i}}" required>
-                    </div>
-                  </div>
-                }
-                <button class="btn btn-outline-primary" type="button" (click)="addNewSet()">Add set</button>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary" [disabled]="editItemForm.invalid">Save changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="editItemModalLabel1">Edit Item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div *ngIf="editingItem" class="modal-body">
-              <form (ngSubmit)="saveNewItem()" #newItemForm=ngForm>
-                <div class="mb-3">
-                  <label for="exerciseSelect" class="form-label">Exercise</label>
-                  <select class="form-select" id="exerciseSelect1" [(ngModel)]="editingItem!.ejercicio!" name="ejercicio" (ngModelChange)="updateExercise($event)" required>
-                    @for (exercise of exercises; track exercise){
-                      <option [ngValue]="exercise">{{exercise.nombre}}</option>
-                    }
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="restInput" class="form-label">Rest (seconds)</label>
-                  <input type="number" class="form-control" id="restInput1" [(ngModel)]="editingItem!.descansoEnSeg" name="desansoEnSeg" required>
-                </div>
-                <div class="mb-3">
-                  <label for="noteInput" class="form-label">Nota</label>
-                  <input type="text" class="form-control" id="noteInput1" [(ngModel)]="editingItem!.nota" name="nota">
-                </div>
-                @for (serie of editingItem.series; track serie; let i = $index){
-                  <div class="rounded-2 bg-secondary-subtle mb-2 p-2">
-                    <div class="row">
-                      <div class="mb-1 col-9"><strong>Set {{i+1}}</strong></div>
-                      <div class="col-3 d-block">
-                        <button class="btn btn-danger w-100" type="button" (click)="removeSet(i)">Remove</button>
-                      </div>
-                    </div>
-
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'weigh')">
-                      <label [for]="'weighInput'+i" class="form-label">Weight (kg)</label>
-                      <input type="number" class="form-control" id="weightInput{{i}}" [(ngModel)]="editingItem.series![i].pesoEnKg" name="weigh{{i}}" required>
-                    </div>
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'reps')">
-                      <label  [for]="'repsInput'+i" class="form-label">Reps</label>
-                      <input type="number" class="form-control" id="repsInput{{i}}" [(ngModel)]="editingItem.series![i].reps" name="reps{{i}}" required>
-                    </div>
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'distance')">
-                      <label [for]="'distanceInput'+i" class="form-label">Distance</label>
-                      <input type="number" class="form-control" [id]="'distanceInput'+i" [(ngModel)]="editingItem.series![i].distancia" name="distance{{i}}" required>
-                    </div>
-                    <div class="mb-1" *ngIf="appropriateExerciseType(editingItem.ejercicio!, 'time')">
-                      <label [for]="'timeInput'+i" class="form-label">Time (seconds)</label>
-                      <input type="number" class="form-control" [id]="'timeInput'+i" [(ngModel)]="editingItem.series![i].tiempoEnSeg" name="time{{i}}" required>
-                    </div>
-                  </div>
-                }
-                <button class="btn btn-outline-primary" type="button" (click)="addNewSet()">Add set</button>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary" [disabled]="newItemForm.invalid || newItemForm.pristine">Save item</button>
-                </div>
-              </form>
-            </div>
-
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

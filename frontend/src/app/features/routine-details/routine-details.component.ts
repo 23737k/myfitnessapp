@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {
   EjercicioControllerService,
@@ -13,6 +13,7 @@ import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {concatMap, forkJoin} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
+import {ItemModalComponent} from "../../shared/item-modal/item-modal.component";
 
 @Component({
   selector: 'app-routine-details',
@@ -20,7 +21,8 @@ import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
   imports: [
     NgIf,
     FormsModule,
-    RouterLink
+    RouterLink,
+    ItemModalComponent
   ],
   templateUrl: './routine-details.component.html',
   styleUrl: './routine-details.component.css'
@@ -66,13 +68,6 @@ export class RoutineDetailsComponent implements OnInit {
     const itemToUpdate = this.itemsRutina.find(item => item.id === id)!;
     this.editingItem = JSON.parse(JSON.stringify(itemToUpdate));
 
-// Busca el ejercicio correspondiente en la lista de ejercicios
-    this.editingItem.ejercicio = this.exercises.find(exercise => exercise.id === this.editingItem.ejercicio!.id!);
-
-    const modalElement = document.getElementById('editItemModal');
-// @ts-ignore
-    const modal = new bootstrap.Modal(modalElement!);
-    modal.show();
   }
 
   appropriateExerciseType(typeOfExercise: EjercicioRes, type: string) {

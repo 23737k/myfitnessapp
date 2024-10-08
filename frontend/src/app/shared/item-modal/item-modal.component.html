@@ -5,7 +5,7 @@
         <h5 class="modal-title">Edit Item</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div *ngIf="form" class="modal-body">
+      <div *ngIf="form && exercises" class="modal-body">
         <div [ngClass]="{'alert alert-danger': !form.valid}">{{ getFormErrors() }}</div>
         <form  (ngSubmit)="saveItem()"  [formGroup]="form">
           <div class="mb-3">
