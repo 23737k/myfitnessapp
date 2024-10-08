@@ -5,12 +5,12 @@
         <div class="card-body">
           <h1 class="card-title text-center mb-4">{{ rutina!.nombre!.toUpperCase() }}</h1>
           <div class="routine-summary text-center mb-4">
-<span class="badge bg-info me-2">
-<i class="fas fa-dumbbell me-1"></i> {{ itemsRutina!.length }} Exercises
-</span>
+            <span class="badge bg-info me-2">
+              <i class="fas fa-dumbbell me-1"></i> {{ itemsRutina!.length }} Exercises
+            </span>
             <span class="badge bg-success">
-<i class="fas fa-clock me-1"></i>{{totalSeries()}} sets
-</span>
+              <i class="fas fa-clock me-1"></i>{{ totalSeries() }} sets
+            </span>
           </div>
 
           <div class="accordion" id="routineAccordion">
@@ -27,17 +27,22 @@
                 </h2>
                 <div [attr.id]="'collapse' + i" class="accordion-collapse collapse">
                   <div class="accordion-body">
-                    <p class="card-text"><i class="fas fa-hourglass-half me-2"></i>Rest: {{ item!.descansoEnSeg }} seconds</p>
+                    <p class="card-text"><i class="fas fa-hourglass-half me-2"></i>Rest: {{ item!.descansoEnSeg }}
+                      seconds</p>
 
                     <div class="sets-container">
                       <h6><i class="fas fa-layer-group me-2"></i>Sets:</h6>
                       <ul class="list-group">
-                        @for (serie of item.series; track serie.id ; let i = $index) {
+                        @for (serie of item.series; track serie.id; let i = $index) {
                           <li class="list-group-item d-flex justify-content-between align-items-center" id="set{{i}}">
-                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')" id="weightInput{{i}}">{{ serie.pesoEnKg }} kg</span>
-                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'reps')" id="repsInput{{i}}">{{ serie.reps }} reps</span>
-                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'distance')" id="distanceInput{{i}}">{{ serie.distancia }}</span>
-                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'time')" id="timeInput{{i}}">{{ serie.tiempoEnSeg }} sec</span>
+                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'weigh')"
+                                  id="weightInput{{i}}">{{ serie.pesoEnKg }} kg</span>
+                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'reps')"
+                                  id="repsInput{{i}}">{{ serie.reps }} reps</span>
+                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'distance')"
+                                  id="distanceInput{{i}}">{{ serie.distancia }}</span>
+                            <span *ngIf="appropriateExerciseType(item.ejercicio!,'time')"
+                                  id="timeInput{{i}}">{{ serie.tiempoEnSeg }} sec</span>
                           </li>
                         }
                       </ul>
@@ -45,8 +50,10 @@
                     <div class="row d-block">
                       <button class="btn btn-primary mt-3 col-3 me-2 d-inline-block"
                               data-bs-target="#itemModal" data-bs-toggle="modal"
-                              (click)="setItemToUpdate(item!.id!)">Edit</button>
-                      <button class="btn btn-danger mt-3 col-3 d-inline-block" (click)="removeItem(item!.id!)">Remove</button>
+                              (click)="setItemToUpdate(item!.id!)">Edit
+                      </button>
+                      <button class="btn btn-danger mt-3 col-3 d-inline-block" (click)="removeItem(item!.id!)">Remove
+                      </button>
                     </div>
 
                   </div>
@@ -54,15 +61,20 @@
               </div>
             }
           </div>
-          <button class="btn btn-primary my-2" >Add item</button>
-          <a [routerLink]="['/new-workout']" [queryParams]="{routineId: routineId}"><button class="btn btn-success w-100"> <i class="fas fa-play me-2"></i>Start Workout
-          </button></a>
+          <button class="btn btn-primary my-2" (click)="addNewItem()" data-bs-toggle="modal"
+                  data-bs-target="#itemModal">Add item
+          </button>
+          <a [routerLink]="['/new-workout']" [queryParams]="{routineId: routineId}">
+            <button class="btn btn-success w-100"><i class="fas fa-play me-2"></i>Start Workout
+            </button>
+          </a>
 
         </div>
       </div>
 
       <app-item-modal
         [item]="editingItem"
+        (savedItem)="saveNewItem($event)"
       ></app-item-modal>
 
     </div>

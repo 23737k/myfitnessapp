@@ -3,7 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
+  OnChanges, OnDestroy,
   OnInit,
   Output,
   SimpleChanges
@@ -15,7 +15,16 @@ import {
   ItemRutinaRes,
   SerieReq
 } from "../../core/services/api-client";
-import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule, ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 import {Subscription} from "rxjs";
@@ -36,11 +45,10 @@ import {Subscription} from "rxjs";
 export class ItemModalComponent implements OnInit, OnChanges{
 
   @Input() item?:ItemRutinaRes;
-  @Output() savedItem: EventEmitter<ItemRutinaReq> = new EventEmitter();
+  @Output() savedItem: EventEmitter<SavedItemEvent> = new EventEmitter();
 
   form!:FormGroup;
   exercises?: EjercicioRes[];
-  formSetsChanges!: Subscription;
 
   constructor(
     private _fb:FormBuilder,
@@ -53,9 +61,6 @@ export class ItemModalComponent implements OnInit, OnChanges{
       next: exercises => {
         this.exercises = exercises;
         this.createForm();
-        this.formSetsChanges =  this.form.get('sets')!.valueChanges!.subscribe({
-          next: ()=> this.checkSets()
-        })
       }})
   }
 
@@ -75,37 +80,32 @@ export class ItemModalComponent implements OnInit, OnChanges{
         }) : []
       )
     });
+    // @ts-ignore
+    this.form.get('sets')?.setValidators(this.setValidators(this.form.get('exerciseId').value));
   }
 
-  checkSets() {
-    let sets = this.form.get('sets')!.value;
 
-    // Comprobar si hay sets inválidos
-    if (sets.some((s: any) => !this.validSet(this.form.get('exerciseId')!.value, s))) {
-      this.form!.setErrors({
-        invalidSets: {
-          message: 'There are some invalid sets'
-        }
-      });
-      console.log("hello")
-    }
-    else if (sets.length === 0) {
-      // Comprobar si el array de sets está vacío
-      this.form.get('sets')!.setErrors({
-        emptySets: {
-          message: 'The sets array is empty'
-        }
+  setValidators = (exerciseId: number): ValidatorFn => {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const sets = control.value;
+
+      // Verifica si el array de sets está vacío
+      if (sets.length === 0) {
+        return { emptySets: true };
+      }
+
+      // Verifica si hay sets inválidos
+      const invalidSets = sets.some((s: any) => {
+        return !this.validSet(exerciseId, s);
       });
 
-    } else {
-      // Si no hay ningún error, eliminar los errores
-      console.log("hello")
-      this.form.get('sets')!.setErrors(null);
-    }
-
-    console.log(this.form)
-  }
-
+      if (invalidSets) {
+        return { invalidSets: true };
+      } else {
+        return null;
+      }
+    };
+  };
 
   getFormErrors(): string[] {
     const errors: string[] = [];
@@ -125,14 +125,20 @@ export class ItemModalComponent implements OnInit, OnChanges{
   saveItem(){
     if(this.form.valid){
       let formValue = this.form.value;
+      let setsValue = this.form.get('sets')!.value;
       if(formValue.sets.length >= 0){
         let savedItem: ItemRutinaReq = {
           ejercicioId: formValue.exerciseId,
           descansoEnSeg: formValue.rest,
           nota: formValue.note,
-          series: (formValue.sets) as Array<SerieReq>
+          series: setsValue.map((s :any) => ({
+            reps: s.reps,
+            pesoEnKg: s.weighInKg,
+            tiempoEnSeg: s.timeInSecs,
+            distancia: s.distance
+          }))
         };
-        this.savedItem.emit(savedItem);
+        this.savedItem.emit({item: savedItem, id: this.item? this.item.id : undefined});
       }
     }
   }
@@ -158,10 +164,6 @@ export class ItemModalComponent implements OnInit, OnChanges{
       distance: null
     });
     this.formSets.push(newSet);
-    newSet.markAsTouched(); // Marcar los campos como tocados
-    this.form.updateValueAndValidity(); // Actualizar los errores
-    this.checkSets(); // Comprobar los sets después de agregar uno nuevo
-    this._cdref.detectChanges();
   }
 
   appropriateExerciseType(exerciseId:number, type: string) {
@@ -183,13 +185,13 @@ export class ItemModalComponent implements OnInit, OnChanges{
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['item']) {
-      if(this.formSetsChanges)
-        this.formSetsChanges.unsubscribe();
       this.createForm();
-      this.formSetsChanges =  this.form.get('sets')!.valueChanges!.subscribe({
-        next: ()=> this.checkSets()
-      });
     }
   }
 
+}
+
+export interface SavedItemEvent {
+  item: ItemRutinaReq;
+  id: number | undefined;
 }

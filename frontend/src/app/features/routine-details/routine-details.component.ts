@@ -7,13 +7,13 @@ import {
   ItemRutinaReq,
   ItemRutinaRes,
   RutinaControllerService,
-  RutinaRes
+  RutinaRes, SerieRes
 } from "../../core/services/api-client";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {concatMap, forkJoin} from "rxjs";
 import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
-import {ItemModalComponent} from "../../shared/item-modal/item-modal.component";
+import {ItemModalComponent, SavedItemEvent} from "../../shared/item-modal/item-modal.component";
 
 @Component({
   selector: 'app-routine-details',
@@ -28,19 +28,19 @@ import {ItemModalComponent} from "../../shared/item-modal/item-modal.component";
   styleUrl: './routine-details.component.css'
 })
 export class RoutineDetailsComponent implements OnInit {
-
   rutina!: RutinaRes;
   itemsRutina!: ItemRutinaRes[];
   routineId!: number;
-  editingItem!: ItemRutinaRes;
-  exercises!: EjercicioRes[] ;
+  editingItem?: ItemRutinaRes;
+  exercises!: EjercicioRes[];
 
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _rutinaService: RutinaControllerService,
     private _itemRutinaService: ItemRutinaControllerService,
-    private _ejercicioService : EjercicioControllerService
-  ) {}
+    private _ejercicioService: EjercicioControllerService
+  ) {
+  }
 
   ngOnInit(): void {
     this.routineId = this._activatedRoute.snapshot.params['id'];
@@ -51,7 +51,7 @@ export class RoutineDetailsComponent implements OnInit {
       rutina: this._rutinaService.getRutinaById(this.routineId!),
       ejercicios: this._ejercicioService.listarEjercicios()
     }).subscribe({
-      next: ({ items, rutina, ejercicios }) => {
+      next: ({items, rutina, ejercicios}) => {
         this.itemsRutina = items;
         this.rutina = rutina;
         this.exercises = ejercicios;
@@ -60,7 +60,7 @@ export class RoutineDetailsComponent implements OnInit {
     });
   }
 
-  totalSeries(){
+  totalSeries() {
     return this.itemsRutina!.reduce((total: number, item: ItemRutinaRes) => total + item!.series!.length, 0);
   }
 
@@ -74,127 +74,51 @@ export class RoutineDetailsComponent implements OnInit {
 // @ts-ignore
     const exerciseType: TipoDeEjercicioEnum = typeOfExercise.tipoDeEjercicio;
     switch (type) {
-      case 'reps': return ['PESO_Y_REPETICIONES','PESO_CORPORAL','PESO_CORPORAL_CON_PESO_EXTRA','PESO_CORPORAL_ASISTIDO'].includes(exerciseType!);
-      case 'distance' : return ['DISTANCIA_Y_PESO'].includes(exerciseType!);
-      case 'time' : return ['DURACION','DISTANCIA_Y_DURACION'].includes(exerciseType!);
-      case 'weigh' : return ['PESO_Y_REPETICIONES', 'PESO_CORPORAL_CON_PESO_EXTRA'].includes(exerciseType!);
-      default: return false;
+      case 'reps':
+        return ['PESO_Y_REPETICIONES', 'PESO_CORPORAL', 'PESO_CORPORAL_CON_PESO_EXTRA', 'PESO_CORPORAL_ASISTIDO'].includes(exerciseType!);
+      case 'distance' :
+        return ['DISTANCIA_Y_PESO'].includes(exerciseType!);
+      case 'time' :
+        return ['DURACION', 'DISTANCIA_Y_DURACION'].includes(exerciseType!);
+      case 'weigh' :
+        return ['PESO_Y_REPETICIONES', 'PESO_CORPORAL_CON_PESO_EXTRA'].includes(exerciseType!);
+      default:
+        return false;
     }
   }
 
-  editItem() {
-    const itemReq: ItemRutinaReq = ({
-      ejercicioId: this.editingItem.ejercicio?.id!,
-      descansoEnSeg: this.editingItem.descansoEnSeg!,
-      nota: this.editingItem.nota!,
-      series: this.editingItem.series?.map(s => ({
-        reps: s.reps,
-        pesoEnKg: s.pesoEnKg,
-        tiempoEnSeg: s.tiempoEnSeg,
-        distancia: s.distancia
-      }))!
-    });
-
-    this._itemRutinaService.modificarItem(this.routineId, this.editingItem.id!, itemReq).subscribe({
-      next: (updatedItem) => {
-// Actualiza el item en el array itemsRutina
-        const index = this.itemsRutina.findIndex(item => item.id === this.editingItem.id);
-        if (index !== -1) {
-          this.itemsRutina[index] = {...updatedItem}; // Reemplaza el item modificado
-        }
-
-// Cierra el modal (si lo usas para editar)
-        const modalElement = document.getElementById('editItemModal');
-// @ts-ignore
-        const modal = bootstrap.Modal.getInstance(modalElement)!;
-        modal.hide();
-
-      },
-      error: err => console.error('Error al modificar el item:', err)
-    });
-  }
-
-  updateExercise(exercise: EjercicioRes) {
-    this.editingItem.ejercicio = exercise;
-  }
-
-  addNewSet(){
-    console.log(this.editingItem.series)
-    this.editingItem.series!.push({
-      pesoEnKg: 0,
-      reps: 0,
-      tiempoEnSeg: 0,
-      distancia: 0
-    });
-    console.log(this.editingItem.series)
-
-  }
-  removeSet(index:number){
-    console.log(index)
-    this.editingItem.series!.splice(index, 1);
-  }
-
-  removeItem(id:number){
+  removeItem(id: number) {
     this._itemRutinaService.eliminarItem(id, this.routineId).pipe(
-      concatMap(()=> {return this._itemRutinaService.getItems(this.routineId)})
+      concatMap(() => {
+        return this._itemRutinaService.getItems(this.routineId)
+      })
     ).subscribe({
       next: (updatedItems) => this.itemsRutina = updatedItems
     })
   }
 
-  addNewItem(){
-    const newItem = {
-      ejercicio: {},
-      descansoEnSeg: 0,
-      nota: "",
-      series: []
-    };
-    this.editingItem = JSON.parse(JSON.stringify(newItem));
-    const modalElement = document.getElementById('newItemModal');
-// @ts-ignore
-    const modal = new bootstrap.Modal(modalElement!);
-    modal.show();
+  addNewItem() {
+    this.editingItem = undefined;
   }
 
-  saveNewItem() {
-    const itemReq: ItemRutinaReq = ({
-      ejercicioId: this.editingItem.ejercicio?.id!,
-      descansoEnSeg: this.editingItem.descansoEnSeg!,
-      nota: this.editingItem.nota!,
-      series: this.editingItem.series?.map(s => ({
-        reps: s.reps,
-        pesoEnKg: s.pesoEnKg,
-        tiempoEnSeg: s.tiempoEnSeg,
-        distancia: s.distancia
-      }))!
-    });
-
-    if(itemReq.series.length ===0){
-      alert("Debe haber al menos una serie");
-      return;
-    }
-
-    console.log(itemReq);
-
-    this._itemRutinaService.crearItem(this.routineId, itemReq).subscribe({
-      next: (newItem) => {
-// Actualiza el item en el array itemsRutina
-        const index = this.itemsRutina.findIndex(item => item.id === this.editingItem.id);
-        if (index !== -1) {
-          this.itemsRutina[index] = {...newItem}; // Reemplaza el item modificado
+  saveNewItem(savedItemEvent: SavedItemEvent) {
+    if (savedItemEvent.id) {
+      this._itemRutinaService.modificarItem(this.routineId, savedItemEvent.id, savedItemEvent.item).subscribe({
+        next: item => {
+          // Actualiza el item en el array itemsRutina
+          const index = this.itemsRutina.findIndex(item => item.id === savedItemEvent.id);
+          if (index !== -1)
+            this.itemsRutina[index] = {...item} // Reemplaza el item modificado
         }
-
-// Cierra el modal (si lo usas para editar)
-        const modalElement = document.getElementById('newItemModal');
-// @ts-ignore
-        const modal = bootstrap.Modal.getInstance(modalElement)!;
-        modal.hide();
-
-        this.itemsRutina.push(newItem as ItemRutinaRes);
-
-      },
-      error: err => console.error('Error al guardar el item:', err)
-    });
+      })
+    } else {
+      this._itemRutinaService.crearItem(this.routineId, savedItemEvent.item).subscribe({
+        next: (newItem) => {
+          this.itemsRutina.push(newItem);
+        },
+        error: err => console.error('Error al guardar el item:', err)
+      });
+    }
   }
 
 
