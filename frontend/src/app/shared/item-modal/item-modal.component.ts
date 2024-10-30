@@ -106,7 +106,7 @@ export class ItemModalComponent implements OnInit, OnChanges{
     };
   };
 
-  getFormErrors(): string[] {
+  getFormErrors(): string[]  {
     const errors: string[] = [];
 
     // Comprobar errores en los controles

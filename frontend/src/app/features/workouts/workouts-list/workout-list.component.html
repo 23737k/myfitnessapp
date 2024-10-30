@@ -1,0 +1,38 @@
+<!--<app-pie-chart *ngIf="exerciseLabels && exerciseCount"-->
+<!--  [data]="exerciseCount"-->
+<!--  [labels]="exerciseLabels"-->
+<!--&gt;</app-pie-chart>-->
+
+<div class="container-fluid">
+  <h1 class="fw-bolder my-4">Workout History</h1>
+  <div class="workout-container container-fluid row row-cols-1 row-cols-md-2 row-cols-lg-3 gap-4">
+    <div *ngFor="let workout of workouts" class="p-4 border rounded workout-item">
+      <h4 class="">{{workout.rutinaNombre | uppercase}}</h4>
+      <div class="mt-4 row">
+        <div class="col-1 text-center"><i class="fa-regular fa-calendar"></i></div>
+        <div class="col">{{workout.fecha | date}}</div>
+      </div>
+      <div class="mt-2 row">
+        <div class="col-1 text-center"><i class="fa-regular fa-clock"></i></div>
+        <div class="col">{{workout.duracionEnSeg! * 1000 | date:'H:mm:ss':'UTC'}}</div>
+      </div>
+      <div class="mt-2 row">
+        <div class="col-1 text-center"><i class="fa-solid fa-dumbbell"></i></div>
+        <div class="col">{{workout.volumenEnKg}} kg</div>
+      </div>
+      <div class="mt-2 row">
+        <div class="col-1 text-center"><i class="fa-solid fa-list"></i></div>
+        <div class="col">{{workout.nroDeSeries}} sets</div>
+      </div>
+      <div class="mt-2 ">
+        <h6 class="fw-bold">Exercises:</h6>
+        <ul>
+          <li *ngFor="let item of workout.items">
+          {{item.ejercicio?.nombre}}
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
