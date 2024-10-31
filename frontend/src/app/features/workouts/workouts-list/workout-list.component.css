@@ -1,10 +1,15 @@
 .workout-item:hover{
   cursor: pointer;
+  background-color: rgba(218, 217, 217, 0.95);
 }
 .workout-item{
   transition-duration: .2s;
+  box-shadow: 0 2px 5px #C0C0C0;
 }
 .workout-item:active{
   transform: scale(0.98);
-  background-color: rgba(218, 217, 217, 0.95);
+}
+
+i{
+  color: #0055FF;
 }

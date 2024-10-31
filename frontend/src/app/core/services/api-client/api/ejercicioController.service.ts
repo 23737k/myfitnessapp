@@ -219,6 +219,8 @@ export class EjercicioControllerService {
             }
         }
 
+        fetch('',)
+
         let localVarPath = `/api/ejercicios`;
         return this.httpClient.request<object>('post', `${this.configuration.basePath}${localVarPath}`,
             {
