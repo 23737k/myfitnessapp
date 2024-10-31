@@ -1,58 +1,35 @@
-# myfitnessapp
-Fitness Gym Routine Tracker App Project
+# My Fitness App
 
-Features
--
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
+- [Getting Started](#getting-started)
+
+## Overview
+
+My Fitness App is an web application designed to help users track their workout routines and monitor progress effectively. 
+
+The app provides features for creating, customizing, and modifying exercises and workout routines, ensuring users can tailor their fitness plan to meet specific goals.
+
+Additionally, it offers detailed tracking of personal statistics, allowing users to gain insights into their performance and improvements over time.
+
+Whether you are a beginner or and advanced athlete, My Fitness App aims to make fitness tracking streamlined, motivating and personalized.
+
+## Features
+
 - CRUD operations for routines
 - CRUD operations for exercises and sets
 - CRUD operations for custom exercises
 - CRUD operations for workouts
 - Statistics per workout and exercise
 
-Getting started
--
-To get started with this project, you will need to have the following installed on your local machine:
-
-* JDK 17+
-* Maven 3+
-* MySql
-
-1) Database Configuration
-
-    1. Make sure MySQL is installed and running on your system. By default, it will connect to the database on port 3306 with the user `root` and an empty password.
-    
-    2. If you have a different MySQL configuration, update the [application.yml](src/main/resources/application.yml) accordingly
-
-2) To build and run the project, follow these steps:
-
-
-   1. Clone the repository:
-      ```
-      git clone https://github.com/23737k/myfitnessapp.git
-      ```
-      
-   2. Navigate to myfitnessapp directory:
-      ```
-      cd myfitnessapp
-      ```
-   3. Install dependencies (assuming Maven is installed):
-      ```
-      mvn clean install
-      ```
-   4. Run the project
-      ```
-      mvn spring-boot:run
-      ```
-   5. Access the API documentation using Swagger UI:
-      
-      Open a web browser and go to http://localhost:8080/doc/swagger-ui.html
-
-
-   -> The application will be available at http://localhost:8080
-
 
 Class Diagram
--
+-------------
 
 ```mermaid
 classDiagram
@@ -120,3 +97,35 @@ classDiagram
     Serie <|-- SerieTiempo
 
 ```
+
+## Technologies Used
+
+### Backend 
+
+- Spring Boot 3
+- Spring Data JPA
+- Spring Web
+- JSR-303 and Spring Validation
+- OpenAPI and Swagger UI Documentation
+- MySQL
+
+### Frontend
+
+- Angular
+- Typescript
+- Component-Based Architecture
+- Lazy Loading
+- OpenAPI Generator for Angular
+- Bootstrap
+
+
+## Getting Started
+
+To get started with the My Fitness App project, follow the setup instructions in the respective directories:
+
+- [Backend Setup Instructions](backend/README.md)
+- [Frontend Setup Instructions](frontend/README.md)
+
+
+
+
