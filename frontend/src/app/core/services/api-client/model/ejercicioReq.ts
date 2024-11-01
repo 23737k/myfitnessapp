@@ -12,8 +12,53 @@
 
 export interface EjercicioReq { 
     nombre: string;
-    grupoMuscularPrimario: number;
-    grupoMuscularSecundario?: number;
-    tipoDeEjercicio: string;
+    grupoMuscularPrimario: EjercicioReq.GrupoMuscularPrimarioEnum;
+    grupoMuscularSecundario?: EjercicioReq.GrupoMuscularSecundarioEnum;
+    tipoDeEjercicio: EjercicioReq.TipoDeEjercicioEnum;
 }
+export namespace EjercicioReq {
+    export type GrupoMuscularPrimarioEnum = 'PECTORAL' | 'TRICEPS' | 'DORSALES' | 'BICEPS' | 'TRAPECIOS' | 'DELTOIDES' | 'ANTEBRAZOS' | 'ABDOMINALES' | 'CUADRICEPS' | 'GEMELOS' | 'ISQUIOTIBIALES' | 'ADUCTORES' | 'GLUTEOS';
+    export const GrupoMuscularPrimarioEnum = {
+        Pectoral: 'PECTORAL' as GrupoMuscularPrimarioEnum,
+        Triceps: 'TRICEPS' as GrupoMuscularPrimarioEnum,
+        Dorsales: 'DORSALES' as GrupoMuscularPrimarioEnum,
+        Biceps: 'BICEPS' as GrupoMuscularPrimarioEnum,
+        Trapecios: 'TRAPECIOS' as GrupoMuscularPrimarioEnum,
+        Deltoides: 'DELTOIDES' as GrupoMuscularPrimarioEnum,
+        Antebrazos: 'ANTEBRAZOS' as GrupoMuscularPrimarioEnum,
+        Abdominales: 'ABDOMINALES' as GrupoMuscularPrimarioEnum,
+        Cuadriceps: 'CUADRICEPS' as GrupoMuscularPrimarioEnum,
+        Gemelos: 'GEMELOS' as GrupoMuscularPrimarioEnum,
+        Isquiotibiales: 'ISQUIOTIBIALES' as GrupoMuscularPrimarioEnum,
+        Aductores: 'ADUCTORES' as GrupoMuscularPrimarioEnum,
+        Gluteos: 'GLUTEOS' as GrupoMuscularPrimarioEnum
+    };
+    export type GrupoMuscularSecundarioEnum = 'PECTORAL' | 'TRICEPS' | 'DORSALES' | 'BICEPS' | 'TRAPECIOS' | 'DELTOIDES' | 'ANTEBRAZOS' | 'ABDOMINALES' | 'CUADRICEPS' | 'GEMELOS' | 'ISQUIOTIBIALES' | 'ADUCTORES' | 'GLUTEOS';
+    export const GrupoMuscularSecundarioEnum = {
+        Pectoral: 'PECTORAL' as GrupoMuscularSecundarioEnum,
+        Triceps: 'TRICEPS' as GrupoMuscularSecundarioEnum,
+        Dorsales: 'DORSALES' as GrupoMuscularSecundarioEnum,
+        Biceps: 'BICEPS' as GrupoMuscularSecundarioEnum,
+        Trapecios: 'TRAPECIOS' as GrupoMuscularSecundarioEnum,
+        Deltoides: 'DELTOIDES' as GrupoMuscularSecundarioEnum,
+        Antebrazos: 'ANTEBRAZOS' as GrupoMuscularSecundarioEnum,
+        Abdominales: 'ABDOMINALES' as GrupoMuscularSecundarioEnum,
+        Cuadriceps: 'CUADRICEPS' as GrupoMuscularSecundarioEnum,
+        Gemelos: 'GEMELOS' as GrupoMuscularSecundarioEnum,
+        Isquiotibiales: 'ISQUIOTIBIALES' as GrupoMuscularSecundarioEnum,
+        Aductores: 'ADUCTORES' as GrupoMuscularSecundarioEnum,
+        Gluteos: 'GLUTEOS' as GrupoMuscularSecundarioEnum
+    };
+    export type TipoDeEjercicioEnum = 'PESO_Y_REPETICIONES' | 'PESO_CORPORAL' | 'PESO_CORPORAL_CON_PESO_EXTRA' | 'PESO_CORPORAL_ASISTIDO' | 'DISTANCIA_Y_DURACION' | 'DISTANCIA_Y_PESO' | 'DURACION';
+    export const TipoDeEjercicioEnum = {
+        PesoYRepeticiones: 'PESO_Y_REPETICIONES' as TipoDeEjercicioEnum,
+        PesoCorporal: 'PESO_CORPORAL' as TipoDeEjercicioEnum,
+        PesoCorporalConPesoExtra: 'PESO_CORPORAL_CON_PESO_EXTRA' as TipoDeEjercicioEnum,
+        PesoCorporalAsistido: 'PESO_CORPORAL_ASISTIDO' as TipoDeEjercicioEnum,
+        DistanciaYDuracion: 'DISTANCIA_Y_DURACION' as TipoDeEjercicioEnum,
+        DistanciaYPeso: 'DISTANCIA_Y_PESO' as TipoDeEjercicioEnum,
+        Duracion: 'DURACION' as TipoDeEjercicioEnum
+    };
+}
+
 

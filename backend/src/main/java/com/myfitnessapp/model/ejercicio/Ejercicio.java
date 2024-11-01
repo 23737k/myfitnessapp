@@ -1,14 +1,6 @@
 package com.myfitnessapp.model.ejercicio;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,11 +15,9 @@ public class Ejercicio {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String nombre;
-  @ManyToOne
-  @JoinColumn(name = "grupo_muscular_primario_id")
+  @Enumerated(EnumType.STRING)
   private GrupoMuscular grupoMuscularPrimario;
-  @ManyToOne
-  @JoinColumn(name = "grupo_muscular_secundario_id")
+  @Enumerated(EnumType.STRING)
   private GrupoMuscular grupoMuscularSecundario;
   @Enumerated(EnumType.STRING)
   private TipoDeEjercicio tipoDeEjercicio;

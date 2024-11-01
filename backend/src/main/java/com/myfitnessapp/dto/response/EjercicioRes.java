@@ -1,5 +1,6 @@
 package com.myfitnessapp.dto.response;
 
+import com.myfitnessapp.model.ejercicio.GrupoMuscular;
 import com.myfitnessapp.model.ejercicio.TipoDeEjercicio;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.Data;
 public class EjercicioRes {
   private Integer id;
   private String nombre;
-  private Integer grupoMuscularPrimario;
-  private Integer grupoMuscularSecundario;
+  private GrupoMuscular grupoMuscularPrimario;
+  private GrupoMuscular grupoMuscularSecundario;
   private TipoDeEjercicio tipoDeEjercicio;
 }

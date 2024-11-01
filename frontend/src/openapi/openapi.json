@@ -553,12 +553,40 @@
             "type": "string"
           },
           "grupoMuscularPrimario": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "enum": [
+              "PECTORAL",
+              "TRICEPS",
+              "DORSALES",
+              "BICEPS",
+              "TRAPECIOS",
+              "DELTOIDES",
+              "ANTEBRAZOS",
+              "ABDOMINALES",
+              "CUADRICEPS",
+              "GEMELOS",
+              "ISQUIOTIBIALES",
+              "ADUCTORES",
+              "GLUTEOS"
+            ]
           },
           "grupoMuscularSecundario": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "enum": [
+              "PECTORAL",
+              "TRICEPS",
+              "DORSALES",
+              "BICEPS",
+              "TRAPECIOS",
+              "DELTOIDES",
+              "ANTEBRAZOS",
+              "ABDOMINALES",
+              "CUADRICEPS",
+              "GEMELOS",
+              "ISQUIOTIBIALES",
+              "ADUCTORES",
+              "GLUTEOS"
+            ]
           },
           "tipoDeEjercicio": {
             "type": "string",
@@ -705,15 +733,52 @@
             "type": "string"
           },
           "grupoMuscularPrimario": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "enum": [
+              "PECTORAL",
+              "TRICEPS",
+              "DORSALES",
+              "BICEPS",
+              "TRAPECIOS",
+              "DELTOIDES",
+              "ANTEBRAZOS",
+              "ABDOMINALES",
+              "CUADRICEPS",
+              "GEMELOS",
+              "ISQUIOTIBIALES",
+              "ADUCTORES",
+              "GLUTEOS"
+            ]
           },
           "grupoMuscularSecundario": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "enum": [
+              "PECTORAL",
+              "TRICEPS",
+              "DORSALES",
+              "BICEPS",
+              "TRAPECIOS",
+              "DELTOIDES",
+              "ANTEBRAZOS",
+              "ABDOMINALES",
+              "CUADRICEPS",
+              "GEMELOS",
+              "ISQUIOTIBIALES",
+              "ADUCTORES",
+              "GLUTEOS"
+            ]
           },
           "tipoDeEjercicio": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "PESO_Y_REPETICIONES",
+              "PESO_CORPORAL",
+              "PESO_CORPORAL_CON_PESO_EXTRA",
+              "PESO_CORPORAL_ASISTIDO",
+              "DISTANCIA_Y_DURACION",
+              "DISTANCIA_Y_PESO",
+              "DURACION"
+            ]
           }
         }
       }

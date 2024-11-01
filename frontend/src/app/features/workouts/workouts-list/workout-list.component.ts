@@ -3,10 +3,11 @@ import {DatePipe, NgForOf, NgIf, UpperCasePipe} from "@angular/common";
 import {ItemModalComponent} from "../../../shared/item-modal/item-modal.component";
 import {BaseChartDirective} from "ng2-charts";
 import {PieChartComponent} from "../../../shared/chart/pie-chart/pie-chart.component";
-import {EntrenoControllerService, EntrenoRes} from "../../../core/services/api-client";
+import {EjercicioReq, EntrenoControllerService, EntrenoRes} from "../../../core/services/api-client";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {WorkoutDetailComponent} from "../workout-detail/workout-detail.component";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import GrupoMuscularPrimarioEnum = EjercicioReq.GrupoMuscularPrimarioEnum;
 
 @Component({
   selector: 'app-workouts',
@@ -54,11 +55,11 @@ export class WorkoutListComponent implements OnInit{
   }
 
   calculateMuscleGroupOccurrence(workout: EntrenoRes){
-    const muscleGroupsOccurrence : {[key:number]:number} = {}
+    const muscleGroupsOccurrence : {[key:string]:number} = {}
     if (workout.items) {
-      const muscleGroups = workout.items.map(i => i.ejercicio?.grupoMuscularPrimario).filter((m): m is number => m !== undefined);
+      const muscleGroups = workout.items.map(i => i.ejercicio?.grupoMuscularPrimario).filter((m): m is GrupoMuscularPrimarioEnum => m !== undefined);
       if (muscleGroups){
-        muscleGroups.forEach((m : number) => {
+        muscleGroups.forEach((m : GrupoMuscularPrimarioEnum) => {
           muscleGroupsOccurrence[m] = (muscleGroupsOccurrence[m]  || 0 ) + 1;
         })
       }
