@@ -1,17 +1,16 @@
-
-<div *ngIf="workout" class="modal-header">
+<div *ngIf="workout" class="modal-header ">
   <h1 class="modal-title fs-5 fw-bolder fs-3" id="exampleModalLabel">{{workout.rutinaNombre}}</h1>
   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="activeModal.dismiss()"></button>
 </div>
-<div class="modal-body px-4 ">
+<div class="modal-body px-4">
   <div class="mb-3"><span class="fw-bold">Date: </span> {{workout?.fecha | date}}</div>
   <div class="mb-3"><span class="fw-bold">Duration: </span>{{workout?.duracionEnSeg! * 1000 | date:'H:mm:ss':'UTC'}}</div>
   <div class="mb-3"><span class="fw-bold">Volume: </span>{{workout?.volumenEnKg}} kg</div>
   <div class="mb-3"><span class="fw-bold">Total sets: </span>{{workout?.nroDeSeries}}</div>
   <div class="chart row mb-3">
     <app-pie-chart class="float-start"
-    [data]="[1,3,4,6]"
-    [labels]="['hola', 'chau', 'como', 'estas']"
+    [data]="data"
+    [labels]="labels"
     ></app-pie-chart>
   </div>
   <div >
@@ -21,7 +20,7 @@
         <div class="fw-bold text-primary">{{item.ejercicio?.nombre}}</div>
         <ol>
           <li class="mb-2" *ngFor="let set of item.series">
-            {{set.pesoEnKg}}kg x {{set.reps}} reps 
+            {{set.pesoEnKg}}kg x {{set.reps}} reps
           </li>
         </ol>
       </li>

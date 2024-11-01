@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { ChartOptions, ChartType} from "chart.js";
-import {BaseChartDirective} from "ng2-charts";
+import { ChartOptions, ChartType } from "chart.js";
+import { BaseChartDirective } from "ng2-charts";
 
 @Component({
   selector: 'app-pie-chart',
@@ -11,7 +11,7 @@ import {BaseChartDirective} from "ng2-charts";
   templateUrl: './pie-chart.component.html',
   styleUrl: './pie-chart.component.css'
 })
-export class PieChartComponent implements OnInit{
+export class PieChartComponent implements OnInit {
   @Input() data!: number[];
   @Input() labels!: string[];
 
@@ -20,8 +20,6 @@ export class PieChartComponent implements OnInit{
   options!: ChartOptions;
 
   ngOnInit() {
-    console.log(this.data)
-    console.log(this.labels)
     this.datasets = [{
       data: this.data,
       backgroundColor: [
@@ -39,7 +37,13 @@ export class PieChartComponent implements OnInit{
     this.options = {
       plugins: {
         tooltip: {
-
+          callbacks: {
+            label: (tooltipItem) => {
+              const label = this.labels[tooltipItem.dataIndex];
+              const value = this.data[tooltipItem.dataIndex];
+              return `${label}: ${value}`;
+            }
+          }
         }
       }
     };

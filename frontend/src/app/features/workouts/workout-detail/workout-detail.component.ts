@@ -13,6 +13,8 @@ import { PieChartComponent } from "../../../shared/chart/pie-chart/pie-chart.com
 })
 export class WorkoutDetailComponent {
   @Input() workout? : EntrenoRes = {};
+  @Input() data: number[] = [];
+  @Input() labels : string[] = [];
 
   activeModal = inject(NgbActiveModal);
 }
