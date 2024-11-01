@@ -4,11 +4,14 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {provideHttpClient} from "@angular/common/http";
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import {BASE_PATH} from "./core/services/api-client";
+import {environment} from "../environments/environment";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(), provideCharts(withDefaultRegisterables())
+    provideHttpClient(), provideCharts(withDefaultRegisterables()),
+    {provide: BASE_PATH, useValue: environment.apiUrl},
   ]
 };
