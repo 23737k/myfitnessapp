@@ -27,9 +27,10 @@
       <div class="mt-2 col">
         <h6 class="fw-bold">Exercises:</h6>
         <ul>
-          <li *ngFor="let item of workout.items">
+          <li *ngFor="let item of workout.items?.slice(0,3)!">
           {{item.ejercicio?.nombre}}
           </li>
+          . . .
         </ul>
 
       </div>
