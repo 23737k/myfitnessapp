@@ -2,12 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {RutinaControllerService, RutinaReq, RutinaRes} from "../../core/services/api-client";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-routines',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './routines.component.html',
   styleUrl: './routines.component.css'
@@ -15,10 +17,19 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 export class RoutinesComponent implements OnInit{
   routines!:RutinaRes[];
   routineForm!: FormGroup;
+  loading: boolean = true;
 
-  ngOnInit(): void {
+  ngOnInit() {
     this._routineService.listarRutinas().subscribe({
-      next: rutinas => this.routines = rutinas
+      next: async rutinas => {
+        await new Promise(resolve => setTimeout(resolve,1000));
+        this.loading = false;
+        this.routines = rutinas;
+      },
+      error: err => {
+        console.log("Error fetching routines");
+        this.loading = false;
+      }
     });
     this.routineForm = this._fb.group({
       name: ['', Validators.required],
@@ -59,5 +70,7 @@ export class RoutinesComponent implements OnInit{
   }
 
 
-
+  removeRoutine(routineId: number) {
+    this._routineService.eliminarRutina(routineId).subscribe();
+  }
 }

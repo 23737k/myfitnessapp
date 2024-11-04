@@ -5,13 +5,23 @@
       Create New Routine
     </button>
   </div>
+  <div *ngIf="loading" class="spinner-border mx-auto" role="status"></div>
+  <div *ngIf="!loading && (!routines || routines.length === 0 )">There are no routines to show</div>
 
   <div id="routinesList" class="row">
     @for(routine of routines; track routine){
       <div class="col-md-4 mb-4">
         <div class="card " (click)="seeDetails(routine?.id)">
           <div class="card-body">
-            <h5 class="card-title">{{routine.nombre?.toUpperCase()}}</h5>
+            <div class="row justify-content-between">
+              <div class="col-10"><h5 class="card-title">{{routine.nombre?.toUpperCase()}}</h5></div>
+              <div class="dropdown col-2 text-end px-2" (click)="$event.stopPropagation()" >
+                <button class="btn" data-bs-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v"></i></button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item text-danger" (click)="removeRoutine(routine!.id!)">Remove Routine</a></li>
+                </ul>
+              </div>
+            </div>
             <p class="card-text">{{ routine.descripcion }}</p>
             <button class="btn btn-success w-100" (click)="startRoutine($event, routine.id!)">Start Routine</button>
           </div>

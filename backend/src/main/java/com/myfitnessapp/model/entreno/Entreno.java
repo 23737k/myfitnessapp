@@ -5,15 +5,8 @@ import static com.myfitnessapp.model.ejercicio.TipoDeEjercicio.PESO_Y_REPETICION
 import com.myfitnessapp.model.rutina.ItemRutina;
 import com.myfitnessapp.model.rutina.Rutina;
 import com.myfitnessapp.model.series.PesoYReps;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderColumn;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
@@ -29,6 +22,7 @@ public class Entreno {
   private LocalDateTime fecha;
   private Integer nroDeSeries;
   @ManyToOne
+  @JoinColumn(name = "rutina_id", nullable = false)
   private Rutina rutina;
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "entreno_id")

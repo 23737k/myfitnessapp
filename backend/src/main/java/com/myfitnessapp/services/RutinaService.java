@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +30,12 @@ public class RutinaService{
     return rutinaRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Rutina no encontrada"));
   }
 
+  @Transactional
   public void deleteRutinaById(Integer id) {
-    findById(id);
+    Rutina rutina = findById(id);
+    rutina.getEntrenos().forEach(e -> {
+      e.setRutina(null);
+    });
     rutinaRepo.deleteById(id);
   }
 
