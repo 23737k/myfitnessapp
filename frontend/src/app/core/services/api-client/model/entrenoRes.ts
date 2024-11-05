@@ -13,8 +13,7 @@ import { ItemRutinaRes } from './itemRutinaRes';
 
 export interface EntrenoRes { 
     id?: number;
-    rutinaId?: number;
-    rutinaNombre?: string;
+    titulo?: string;
     fecha?: string;
     duracionEnSeg?: number;
     volumenEnKg?: number;

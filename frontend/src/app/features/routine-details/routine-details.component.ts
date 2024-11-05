@@ -1,19 +1,18 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {
   EjercicioControllerService,
   EjercicioRes,
   ItemRutinaControllerService,
-  ItemRutinaReq,
   ItemRutinaRes,
   RutinaControllerService,
-  RutinaRes, SerieRes
+  RutinaRes
 } from "../../core/services/api-client";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {concatMap, forkJoin} from "rxjs";
-import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 import {ItemModalComponent, SavedItemEvent} from "../../shared/item-modal/item-modal.component";
+import TipoDeEjercicioEnum = EjercicioRes.TipoDeEjercicioEnum;
 
 @Component({
   selector: 'app-routine-details',

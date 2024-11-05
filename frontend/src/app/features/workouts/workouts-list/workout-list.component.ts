@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf, UpperCasePipe} from "@angular/common";
 import {ItemModalComponent} from "../../../shared/item-modal/item-modal.component";
 import {BaseChartDirective} from "ng2-charts";
-import {PieChartComponent} from "../../../shared/chart/pie-chart/pie-chart.component";
+import {ChartComponent} from "../../../shared/chart/chart.component";
 import {EjercicioReq, EntrenoControllerService, EntrenoRes} from "../../../core/services/api-client";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {WorkoutDetailComponent} from "../workout-detail/workout-detail.component";
@@ -16,7 +16,7 @@ import GrupoMuscularPrimarioEnum = EjercicioReq.GrupoMuscularPrimarioEnum;
     NgIf,
     ItemModalComponent,
     BaseChartDirective,
-    PieChartComponent,
+    ChartComponent,
     NgForOf,
     UpperCasePipe,
     DatePipe,
@@ -57,10 +57,16 @@ export class WorkoutListComponent implements OnInit{
   calculateMuscleGroupOccurrence(workout: EntrenoRes){
     const muscleGroupsOccurrence : {[key:string]:number} = {}
     if (workout.items) {
-      const muscleGroups = workout.items.map(i => i.ejercicio?.grupoMuscularPrimario).filter((m): m is GrupoMuscularPrimarioEnum => m !== undefined);
-      if (muscleGroups){
-        muscleGroups.forEach((m : GrupoMuscularPrimarioEnum) => {
+      const primaryMuscleGroups = workout.items.map(i => i.ejercicio?.grupoMuscularPrimario).filter((m): m is GrupoMuscularPrimarioEnum => m !== undefined);
+      const secondaryMuscleGroups = workout.items.map(i => i.ejercicio?.grupoMuscularSecundario).filter((m): m is GrupoMuscularPrimarioEnum => m !== undefined);
+      if (primaryMuscleGroups){
+        primaryMuscleGroups.forEach((m : GrupoMuscularPrimarioEnum) => {
           muscleGroupsOccurrence[m] = (muscleGroupsOccurrence[m]  || 0 ) + 1;
+        })
+      }
+      if (secondaryMuscleGroups){
+        secondaryMuscleGroups.forEach((m : GrupoMuscularPrimarioEnum) => {
+          muscleGroupsOccurrence[m] = (muscleGroupsOccurrence[m]  || 0 ) + 0.3;
         })
       }
     }

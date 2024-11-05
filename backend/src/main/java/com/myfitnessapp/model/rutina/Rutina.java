@@ -1,6 +1,5 @@
 package com.myfitnessapp.model.rutina;
 
-import com.myfitnessapp.model.entreno.Entreno;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,9 +29,7 @@ public class Rutina {
   @JoinColumn(name = "rutina_id")
   @OrderColumn(name="item_order")
   private List<ItemRutina> items;
-  @OneToMany
-  @JoinColumn(name = "rutina_id")
-  List<Entreno> entrenos;
+
 
   public Rutina(String nombre, String descripcion, List<ItemRutina> items) {
     this.nombre = nombre;

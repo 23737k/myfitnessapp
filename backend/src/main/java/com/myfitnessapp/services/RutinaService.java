@@ -32,11 +32,7 @@ public class RutinaService{
 
   @Transactional
   public void deleteRutinaById(Integer id) {
-    Rutina rutina = findById(id);
-    rutina.getEntrenos().forEach(e -> {
-      e.setRutina(null);
-    });
-    rutinaRepo.deleteById(id);
+        rutinaRepo.deleteById(id);
   }
 
   public List<RutinaRes> getRutinas() {

@@ -36,8 +36,7 @@ public class EntrenoService {
     public EntrenoRes toEntrenoResponseDto(Entreno entreno){
         return EntrenoRes.builder()
                 .id(entreno.getId())
-                .rutinaId(entreno.getRutina().getId())
-                .rutinaNombre(entreno.getRutina().getNombre())
+                .titulo(entreno.getTitulo())
                 .fecha(entreno.getFecha())
                 .duracionEnSeg(entreno.getDuracionEnSeg())
                 .volumenEnKg(entreno.getVolumen())

@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EntrenoRes {
     private Integer id;
-    private Integer rutinaId;
-    private String rutinaNombre;
+    private String titulo;
     private LocalDateTime fecha;
     private Long duracionEnSeg;
     private Integer volumenEnKg;

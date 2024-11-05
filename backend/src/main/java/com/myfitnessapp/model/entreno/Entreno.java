@@ -21,9 +21,7 @@ public class Entreno {
   private Integer volumen;
   private LocalDateTime fecha;
   private Integer nroDeSeries;
-  @ManyToOne
-  @JoinColumn(name = "rutina_id", nullable = false)
-  private Rutina rutina;
+  private String titulo;
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "entreno_id")
   @OrderColumn(name="item_order")
@@ -32,10 +30,10 @@ public class Entreno {
   protected Entreno(){}
 
   public Entreno (Rutina rutina, List<ItemRutina> items, Long duracionEnSeg, LocalDateTime fecha){
-    this.rutina = rutina;
     this.duracionEnSeg = duracionEnSeg;
     this.fecha = fecha;
     this.items = items == null? rutina.getItems().stream().map(ItemRutina::clonar).toList():items;
+    this.titulo = rutina.getNombre();
     this.nroDeSeries = calcularNroSeries();
     this.volumen = calcularVolumen();
   }

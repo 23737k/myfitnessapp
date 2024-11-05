@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {RutinaControllerService, RutinaReq, RutinaRes} from "../../core/services/api-client";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";
+import {ChangeDetection} from "@angular/cli/lib/config/workspace-schema";
 
 @Component({
   selector: 'app-routines',
@@ -22,7 +23,6 @@ export class RoutinesComponent implements OnInit{
   ngOnInit() {
     this._routineService.listarRutinas().subscribe({
       next: async rutinas => {
-        await new Promise(resolve => setTimeout(resolve,1000));
         this.loading = false;
         this.routines = rutinas;
       },
@@ -71,6 +71,8 @@ export class RoutinesComponent implements OnInit{
 
 
   removeRoutine(routineId: number) {
-    this._routineService.eliminarRutina(routineId).subscribe();
+    this._routineService.eliminarRutina(routineId).subscribe({
+      next: value => this.routines = this.routines.filter(routine => routine.id !== routineId)
+    });
   }
 }

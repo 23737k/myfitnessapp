@@ -690,11 +690,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "rutinaId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rutinaNombre": {
+          "titulo": {
             "type": "string"
           },
           "fecha": {

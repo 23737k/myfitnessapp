@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import { ChartOptions, ChartType } from "chart.js";
-import { BaseChartDirective } from "ng2-charts";
+import { Component, Input, OnInit } from '@angular/core';
+import { ChartOptions, ChartType, TooltipItem } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-pie-chart',
@@ -8,10 +8,10 @@ import { BaseChartDirective } from "ng2-charts";
   imports: [
     BaseChartDirective
   ],
-  templateUrl: './pie-chart.component.html',
-  styleUrl: './pie-chart.component.css'
+  templateUrl: './chart.component.html',
+  styleUrl: './chart.component.css'
 })
-export class PieChartComponent implements OnInit {
+export class ChartComponent implements OnInit {
   @Input() data!: number[];
   @Input() labels!: string[];
 
@@ -34,14 +34,18 @@ export class PieChartComponent implements OnInit {
       ],
       borderWidth: 1
     }];
+
+    const total = this.data.reduce((acc, value) => acc + value, 0);
+
     this.options = {
       plugins: {
         tooltip: {
           callbacks: {
-            label: (tooltipItem) => {
+            label: (tooltipItem: TooltipItem<'pie'>) => {
               const label = this.labels[tooltipItem.dataIndex];
               const value = this.data[tooltipItem.dataIndex];
-              return `${label}: ${value}`;
+              const percentage = ((value / total) * 100).toFixed(2); // Calcular el porcentaje
+              return `${label}: ${percentage}%`;
             }
           }
         }

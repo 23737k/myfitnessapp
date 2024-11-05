@@ -6,7 +6,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div *ngIf="form && exercises" class="modal-body">
-        <div [ngClass]="{'alert alert-danger': !form.valid}">{{ getFormErrors() }}</div>
+        <div *ngIf="form" [ngClass]="{'alert alert-danger': !form.valid}">{{ getFormErrors() }}</div>
         <form  (ngSubmit)="saveItem()"  [formGroup]="form">
           <div class="mb-3">
             <label for="exerciseSelect" class="form-label">Exercise</label>
